@@ -2,6 +2,9 @@
 
 import { motion } from 'framer-motion';
 
+const cinematicEase = [0.25, 0.46, 0.45, 0.94];
+const slowEase = [0.16, 1, 0.3, 1];
+
 const steps = [
   {
     number: '01',
@@ -27,62 +30,78 @@ const steps = [
 
 export default function Process() {
   return (
-    <section id="process" className="relative bg-[#050505] py-24 md:py-32">
-      {/* Top divider */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60px] h-[1px] bg-[#c9a96e]/20" />
+    <section id="process" className="relative bg-[#050505] py-28 md:py-36">
+      {/* Section divider */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60px] h-[1px] bg-gradient-to-r from-transparent via-[#c9a96e]/25 to-transparent" />
 
       <div className="max-w-5xl mx-auto px-5 sm:px-8">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="text-center mb-14 md:mb-18"
-        >
-          <p className="text-[11px] tracking-[0.3em] uppercase text-[#c9a96e] mb-4 font-sans">
+        <div className="text-center mb-16 md:mb-20">
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.8, ease: cinematicEase }}
+            className="text-[10px] sm:text-[11px] tracking-[0.35em] uppercase text-[#c9a96e] mb-5 font-sans"
+          >
             Simple & Clear
-          </p>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#f5f0e8] mb-4">
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.9, delay: 0.1, ease: slowEase }}
+            className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#f5f0e8] mb-5"
+          >
             Caranya Mudah
-          </h2>
-          <p className="text-[#8a8578] text-base max-w-md mx-auto leading-relaxed">
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.25 }}
+            className="text-[#8a8578] text-[15px] max-w-md mx-auto leading-[1.7]"
+          >
             Kamu tidak menjadi designer. Kamu hanya memilih, mengisi, dan kami yang menjaga harmony.
-          </p>
-        </motion.div>
+          </motion.p>
+        </div>
 
-        {/* Steps */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        {/* Steps — clean flow with connectors */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {steps.map((step, index) => (
             <motion.div
               key={step.number}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
+              viewport={{ once: true, margin: '-60px' }}
               transition={{
-                duration: 0.7,
+                duration: 0.8,
                 delay: index * 0.12,
-                ease: [0.25, 0.46, 0.45, 0.94],
+                ease: slowEase,
               }}
-              className="relative text-center"
+              className="relative text-center group"
             >
-              {/* Connector line (not on last item) */}
+              {/* Connector line between steps (desktop only) */}
               {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-8 left-[calc(50%+30px)] w-[calc(100%-60px)] h-[1px] bg-white/[0.04]" />
+                <div className="hidden lg:block absolute top-8 left-[calc(50%+36px)] w-[calc(100%-72px)] h-[1px]">
+                  <div className="w-full h-full bg-gradient-to-r from-white/[0.04] to-white/[0.02]" />
+                  {/* Arrow dot at end */}
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-white/[0.08]" />
+                </div>
               )}
 
-              {/* Step number */}
-              <div className="inline-flex items-center justify-center w-16 h-16 border border-[#c9a96e]/15 mb-5">
-                <span className="font-mono text-sm text-[#c9a96e]/60 tracking-wider">{step.number}</span>
+              {/* Step number — geometric, not decorative */}
+              <div className="inline-flex items-center justify-center w-[72px] h-[72px] border border-[#c9a96e]/10 mb-6 group-hover:border-[#c9a96e]/20 transition-all duration-500 group-hover:shadow-[0_0_25px_rgba(201,169,110,0.04)]">
+                <span className="font-mono text-[13px] text-[#c9a96e]/40 tracking-[0.15em] group-hover:text-[#c9a96e]/60 transition-colors duration-500">{step.number}</span>
               </div>
 
               {/* Title */}
-              <h3 className="font-serif text-lg font-semibold text-[#f5f0e8] mb-3">
+              <h3 className="font-serif text-lg font-semibold text-[#f5f0e8] mb-3 group-hover:text-[#c9a96e] transition-colors duration-500">
                 {step.title}
               </h3>
 
               {/* Description */}
-              <p className="text-sm text-[#8a8578] leading-relaxed max-w-xs mx-auto">
+              <p className="text-[14px] text-[#8a8578] leading-[1.7] max-w-[240px] mx-auto">
                 {step.description}
               </p>
             </motion.div>

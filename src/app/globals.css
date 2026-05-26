@@ -163,9 +163,15 @@
   }
 }
 
-/* Smooth scrolling */
+/* Smooth scrolling — cinematic, not snappy */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 72px;
+}
+
+/* Prevent layout shift during scroll */
+body {
+  overflow-x: hidden;
 }
 
 /* Custom selection color */
