@@ -31,19 +31,10 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#050505] pt-16"
+      className="nauka-atmosphere-hero relative min-h-screen flex items-center justify-center overflow-hidden pt-16"
     >
-      {/* Ambient background lighting */}
-      <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          style={{ opacity: glowIntensity }}
-          className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[500px] h-[500px] sm:w-[700px] sm:h-[700px] md:w-[900px] md:h-[900px] bg-[#c9a96e]/[0.03] rounded-full blur-[120px]"
-        />
-        <div className="absolute bottom-[-10%] right-[-5%] w-[350px] h-[350px] md:w-[500px] md:h-[500px] bg-[#3a2f1f]/[0.06] rounded-full blur-[100px]" />
-      </div>
-
-      {/* Cinematic vignette */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(5,5,5,0.7)_100%)]" />
+      {/* Cinematic vignette — deeper on hero */}
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(5,5,5,0.75)_100%)]" />
 
       {/* Subtle film grain overlay */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.015]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E")', backgroundRepeat: 'repeat', backgroundSize: '256px 256px' }} />
@@ -129,7 +120,6 @@ export default function Hero() {
                 >
                   <path d="M5 12h14m-7-7 7 7-7 7" />
                 </svg>
-                {/* Shimmer on hover */}
                 <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
               </a>
               <a
@@ -157,7 +147,6 @@ export default function Hero() {
 
               {/* Phone mockup frame */}
               <div className="relative w-[250px] sm:w-[275px] md:w-[300px] aspect-[9/16] rounded-[2rem] overflow-hidden border border-white/[0.06] shadow-[0_25px_60px_-12px_rgba(0,0,0,0.7)] group">
-                {/* Inner glow on top edge */}
                 <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#c9a96e]/20 to-transparent z-10" />
                 <Image
                   src="/hero-mockup.png"
@@ -170,7 +159,7 @@ export default function Hero() {
                 />
               </div>
 
-              {/* Subtle floating elements — restraint, not clutter */}
+              {/* Floating elements */}
               <motion.div
                 animate={{ opacity: [0.15, 0.35, 0.15], scale: [1, 1.05, 1] }}
                 transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}

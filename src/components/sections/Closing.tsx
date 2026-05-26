@@ -7,14 +7,9 @@ const slowEase = [0.16, 1, 0.3, 1];
 
 export default function Closing() {
   return (
-    <section className="relative bg-[#050505] py-28 md:py-36 overflow-hidden">
-      {/* Warm glow — emotional, not cold */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute bottom-[20%] left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#c9a96e]/[0.02] rounded-full blur-[140px]" />
-      </div>
-
+    <section className="nauka-atmosphere-closing relative py-28 md:py-36 overflow-hidden">
       {/* Section divider */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60px] h-[1px] bg-gradient-to-r from-transparent via-[#c9a96e]/25 to-transparent" />
+      <div className="nauka-divider-warm" />
 
       <div className="relative max-w-3xl mx-auto px-5 sm:px-8 text-center">
         <motion.div
@@ -23,7 +18,7 @@ export default function Closing() {
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 1, ease: slowEase }}
         >
-          {/* Brand marker — refined */}
+          {/* Brand marker */}
           <motion.div
             initial={{ opacity: 0, filter: 'blur(4px)' }}
             whileInView={{ opacity: 1, filter: 'blur(0px)' }}
@@ -38,7 +33,7 @@ export default function Closing() {
             <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-[#c9a96e]/20" />
           </motion.div>
 
-          {/* Closing statement — the final emotional beat */}
+          {/* Closing statement */}
           <motion.h2
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -83,7 +78,6 @@ export default function Closing() {
               >
                 <path d="M5 12h14m-7-7 7 7-7 7" />
               </svg>
-              {/* Shimmer */}
               <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             </a>
             <a

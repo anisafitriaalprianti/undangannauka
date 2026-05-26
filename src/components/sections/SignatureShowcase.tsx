@@ -15,15 +15,12 @@ const features = [
 
 export default function SignatureShowcase() {
   return (
-    <section id="signature" className="relative bg-[#050505] py-28 md:py-36 overflow-hidden">
-      {/* Dramatic lighting — felt, not random */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-10%] right-[10%] w-[600px] h-[600px] bg-[#c9a96e]/[0.015] rounded-full blur-[180px]" />
-        <div className="absolute bottom-[-5%] left-[15%] w-[400px] h-[400px] bg-[#2a1f0f]/[0.06] rounded-full blur-[120px]" />
-      </div>
+    <section id="signature" className="nauka-atmosphere-luxury relative py-28 md:py-36 overflow-hidden">
+      {/* Warm transition from manifesto */}
+      <div className="nauka-transition-warm" />
 
       {/* Section divider */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60px] h-[1px] bg-gradient-to-r from-transparent via-[#c9a96e]/25 to-transparent" />
+      <div className="nauka-divider-warm" />
 
       <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
         <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-20">
@@ -47,7 +44,7 @@ export default function SignatureShowcase() {
               Signature bukan sekadar mahal. Signature adalah pengalaman emosional yang disutradarai. Semua elemen sinkron, motion punya makna, font punya direction, properti punya alasan.
             </p>
 
-            {/* Signature Features — refined, each with detail */}
+            {/* Signature Features */}
             <div className="space-y-5 mb-12">
               {features.map((feature, i) => (
                 <motion.div
@@ -76,7 +73,7 @@ export default function SignatureShowcase() {
             </a>
           </motion.div>
 
-          {/* Signature Template Preview — cinematic depth */}
+          {/* Signature Template Preview */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -85,14 +82,11 @@ export default function SignatureShowcase() {
             className="flex-1 flex justify-center"
           >
             <div className="relative group">
-              {/* Dramatic glow behind — intentional, warm */}
-              <div className="absolute -inset-16 bg-gradient-to-b from-[#c9a96e]/[0.03] via-[#c9a96e]/[0.015] to-transparent rounded-full blur-[80px] group-hover:from-[#c9a96e]/[0.05] transition-all duration-1000" />
+              {/* Dramatic glow — richer in luxury section */}
+              <div className="absolute -inset-16 bg-gradient-to-b from-[#c9a96e]/[0.04] via-[#c9a96e]/[0.02] to-transparent rounded-full blur-[80px] group-hover:from-[#c9a96e]/[0.06] transition-all duration-1000" />
 
-              {/* Main mockup */}
               <div className="relative w-[250px] sm:w-[275px] md:w-[300px] aspect-[9/16] rounded-[2rem] overflow-hidden border border-[#c9a96e]/8 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.7)]">
-                {/* Top shimmer */}
                 <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#c9a96e]/15 to-transparent z-10" />
-                {/* Bottom accent */}
                 <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#c9a96e]/25 to-transparent z-10" />
                 <Image
                   src="/template-signature.png"
@@ -103,7 +97,6 @@ export default function SignatureShowcase() {
                 />
               </div>
 
-              {/* Signature badge — refined */}
               <div className="absolute -top-3 -right-3 bg-[#c9a96e] text-[#050505] text-[8px] font-bold tracking-[0.3em] uppercase px-3 py-1.5 shadow-[0_4px_12px_rgba(201,169,110,0.2)]">
                 Signature
               </div>

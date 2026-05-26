@@ -163,6 +163,126 @@
   }
 }
 
+/* ============================================================
+   NAUKA SECTION ATMOSPHERES
+   Each section has its own lighting — like scenes in cinema.
+   Cinematic is not all dark. It's about feel and contrast.
+   ============================================================ */
+
+/* Hero — Deep cinematic opening. Mystery. Center-lit. */
+.nauka-atmosphere-hero {
+  background: #050505;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201, 169, 110, 0.03) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(58, 47, 31, 0.04) 0%, transparent 60%);
+}
+
+/* Hot Template — Warm gallery. Spotlights from above. Discovery mood. */
+.nauka-atmosphere-gallery {
+  background: #080706;
+  background-image:
+    radial-gradient(ellipse 50% 40% at 30% 20%, rgba(201, 169, 110, 0.035) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 70% 30%, rgba(201, 169, 110, 0.025) 0%, transparent 70%),
+    linear-gradient(180deg, rgba(201, 169, 110, 0.012) 0%, transparent 30%);
+}
+
+/* AI Finder — Cooler tool feel. Slight blue-grey undertone. Interactive. */
+.nauka-atmosphere-tool {
+  background: #060607;
+  background-image:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(120, 130, 150, 0.02) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 50% 30%, rgba(201, 169, 110, 0.015) 0%, transparent 60%);
+}
+
+/* Why Nauka — Warm intimate space. Manifesto. Conviction. */
+.nauka-atmosphere-manifesto {
+  background: #090806;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 50% 50%, rgba(201, 169, 110, 0.025) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 40% at 20% 80%, rgba(80, 60, 30, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 40% at 80% 80%, rgba(80, 60, 30, 0.03) 0%, transparent 60%);
+}
+
+/* Signature — Rich deep luxury. More pronounced warmth. Aspirational. */
+.nauka-atmosphere-luxury {
+  background: #0a0806;
+  background-image:
+    radial-gradient(ellipse 60% 50% at 60% 40%, rgba(201, 169, 110, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 40% at 30% 90%, rgba(100, 70, 25, 0.04) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(201, 169, 110, 0.015) 0%, transparent 40%);
+}
+
+/* Testimonials — Warm human connection. Intimate. Soft side-lighting. */
+.nauka-atmosphere-intimate {
+  background: #070606;
+  background-image:
+    radial-gradient(ellipse 60% 40% at 20% 50%, rgba(201, 169, 110, 0.02) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(201, 169, 110, 0.02) 0%, transparent 60%);
+}
+
+/* Process — Cleaner, slightly brighter. Clarity. Confidence. */
+.nauka-atmosphere-clarity {
+  background: #080808;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201, 169, 110, 0.02) 0%, transparent 60%);
+}
+
+/* Closing — Emotional fade-out. Return to deep. Closure. */
+.nauka-atmosphere-closing {
+  background: #050505;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 50% 60%, rgba(201, 169, 110, 0.025) 0%, transparent 70%);
+}
+
+/* ============================================================
+   SECTION DIVIDERS — Mood-appropriate transitions
+   ============================================================ */
+
+/* Warm divider — for warm-lit sections */
+.nauka-divider-warm {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(201, 169, 110, 0.25), transparent);
+}
+
+/* Cool divider — for cooler sections */
+.nauka-divider-cool {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(150, 160, 180, 0.15), transparent);
+}
+
+/* Wide gradient transition between sections */
+.nauka-transition-warm {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(180deg, rgba(201, 169, 110, 0.02) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.nauka-transition-cool {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(180deg, rgba(120, 130, 150, 0.015) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* ============================================================ */
+
 /* Smooth scrolling — cinematic, not snappy */
 html {
   scroll-behavior: smooth;

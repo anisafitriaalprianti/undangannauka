@@ -32,11 +32,14 @@ const templates = [
 
 export default function HotTemplate() {
   return (
-    <section id="templates" className="relative bg-[#050505] py-28 md:py-36">
-      {/* Section divider */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60px] h-[1px] bg-gradient-to-r from-transparent via-[#c9a96e]/25 to-transparent" />
+    <section id="templates" className="nauka-atmosphere-gallery relative py-28 md:py-36">
+      {/* Top gradient transition from hero */}
+      <div className="nauka-transition-warm" />
 
-      <div className="max-w-7xl mx-auto px-5 sm:px-8">
+      {/* Section divider */}
+      <div className="nauka-divider-warm" />
+
+      <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
         {/* Section Header */}
         <div className="text-center mb-16 md:mb-20">
           <motion.p
@@ -81,11 +84,10 @@ export default function HotTemplate() {
                 transition={{ duration: 1, delay: index * 0.15, ease: slowEase }}
                 className="group cursor-pointer"
               >
-                {/* The template display — no card bg, just the work */}
                 <div className={`relative ${isFeatured ? '-mt-6' : 'mt-6'}`}>
                   {/* Atmospheric glow for featured */}
                   {isFeatured && (
-                    <div className="absolute -inset-10 bg-[#c9a96e]/[0.025] rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                    <div className="absolute -inset-10 bg-[#c9a96e]/[0.03] rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
                   )}
 
                   {/* Template image frame */}
@@ -96,10 +98,7 @@ export default function HotTemplate() {
                         : 'aspect-[9/14] group-hover:-translate-y-1.5'
                     }`}
                   >
-                    {/* Subtle frame border — like a gallery piece */}
                     <div className="absolute inset-0 border border-white/[0.04] z-10 pointer-events-none" />
-
-                    {/* Skeleton */}
                     <div className="absolute inset-0 bg-[#0d0d0d] animate-pulse" />
                     <Image
                       src={template.image}
@@ -108,14 +107,10 @@ export default function HotTemplate() {
                       className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.03]"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
-
-                    {/* Bottom gold accent — always visible, animates on hover */}
                     <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#c9a96e]/20 to-transparent group-hover:via-[#c9a96e]/50 transition-all duration-700 z-10" />
-
-                    {/* Top shimmer on hover */}
                     <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#c9a96e]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10" />
 
-                    {/* Hover overlay — cinematic, not harsh */}
+                    {/* Hover overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/50 via-[#050505]/0 to-[#050505]/0 opacity-0 group-hover:opacity-100 transition-all duration-700 flex items-end justify-center pb-8">
                       <span className="inline-flex items-center gap-2 px-7 py-3 border border-[#c9a96e]/25 text-[#c9a96e] text-[10px] tracking-[0.3em] uppercase backdrop-blur-sm bg-[#050505]/30 opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-all duration-500 delay-100">
                         Preview
@@ -123,7 +118,7 @@ export default function HotTemplate() {
                     </div>
                   </div>
 
-                  {/* Template info — editorial, not card-footer */}
+                  {/* Template info — editorial */}
                   <div className="mt-5 px-1">
                     <div className="flex items-baseline gap-3 mb-1.5">
                       <h3 className="font-serif text-lg sm:text-xl font-semibold text-[#f5f0e8] group-hover:text-[#c9a96e] transition-colors duration-500">
@@ -142,8 +137,8 @@ export default function HotTemplate() {
           })}
         </div>
 
-        {/* Mobile/Tablet: Horizontal scroll — gallery swipe feel */}
-        <div className="lg:hidden flex gap-5 overflow-x-auto snap-x snap-mandatory pb-6 -mx-5 px-5 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        {/* Mobile/Tablet: Horizontal scroll */}
+        <div className="lg:hidden flex gap-5 overflow-x-auto snap-x snap-mandatory pb-6 -mx-5 px-5 scrollbar-hide">
           {templates.map((template, index) => (
             <motion.div
               key={template.id}
@@ -153,7 +148,6 @@ export default function HotTemplate() {
               transition={{ duration: 0.8, delay: index * 0.1, ease: slowEase }}
               className="flex-shrink-0 w-[78vw] max-w-[320px] snap-center group cursor-pointer"
             >
-              {/* Template image */}
               <div className="relative aspect-[9/14] overflow-hidden">
                 <div className="absolute inset-0 border border-white/[0.04] z-10 pointer-events-none" />
                 <div className="absolute inset-0 bg-[#0d0d0d] animate-pulse" />
@@ -171,8 +165,6 @@ export default function HotTemplate() {
                   </span>
                 </div>
               </div>
-
-              {/* Info */}
               <div className="mt-4 px-0.5">
                 <div className="flex items-baseline gap-2.5 mb-1">
                   <h3 className="font-serif text-lg font-semibold text-[#f5f0e8] group-hover:text-[#c9a96e] transition-colors duration-500">

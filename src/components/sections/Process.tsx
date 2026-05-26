@@ -50,11 +50,14 @@ const steps = [
 
 export default function Process() {
   return (
-    <section id="process" className="relative bg-[#050505] py-28 md:py-36">
-      {/* Section divider */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60px] h-[1px] bg-gradient-to-r from-transparent via-[#c9a96e]/25 to-transparent" />
+    <section id="process" className="nauka-atmosphere-clarity relative py-28 md:py-36">
+      {/* Warm transition from intimate */}
+      <div className="nauka-transition-warm" />
 
-      <div className="max-w-5xl mx-auto px-5 sm:px-8">
+      {/* Section divider */}
+      <div className="nauka-divider-warm" />
+
+      <div className="relative max-w-5xl mx-auto px-5 sm:px-8">
         {/* Section Header */}
         <div className="text-center mb-16 md:mb-20">
           <motion.p
@@ -86,7 +89,7 @@ export default function Process() {
           </motion.p>
         </div>
 
-        {/* Steps — narrative timeline */}
+        {/* Steps */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {steps.map((step, index) => (
             <motion.div
@@ -101,7 +104,7 @@ export default function Process() {
               }}
               className="relative text-center group"
             >
-              {/* Connector line between steps (desktop only) */}
+              {/* Connector line */}
               {index < steps.length - 1 && (
                 <div className="hidden lg:block absolute top-9 left-[calc(50%+36px)] w-[calc(100%-72px)] h-[1px]">
                   <div className="w-full h-full bg-gradient-to-r from-white/[0.04] to-white/[0.02]" />
@@ -109,10 +112,9 @@ export default function Process() {
                 </div>
               )}
 
-              {/* Step number + icon container */}
+              {/* Step number + icon */}
               <div className="inline-flex items-center justify-center w-[72px] h-[72px] border border-[#c9a96e]/10 mb-6 group-hover:border-[#c9a96e]/20 transition-all duration-500 group-hover:shadow-[0_0_25px_rgba(201,169,110,0.04)] relative">
                 <span className="font-mono text-[13px] text-[#c9a96e]/40 tracking-[0.15em] group-hover:text-[#c9a96e]/60 transition-colors duration-500">{step.number}</span>
-                {/* Icon — appears on hover, subtle */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                   <div className="text-[#c9a96e]/30">
                     {step.icon}
@@ -120,12 +122,10 @@ export default function Process() {
                 </div>
               </div>
 
-              {/* Title */}
               <h3 className="font-serif text-lg font-semibold text-[#f5f0e8] mb-3 group-hover:text-[#c9a96e] transition-colors duration-500">
                 {step.title}
               </h3>
 
-              {/* Description */}
               <p className="text-[14px] text-[#8a8578] leading-[1.7] max-w-[240px] mx-auto">
                 {step.description}
               </p>

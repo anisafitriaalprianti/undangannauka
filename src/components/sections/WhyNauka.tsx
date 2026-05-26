@@ -44,11 +44,14 @@ export default function WhyNauka() {
   const others = principles.filter((p) => !p.featured);
 
   return (
-    <section id="why-nauka" className="relative bg-[#050505] py-28 md:py-36">
-      {/* Section divider */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60px] h-[1px] bg-gradient-to-r from-transparent via-[#c9a96e]/25 to-transparent" />
+    <section id="why-nauka" className="nauka-atmosphere-manifesto relative py-28 md:py-36">
+      {/* Warm transition from AI Finder */}
+      <div className="nauka-transition-warm" />
 
-      <div className="max-w-7xl mx-auto px-5 sm:px-8">
+      {/* Section divider */}
+      <div className="nauka-divider-warm" />
+
+      <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
         {/* Section Header */}
         <div className="text-center mb-16 md:mb-20">
           <motion.p
@@ -86,10 +89,10 @@ export default function WhyNauka() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 1, ease: slowEase }}
-          className="group relative bg-[#070707] border border-white/[0.04] p-10 sm:p-14 md:p-16 mb-6 md:mb-8 hover:border-[#c9a96e]/10 transition-all duration-700 overflow-hidden"
+          className="group relative bg-[#0b0a07] border border-[#c9a96e]/[0.06] p-10 sm:p-14 md:p-16 mb-6 md:mb-8 hover:border-[#c9a96e]/10 transition-all duration-700 overflow-hidden"
         >
-          {/* Atmospheric glow — felt, not seen */}
-          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#c9a96e]/[0.015] rounded-full blur-[120px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+          {/* Atmospheric glow */}
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#c9a96e]/[0.02] rounded-full blur-[120px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
 
           {/* Featured marker */}
           <div className="flex items-center gap-4 mb-8">
@@ -100,17 +103,17 @@ export default function WhyNauka() {
             <span className="text-[9px] tracking-[0.3em] uppercase text-[#c9a96e]/20">Core Principle</span>
           </div>
 
-          {/* Title — large, confident */}
+          {/* Title */}
           <h3 className="font-serif text-3xl sm:text-4xl md:text-5xl font-semibold text-[#f5f0e8] group-hover:text-[#c9a96e] transition-colors duration-500 mb-6 leading-[1.15]">
             {featured.title}
           </h3>
 
-          {/* Description — generous, readable */}
+          {/* Description */}
           <p className="text-[16px] sm:text-lg text-[#8a8578] leading-[1.75] max-w-2xl">
             {featured.description}
           </p>
 
-          {/* Bottom gold accent — grows on hover */}
+          {/* Bottom gold accent */}
           <div className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-[#c9a96e]/40 via-[#c9a96e]/20 to-transparent group-hover:w-full transition-all duration-[1200ms]" />
         </motion.div>
 
@@ -127,7 +130,7 @@ export default function WhyNauka() {
                 delay: index * 0.1,
                 ease: slowEase,
               }}
-              className="group relative bg-[#080808] border border-white/[0.03] p-8 sm:p-9 hover:border-[#c9a96e]/8 transition-all duration-700 hover:bg-[#0a0908]"
+              className="group relative bg-[#0a0908] border border-white/[0.03] p-8 sm:p-9 hover:border-[#c9a96e]/8 transition-all duration-700 hover:bg-[#0c0b08]"
             >
               {/* Number + thin line */}
               <div className="flex items-center gap-3 mb-6">
@@ -137,26 +140,21 @@ export default function WhyNauka() {
                 <div className="h-[1px] flex-1 bg-gradient-to-r from-white/[0.03] to-transparent" />
               </div>
 
-              {/* Title */}
               <h3 className="font-serif text-xl sm:text-2xl font-semibold text-[#f5f0e8] mb-4 group-hover:text-[#c9a96e] transition-colors duration-500">
                 {principle.title}
               </h3>
 
-              {/* Description */}
               <p className="text-[14px] text-[#8a8578] leading-[1.7]">
                 {principle.description}
               </p>
 
-              {/* Bottom accent line on hover */}
               <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-gradient-to-r from-[#c9a96e]/30 to-transparent group-hover:w-full transition-all duration-[900ms]" />
-
-              {/* Subtle glow on hover */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-gradient-to-b from-[#c9a96e]/[0.008] to-transparent" />
             </motion.div>
           ))}
         </div>
 
-        {/* Manifesto Statement — dramatic reveal */}
+        {/* Manifesto Statement */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -165,10 +163,9 @@ export default function WhyNauka() {
           className="mt-20 md:mt-28 text-center relative"
         >
           {/* Atmospheric glow behind the quote */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-[#c9a96e]/[0.015] rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-[#c9a96e]/[0.02] rounded-full blur-[100px] pointer-events-none" />
 
           <div className="relative">
-            {/* Decorative marks — subtle, not dominating */}
             <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-[#c9a96e]/8 font-serif text-6xl leading-none select-none">&ldquo;</span>
             <blockquote className="font-serif text-2xl sm:text-3xl md:text-[2.5rem] lg:text-5xl text-[#f5f0e8]/85 italic leading-[1.3] max-w-3xl mx-auto">
               Bukan sekadar undangan.

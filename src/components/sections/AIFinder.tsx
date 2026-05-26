@@ -16,9 +16,7 @@ export default function AIFinder() {
   const [selectedVibes, setSelectedVibes] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
 
-  const handleFind = () => {
-    setShowResult(true);
-  };
+  const handleFind = () => setShowResult(true);
 
   const handleReset = () => {
     setShowResult(false);
@@ -32,14 +30,12 @@ export default function AIFinder() {
   const selectionCount = [selectedTone, selectedCulture, selectedVibes].filter(Boolean).length;
 
   return (
-    <section id="ai-finder" className="relative bg-[#070707] py-28 md:py-36">
-      {/* Subtle background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#c9a96e]/[0.012] rounded-full blur-[120px]" />
-      </div>
+    <section id="ai-finder" className="nauka-atmosphere-tool relative py-28 md:py-36">
+      {/* Cool transition from gallery */}
+      <div className="nauka-transition-cool" />
 
-      {/* Section divider */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60px] h-[1px] bg-gradient-to-r from-transparent via-[#c9a96e]/25 to-transparent" />
+      {/* Section divider — cool toned */}
+      <div className="nauka-divider-cool" />
 
       <div className="relative max-w-2xl mx-auto px-5 sm:px-8">
         {/* Section Header */}
@@ -79,7 +75,7 @@ export default function AIFinder() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.9, delay: 0.2, ease: slowEase }}
-          className="bg-[#0a0a0a] border border-white/[0.03] p-7 sm:p-10"
+          className="bg-[#090910] border border-white/[0.03] p-7 sm:p-10"
         >
           <AnimatePresence mode="wait">
             {!showResult ? (
