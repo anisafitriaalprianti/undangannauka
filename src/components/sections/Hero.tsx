@@ -1,10 +1,9 @@
 'use client';
 
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 
-// Cinematic easing - feels intentional, not robotic
 const cinematicEase = [0.25, 0.46, 0.45, 0.94];
 const slowEase = [0.16, 1, 0.3, 1];
 
@@ -34,7 +33,7 @@ export default function Hero() {
       ref={containerRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#050505] pt-16"
     >
-      {/* Ambient background lighting — directional, felt, not random */}
+      {/* Ambient background lighting */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
           style={{ opacity: glowIntensity }}
@@ -46,6 +45,9 @@ export default function Hero() {
       {/* Cinematic vignette */}
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(5,5,5,0.7)_100%)]" />
 
+      {/* Subtle film grain overlay */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.015]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E")', backgroundRepeat: 'repeat', backgroundSize: '256px 256px' }} />
+
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 w-full">
         <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20 py-20 md:py-28">
@@ -54,7 +56,7 @@ export default function Hero() {
             style={{ y: textY, opacity: textOpacity }}
             className="flex-1 text-center lg:text-left max-w-xl lg:max-w-none"
           >
-            {/* Kicker — small, spaced, gold */}
+            {/* Kicker */}
             <motion.p
               initial={{ opacity: 0, y: 24, filter: 'blur(4px)' }}
               animate={isLoaded ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
@@ -70,12 +72,12 @@ export default function Hero() {
                 initial={{ y: 60, opacity: 0 }}
                 animate={isLoaded ? { y: 0, opacity: 1 } : {}}
                 transition={{ duration: 1.1, delay: 0.5, ease: slowEase }}
-                className="font-serif text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] text-[#f5f0e8] mb-8"
+                className="font-serif text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] text-[#f5f0e8] mb-6"
               >
                 Undangan Digital
               </motion.h1>
             </div>
-            <div className="overflow-hidden">
+            <div className="overflow-hidden mb-6">
               <motion.h1
                 initial={{ y: 60, opacity: 0 }}
                 animate={isLoaded ? { y: 0, opacity: 1 } : {}}
@@ -127,6 +129,8 @@ export default function Hero() {
                 >
                   <path d="M5 12h14m-7-7 7 7-7 7" />
                 </svg>
+                {/* Shimmer on hover */}
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
               </a>
               <a
                 href="#ai-finder"
@@ -152,14 +156,14 @@ export default function Hero() {
               <div className="absolute -inset-12 bg-[#c9a96e]/[0.04] rounded-full blur-[80px]" />
 
               {/* Phone mockup frame */}
-              <div className="relative w-[250px] sm:w-[275px] md:w-[300px] aspect-[9/16] rounded-[2rem] overflow-hidden border border-white/[0.06] shadow-[0_25px_60px_-12px_rgba(0,0,0,0.7)]">
+              <div className="relative w-[250px] sm:w-[275px] md:w-[300px] aspect-[9/16] rounded-[2rem] overflow-hidden border border-white/[0.06] shadow-[0_25px_60px_-12px_rgba(0,0,0,0.7)] group">
                 {/* Inner glow on top edge */}
                 <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#c9a96e]/20 to-transparent z-10" />
                 <Image
                   src="/hero-mockup.png"
                   alt="Nauka Premium Template Preview"
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform duration-[1200ms] group-hover:scale-[1.02]"
                   priority
                   sizes="300px"
                   quality={90}
@@ -182,7 +186,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll indicator — breathe, not rush */}
+      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={isLoaded ? { opacity: 1 } : {}}

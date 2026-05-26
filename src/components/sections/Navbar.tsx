@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 const cinematicEase = [0.25, 0.46, 0.45, 0.94];
 const slowEase = [0.16, 1, 0.3, 1];
@@ -10,12 +10,22 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  // Listen to scroll for navbar bg intensity
-  if (typeof window !== 'undefined') {
-    window.addEventListener('scroll', () => {
+  useEffect(() => {
+    const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
-    }, { passive: true });
-  }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close mobile menu on resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) setIsMobileOpen(false);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const navLinks = [
     { href: '#templates', label: 'Template' },
@@ -86,7 +96,7 @@ export default function Navbar() {
         initial={false}
         animate={{
           opacity: isMobileOpen ? 1 : 0,
-          pointerEvents: isMobileOpen ? 'auto' as const : 'none' as const,
+          pointerEvents: isMobileOpen ? ('auto' as const) : ('none' as const),
         }}
         transition={{ duration: 0.4, ease: cinematicEase }}
         className="fixed inset-0 z-40 bg-[#050505]/95 backdrop-blur-xl md:hidden"

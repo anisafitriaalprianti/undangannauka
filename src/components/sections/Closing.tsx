@@ -23,16 +23,20 @@ export default function Closing() {
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 1, ease: slowEase }}
         >
-          {/* Brand marker */}
-          <motion.p
+          {/* Brand marker — refined */}
+          <motion.div
             initial={{ opacity: 0, filter: 'blur(4px)' }}
             whileInView={{ opacity: 1, filter: 'blur(0px)' }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: cinematicEase }}
-            className="text-[10px] sm:text-[11px] tracking-[0.4em] uppercase text-[#c9a96e] mb-8 font-sans"
+            className="flex items-center justify-center gap-3 mb-10"
           >
-            Nauka
-          </motion.p>
+            <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-[#c9a96e]/20" />
+            <span className="text-[10px] sm:text-[11px] tracking-[0.4em] uppercase text-[#c9a96e] font-sans">
+              Nauka
+            </span>
+            <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-[#c9a96e]/20" />
+          </motion.div>
 
           {/* Closing statement — the final emotional beat */}
           <motion.h2
@@ -57,7 +61,7 @@ export default function Closing() {
             Undangan digital dengan rasa yang lebih hidup. Crafted dengan cinematic clarity, meaningful motion, dan emotional storytelling.
           </motion.p>
 
-          {/* CTA — clear, not desperate */}
+          {/* CTA */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -79,6 +83,8 @@ export default function Closing() {
               >
                 <path d="M5 12h14m-7-7 7 7-7 7" />
               </svg>
+              {/* Shimmer */}
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             </a>
             <a
               href="#ai-finder"
@@ -90,7 +96,7 @@ export default function Closing() {
         </motion.div>
       </div>
 
-      {/* Footer — clean, no clutter */}
+      {/* Footer */}
       <div className="relative max-w-7xl mx-auto px-5 sm:px-8 mt-24 md:mt-32 pt-8 border-t border-white/[0.03]">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">

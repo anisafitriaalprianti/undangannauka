@@ -215,3 +215,12 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(201, 169, 110, 0.4);
 }
+
+/* Hide scrollbar for horizontal scroll sections */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

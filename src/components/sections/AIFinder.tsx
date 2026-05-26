@@ -33,9 +33,9 @@ export default function AIFinder() {
 
   return (
     <section id="ai-finder" className="relative bg-[#070707] py-28 md:py-36">
-      {/* Subtle background — not dominant */}
+      {/* Subtle background */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#c9a96e]/[0.015] rounded-full blur-[120px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#c9a96e]/[0.012] rounded-full blur-[120px]" />
       </div>
 
       {/* Section divider */}
@@ -91,7 +91,7 @@ export default function AIFinder() {
                 transition={{ duration: 0.4 }}
                 className="space-y-9"
               >
-                {/* Step 1: Religious Tone */}
+                {/* Step 1 */}
                 <div>
                   <label className="flex items-center gap-3 text-[10px] tracking-[0.25em] uppercase text-[#8a8578] mb-4">
                     <span className="font-mono text-[#c9a96e]/30">01</span>
@@ -114,7 +114,7 @@ export default function AIFinder() {
                   </div>
                 </div>
 
-                {/* Step 2: Cultural Theme */}
+                {/* Step 2 */}
                 <div>
                   <label className="flex items-center gap-3 text-[10px] tracking-[0.25em] uppercase text-[#8a8578] mb-4">
                     <span className="font-mono text-[#c9a96e]/30">02</span>
@@ -137,7 +137,7 @@ export default function AIFinder() {
                   </div>
                 </div>
 
-                {/* Step 3: Vibes */}
+                {/* Step 3 */}
                 <div>
                   <label className="flex items-center gap-3 text-[10px] tracking-[0.25em] uppercase text-[#8a8578] mb-4">
                     <span className="font-mono text-[#c9a96e]/30">03</span>
@@ -170,7 +170,6 @@ export default function AIFinder() {
                 </button>
               </motion.div>
             ) : (
-              /* Result State — smooth transition */
               <motion.div
                 key="result"
                 initial={{ opacity: 0, y: 15, scale: 0.97 }}
