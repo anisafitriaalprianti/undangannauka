@@ -130,25 +130,44 @@ export default function HotTemplate() {
                 {/* Notch */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 rounded-b-2xl z-20" style={{ backgroundColor: '#1C1C1C' }} />
 
-                {/* Screen */}
+                {/* Screen — responsive scaling */}
                 <div className="relative w-full h-full rounded-[2rem] overflow-hidden bg-[#F6F2EE]">
                   <div className="absolute inset-0 bg-[#F0EBE5] animate-pulse" />
-                  <Image
-                    src={featured.image}
-                    alt={featured.name}
-                    fill
-                    className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-                    sizes="300px"
-                  />
+                  <div className="absolute inset-0">
+                    <div
+                      className="w-[256px] origin-top-left"
+                      ref={(el) => {
+                        if (!el) return;
+                        const parent = el.parentElement;
+                        if (!parent) return;
+                        const updateScale = () => {
+                          const pw = parent.clientWidth;
+                          el.style.transform = `scale(${pw / 256})`;
+                        };
+                        updateScale();
+                        const ro = new ResizeObserver(updateScale);
+                        ro.observe(parent);
+                        return () => ro.disconnect();
+                      }}
+                    >
+                      <Image
+                        src={featured.image}
+                        alt={featured.name}
+                        width={256}
+                        height={512}
+                        className="w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                      />
+                    </div>
+                  </div>
                   {/* Lighting on hover */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10">
                     <div
                       className="absolute top-0 left-0 w-[60%] h-[50%]"
                       style={{ background: 'radial-gradient(ellipse at 30% 20%, rgba(198,167,105,0.08) 0%, transparent 60%)' }}
                     />
                   </div>
                   {/* Featured label */}
-                  <div className="absolute top-6 left-3 flex items-center gap-1.5">
+                  <div className="absolute top-[8%] left-[5%] z-10 flex items-center gap-1.5">
                     <span className="px-2 py-0.5 rounded-full text-[7px] tracking-[0.15em] uppercase text-[#C6A769] bg-[#C6A769]/15 backdrop-blur-sm">
                       {featured.vibes}
                     </span>
@@ -201,25 +220,44 @@ export default function HotTemplate() {
                   {/* Notch */}
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-5 rounded-b-xl z-20" style={{ backgroundColor: '#1C1C1C' }} />
 
-                  {/* Screen */}
+                  {/* Screen — responsive scaling */}
                   <div className="relative w-full h-full rounded-[1.5rem] overflow-hidden bg-[#F6F2EE]">
                     <div className="absolute inset-0 bg-[#F0EBE5] animate-pulse" />
-                    <Image
-                      src={template.image}
-                      alt={template.name}
-                      fill
-                      className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
-                      sizes="200px"
-                    />
+                    <div className="absolute inset-0">
+                      <div
+                        className="w-[160px] origin-top-left"
+                        ref={(el) => {
+                          if (!el) return;
+                          const parent = el.parentElement;
+                          if (!parent) return;
+                          const updateScale = () => {
+                            const pw = parent.clientWidth;
+                            el.style.transform = `scale(${pw / 160})`;
+                          };
+                          updateScale();
+                          const ro = new ResizeObserver(updateScale);
+                          ro.observe(parent);
+                          return () => ro.disconnect();
+                        }}
+                      >
+                        <Image
+                          src={template.image}
+                          alt={template.name}
+                          width={160}
+                          height={320}
+                          className="w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+                        />
+                      </div>
+                    </div>
                     {/* Hover lighting */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10">
                       <div
                         className="absolute top-0 left-0 w-[60%] h-[50%]"
                         style={{ background: 'radial-gradient(ellipse at 30% 20%, rgba(198,167,105,0.08) 0%, transparent 60%)' }}
                       />
                     </div>
                     {/* Tier + vibes badge */}
-                    <div className="absolute top-5 left-2.5 flex items-center gap-1">
+                    <div className="absolute top-[8%] left-[5%] z-10 flex items-center gap-1">
                       <span className="px-1.5 py-0.5 rounded-full text-[6px] tracking-[0.1em] uppercase text-[#6B6B6B] bg-white/60 backdrop-blur-sm">
                         {template.vibes}
                       </span>
