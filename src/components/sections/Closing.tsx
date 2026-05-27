@@ -91,20 +91,62 @@ export default function Closing() {
       </div>
 
       {/* Footer */}
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 mt-20 md:mt-28 pt-6 border-t border-black/[0.04]">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 mt-20 md:mt-28 pt-10 border-t border-black/[0.04]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          {/* Brand column */}
+          <div className="sm:col-span-2 lg:col-span-1">
             <Image
               src="/logo-nauka.png"
               alt="Nauka"
-              width={80}
-              height={24}
-              className="h-5 w-auto opacity-60"
+              width={120}
+              height={36}
+              className="h-8 w-auto mb-4"
             />
+            <p className="text-[13px] text-[#999] leading-[1.7] max-w-[240px]">
+              Studio undangan digital dengan perhatian pada suasana dan detail.
+            </p>
           </div>
+
+          {/* Product */}
+          <div>
+            <h4 className="text-[10px] tracking-[0.25em] uppercase text-[#1C1C1C] font-semibold mb-4">Produk</h4>
+            <ul className="space-y-2.5">
+              <li><a href="#templates" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">Koleksi Template</a></li>
+              <li><a href="#signature" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">Signature Experience</a></li>
+              <li><a href="#ai-finder" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">Bantuan Pilih</a></li>
+            </ul>
+          </div>
+
+          {/* Company */}
+          <div>
+            <h4 className="text-[10px] tracking-[0.25em] uppercase text-[#1C1C1C] font-semibold mb-4">Studio</h4>
+            <ul className="space-y-2.5">
+              <li><a href="#why-nauka" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">Pendekatan Kami</a></li>
+              <li><a href="#process" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">Cara Kerja</a></li>
+              <li><a href="#testimonials" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">Kata Mereka</a></li>
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h4 className="text-[10px] tracking-[0.25em] uppercase text-[#1C1C1C] font-semibold mb-4">Hubungi</h4>
+            <ul className="space-y-2.5">
+              <li><a href="#" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">Instagram</a></li>
+              <li><a href="#" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">WhatsApp</a></li>
+              <li><a href="#" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">Email</a></li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t border-black/[0.03]">
           <p className="text-[11px] text-[#999] tracking-wider">
             &copy; 2026 Nauka Studio. Dibuat dengan penuh perhatian.
           </p>
+          <div className="flex items-center gap-5">
+            <a href="#" className="text-[10px] tracking-[0.15em] uppercase text-[#999] hover:text-[#C6A769] transition-colors duration-300">Privasi</a>
+            <a href="#" className="text-[10px] tracking-[0.15em] uppercase text-[#999] hover:text-[#C6A769] transition-colors duration-300">Syarat</a>
+          </div>
         </div>
       </div>
     </section>
