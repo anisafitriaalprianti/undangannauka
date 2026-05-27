@@ -98,9 +98,9 @@ export default function Closing() {
             <Image
               src="/logo-nauka.png"
               alt="Nauka"
-              width={120}
-              height={36}
-              className="h-8 w-auto mb-4"
+              width={180}
+              height={54}
+              className="h-26 sm:h-30 w-auto mb-6"
             />
             <p className="text-[13px] text-[#999] leading-[1.7] max-w-[240px]">
               Studio undangan digital dengan perhatian pada suasana dan detail.
@@ -141,7 +141,7 @@ export default function Closing() {
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t border-black/[0.03]">
           <p className="text-[11px] text-[#999] tracking-wider">
-            &copy; 2026 Nauka Studio. Dibuat dengan penuh perhatian.
+            &copy; 2026 Nauka Motion ~ small movement, real impact ~
           </p>
           <div className="flex items-center gap-5">
             <a href="#" className="text-[10px] tracking-[0.15em] uppercase text-[#999] hover:text-[#C6A769] transition-colors duration-300">Privasi</a>
