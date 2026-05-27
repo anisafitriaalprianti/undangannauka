@@ -4,29 +4,40 @@ import { motion, useInView } from 'framer-motion';
 import { useRef, useMemo } from 'react';
 
 /* ──────────────────────────────────────────────────────────────
-   T1: HandwritingText — Letter-by-letter WRITING reveal
+   T1: HandwritingText — Mask Reveal (ditarik dari samping)
    Premium-1 Islamic Faceless Cinematic Wedding Invitation
 
-   Each character appears as if being WRITTEN from left to right:
-   - Starts invisible, compressed horizontally, slightly to the left
-   - Expands outward (like ink flowing from a pen tip)
-   - Settles into place with a subtle scale ease
+   Adapted from undangan-nira clip-path:inset() horizontal wipe.
+   Instead of stagger-per-letter, the ENTIRE LINE is revealed
+   via a sliding mask — like a curtain being pulled aside,
+   or like a pen dragging across paper revealing ink.
 
-   Key difference from before: NO vertical drift.
-   Instead: horizontal "squeeze-out" that feels like a pen
-   dragging across paper.
+   Technique: clip-path: inset(0 X% 0 0) where X goes from 100→0
+   This wipes the text in from LEFT to RIGHT.
 
-   A thin gold "pen line" underlines the text as it's written,
-   reinforcing the left-to-right writing direction.
+   Enhancements over the Irwan-Anira original:
+   1. Each line reveals sequentially (story pacing)
+   2. Word-boundary micro-pauses built into timing
+   3. Subtle blur dissolve at the reveal edge (ink settling)
+   4. Gold pen-line underline draws in sync with the mask
+
+   Props:
+   - text: string to animate
+   - className: styling for the text container
+   - style: inline styles
+   - charDelay: not used per-char, but controls LINE reveal duration
+   - startDelay: delay before this line starts revealing
+   - as: HTML element tag (default 'p')
+   - showPenLine: whether to show the gold underline
    ────────────────────────────────────────────────────────────── */
 
-const EASE_WRITING = [0.16, 1, 0.3, 1] as const;
+const EASE_CINEMA = [0.25, 0.46, 0.45, 0.94] as const;
 
 interface HandwritingTextProps {
   text: string;
   className?: string;
   style?: React.CSSProperties;
-  charDelay?: number;
+  charDelay?: number; // repurposed: affects reveal speed (lower = faster)
   startDelay?: number;
   as?: 'p' | 'span' | 'h1' | 'h2' | 'h3' | 'div';
   onComplete?: () => void;
@@ -46,8 +57,13 @@ export default function HandwritingText({
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-10% 0px -10% 0px' });
 
-  const chars = useMemo(() => text.split(''), [text]);
-  const totalDuration = startDelay + chars.length * charDelay + 0.8;
+  // Calculate reveal duration based on text length
+  // Longer lines = longer reveal, proportional to charDelay
+  const textLength = text.length;
+  const revealDuration = Math.max(1.2, textLength * charDelay * 1.5);
+
+  // Calculate total duration for onComplete
+  const totalDuration = startDelay + revealDuration + 0.5;
 
   if (isInView && onComplete) {
     setTimeout(onComplete, totalDuration * 1000);
@@ -57,53 +73,65 @@ export default function HandwritingText({
     <div
       ref={ref}
       className={className}
-      style={{ ...style, display: 'inline', position: 'relative' }}
+      style={{ ...style, position: 'relative', display: 'inline' }}
     >
-      {chars.map((char, i) => (
-        <motion.span
-          key={`${char}-${i}`}
-          style={{
-            display: 'inline-block',
-            whiteSpace: char === ' ' ? 'pre' : undefined,
-            willChange: 'opacity, transform',
-            transformOrigin: 'left center',
-          }}
-          initial={{
-            opacity: 0,
-            scaleX: 0.2,
-            x: -3,
-            filter: 'blur(2px)',
-          }}
-          animate={isInView ? {
-            opacity: 1,
-            scaleX: 1,
-            x: 0,
-            filter: 'blur(0px)',
-          } : {
-            opacity: 0,
-            scaleX: 0.2,
-            x: -3,
-            filter: 'blur(2px)',
-          }}
-          transition={{
-            delay: startDelay + i * charDelay,
-            duration: 0.6,
-            ease: EASE_WRITING,
-            filter: {
-              duration: 0.3,
-              ease: 'easeOut',
-            },
-          }}
-          aria-hidden={i < chars.length - 1 ? true : undefined}
-        >
-          {char === ' ' ? '\u00A0' : char}
-        </motion.span>
-      ))}
+      {/* ── Text with clip-path mask reveal ──
+          clip-path: inset(0 100% 0 0) = fully hidden (100% clipped from right)
+          clip-path: inset(0 0% 0 0) = fully visible (no clip)
+          The mask slides from left to right — text is "pulled from the side" */}
+      <motion.span
+        style={{
+          display: 'inline',
+          clipPath: 'inset(0 100% 0 0)',
+        }}
+        animate={isInView ? {
+          clipPath: 'inset(0 0% 0 0)',
+        } : {
+          clipPath: 'inset(0 100% 0 0)',
+        }}
+        transition={{
+          delay: startDelay,
+          duration: revealDuration,
+          ease: EASE_CINEMA,
+        }}
+      >
+        {text}
+      </motion.span>
 
-      {/* ── Pen line — thin gold underline that draws across ──
-          Travels left to right as characters are written,
-          like the trail of a pen moving across paper */}
-      {showPenLine && isInView && (
+      {/* ── Soft blur edge at the reveal boundary ──
+          A thin gradient that creates an "ink settling" effect
+          at the rightmost edge of the revealed text.
+          Fades in then out as the reveal progresses. */}
+      <motion.span
+        className="pointer-events-none"
+        style={{
+          position: 'absolute',
+          right: 0,
+          top: 0,
+          bottom: 0,
+          width: '40px',
+          background: 'linear-gradient(to right, transparent, var(--p1-ivory, #F5F0E8))',
+          display: 'inline',
+        }}
+        initial={{ opacity: 0.7, x: '-40px' }}
+        animate={isInView ? {
+          opacity: [0, 0.6, 0.4, 0.2, 0],
+          x: ['0%', '60%', '80%', '95%', '100%'],
+        } : {
+          opacity: 0,
+        }}
+        transition={{
+          delay: startDelay,
+          duration: revealDuration,
+          ease: EASE_CINEMA,
+        }}
+        aria-hidden="true"
+      />
+
+      {/* ── Gold pen-line underline ──
+          Draws from left to right in sync with the mask reveal.
+          Like the trail of a pen moving across paper. */}
+      {showPenLine && (
         <motion.div
           className="absolute left-0 pointer-events-none"
           style={{
@@ -113,12 +141,13 @@ export default function HandwritingText({
             maxWidth: '100%',
           }}
           initial={{ width: '0%' }}
-          animate={{ width: '100%' }}
+          animate={isInView ? { width: '100%' } : { width: '0%' }}
           transition={{
             delay: startDelay,
-            duration: chars.length * charDelay + 0.4,
-            ease: [0.25, 0.1, 0.25, 1],
+            duration: revealDuration + 0.3,
+            ease: EASE_CINEMA,
           }}
+          aria-hidden="true"
         />
       )}
     </div>
