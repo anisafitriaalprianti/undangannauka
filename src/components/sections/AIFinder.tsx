@@ -15,12 +15,12 @@ const steps = [
   {
     number: '02',
     question: 'Tema adat apa yang kamu mau pakai?',
-    options: ['Jawa', 'Sunda', 'Batak', 'Betawi', 'Bali', 'China', 'Jepang', 'Minimal Adat'],
+    options: ['Jawa', 'Sunda', 'Batak', 'Betawi', 'Bali', 'Minang', 'Palembang', 'Melayu', 'Bugis', 'Aceh', 'Toraja', 'Madura', 'China', 'Jepang', 'Korea', 'Minimal Adat'],
   },
   {
     number: '03',
     question: 'Vibes apa yang kamu suka?',
-    options: ['Cinematic', 'Modern', 'Vintage', 'Black & White', 'Luxury', 'Mewah', 'Minimalis', 'Romantis'],
+    options: ['Cinematic', 'Modern', 'Vintage', 'Black & White', 'Luxury', 'Mewah', 'Minimalis', 'Romantis', 'Garden', 'Boho', 'Fairytale', 'Pastel', 'Tropical', 'Rustic', 'Elegant'],
   },
 ];
 
