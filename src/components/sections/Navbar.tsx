@@ -42,20 +42,8 @@ export default function Navbar() {
         }`}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-[72px] flex items-center justify-between">
-          {/* Logo */}
-          <a href="#" className="flex items-center group">
-            <Image
-              src="/logo-nauka.png"
-              alt="Nauka"
-              width={120}
-              height={36}
-              className="h-8 sm:h-9 w-auto group-hover:opacity-80 transition-opacity duration-400"
-              priority
-            />
-          </a>
-
-          {/* Nav Links — desktop */}
-          <div className="hidden md:flex items-center gap-8">
+          {/* Nav Links — desktop (left) */}
+          <div className="hidden md:flex items-center gap-8 flex-1">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -66,6 +54,22 @@ export default function Navbar() {
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-[#C6A769]/50 group-hover:w-full transition-all duration-400" />
               </a>
             ))}
+          </div>
+
+          {/* Logo — centered */}
+          <a href="#" className="flex items-center group absolute left-1/2 -translate-x-1/2">
+            <Image
+              src="/logo-nauka.png"
+              alt="Nauka"
+              width={180}
+              height={54}
+              className="h-10 sm:h-12 w-auto group-hover:opacity-80 transition-opacity duration-400"
+              priority
+            />
+          </a>
+
+          {/* Right side — desktop */}
+          <div className="hidden md:flex items-center gap-8 flex-1 justify-end">
             <a
               href="#ai-finder"
               className="text-[12px] tracking-[0.2em] uppercase px-5 py-2 rounded-full border border-[#C6A769]/20 text-[#C6A769] hover:border-[#C6A769]/40 hover:bg-[#C6A769]/5 transition-all duration-400"
@@ -77,7 +81,7 @@ export default function Navbar() {
           {/* Mobile menu button */}
           <button
             onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className="md:hidden relative w-10 h-10 flex items-center justify-center text-[#6B6B6B] hover:text-[#1C1C1C] transition-colors duration-300"
+            className="md:hidden relative w-10 h-10 flex items-center justify-center text-[#6B6B6B] hover:text-[#1C1C1C] transition-colors duration-300 ml-auto"
             aria-label="Toggle menu"
           >
             <div className="relative w-5 h-3.5">
