@@ -210,13 +210,13 @@ export default function Scene1() {
           <div
             className="relative overflow-hidden rounded-lg md:rounded-xl"
             style={{
-              aspectRatio: '3 / 4',
+              aspectRatio: '574 / 388',
               boxShadow:
                 '0 2px 8px rgba(28,28,28,0.04), 0 8px 24px rgba(28,28,28,0.06), 0 20px 48px rgba(28,28,28,0.04)',
             }}
           >
             <Image
-              src="/template/premium-1/scene1-window.png"
+              src="/template/premium-1/scene-1.webp"
               alt="Faceless hijab woman silhouette behind a window bathed in moonlight, a quiet room aglow with warmth"
               fill
               sizes="(max-width: 640px) 85vw, (max-width: 768px) 480px, 520px"

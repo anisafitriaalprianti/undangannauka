@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion, useInView, type Variants } from 'framer-motion';
 import { useRef } from 'react';
 
@@ -8,47 +9,58 @@ import { useRef } from 'react';
    Premium-1 Islamic Faceless Cinematic Wedding Invitation
 
    Concept:
-   This scene is an emotional pause. No large image.
-   Just warm atmosphere, subtle moving ambience, whitespace,
-   and elegant typography. Like a quiet moment between scenes
-   in a film — the silence where the heart catches up.
+   An emotional pause between the sujud and the wedding day.
+   Two people sitting together on a terrace at dusk —
+   serene, golden hour, romantic but calm. Not dramatic.
+   The image breathes, the text breathes, everything rests.
 
    Composition:
    • Full or near-full viewport height
-   • Centered text composition with generous whitespace
+   • Landscape image centered, ~45-50% of visual space
    • Warm ivory background (#F5F0E8)
+   • Quote text below image with generous whitespace
    • Subtle warm radial glow that drifts slowly (p1WarmDrift)
-   • Gold ornamental divider above and below the quote
-   • Text in Playfair Display italic, warm brown
-   • "Scene III" label in small caps tracking
 
    Animation sequence (scroll-triggered whileInView):
-   1. Background warm glow appears first, slowly
-   2. Top divider draws from center
-   3. Quote text fades in with blur dissolve, line by line
-   4. Bottom divider draws from center
-   5. Very subtle text breathing effect (p1TextBreathe)
+   1. Image reveals with sketch-to-cinematic effect
+   2. Quote text fades in with blur dissolve, line by line
+   3. Subtle breathing effect on text
 
-   Atmosphere: very calm, very spacious, like warm stillness
+   Atmosphere: golden hour, serene, intimate pause
    ────────────────────────────────────────────────────────────── */
 
 // ── Animation variants ──────────────────────────────────────────
 
-/** Background warm glow — fades in slowly, like warm light filling a room */
-const glowReveal: Variants = {
+const sketchToCinematic: Variants = {
   hidden: {
     opacity: 0,
+    filter: 'blur(8px) grayscale(60%)',
+    scale: 1.04,
   },
   visible: {
     opacity: 1,
+    filter: 'blur(0px) grayscale(0%)',
+    scale: 1,
     transition: {
       duration: 2.4,
       ease: [0.16, 1, 0.3, 1],
+      opacity: {
+        duration: 1.6,
+        ease: 'easeOut',
+      },
+      filter: {
+        duration: 2.2,
+        ease: 'easeOut',
+      },
+      scale: {
+        duration: 2.6,
+        ease: [0.16, 1, 0.3, 1],
+      },
     },
   },
 };
 
-/** Scene label — "Scene III" fades in gently before dividers */
+/** Scene label — "Scene III" fades in gently */
 const labelFadeIn: Variants = {
   hidden: {
     opacity: 0,
@@ -125,62 +137,36 @@ export default function Scene3() {
         backgroundColor: '#F5F0E8',
       }}
     >
-      {/* ── Warm ambient glow — appears first, slowly ──
-          A gentle warm radial glow that drifts slowly across the background,
-          like warm light breathing in a quiet room.
-          Uses p1WarmDrift keyframe for subtle organic drift. */}
-      <motion.div
+      {/* ── Warm ambient glow — golden hour drifting light ── */}
+      <div
         className="pointer-events-none absolute inset-0 z-0"
-        variants={glowReveal}
-        initial="hidden"
-        animate={isInView ? 'visible' : 'hidden'}
-      >
-        {/* Primary warm glow — center, large and soft */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(ellipse 50% 40% at 50% 50%, rgba(198,167,105,0.07) 0%, transparent 65%)',
-            animation: 'p1WarmDrift 14s ease-in-out infinite',
-          }}
-          aria-hidden="true"
-        />
+        style={{
+          background:
+            'radial-gradient(ellipse 50% 40% at 50% 40%, rgba(198,167,105,0.07) 0%, transparent 65%)',
+          animation: 'p1WarmDrift 14s ease-in-out infinite',
+        }}
+        aria-hidden="true"
+      />
 
-        {/* Secondary warm glow — offset, very subtle */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(ellipse 40% 35% at 35% 55%, rgba(198,167,105,0.04) 0%, transparent 55%)',
-            animation: 'p1WarmDrift 18s ease-in-out infinite',
-            animationDelay: '3s',
-          }}
-          aria-hidden="true"
-        />
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          background:
+            'radial-gradient(ellipse 40% 35% at 65% 70%, rgba(198,167,105,0.04) 0%, transparent 55%)',
+          animation: 'p1WarmDrift 18s ease-in-out infinite',
+          animationDelay: '3s',
+        }}
+        aria-hidden="true"
+      />
 
-        {/* Tertiary ambient warmth — slight, from bottom */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(ellipse 60% 30% at 65% 70%, rgba(198,167,105,0.03) 0%, transparent 50%)',
-            animation: 'p1WarmDrift 20s ease-in-out infinite',
-            animationDelay: '6s',
-          }}
-          aria-hidden="true"
-        />
-      </motion.div>
-
-      {/* ── Content wrapper — centered with generous whitespace ── */}
-      <div className="relative z-10 mx-auto w-full max-w-2xl px-6 sm:px-8 flex flex-col items-center justify-center py-24 sm:py-32 md:py-40">
-        {/* ── Scene Label — "Scene III" ──
-            Appears gently after the glow has started to reveal */}
+      {/* ── Content wrapper ── */}
+      <div className="relative z-10 mx-auto w-full max-w-3xl px-6 sm:px-8 flex flex-col items-center justify-center py-20 sm:py-28 md:py-36">
+        {/* ── Scene Label ── */}
         <motion.div
-          className="mb-12 sm:mb-16 md:mb-20 flex flex-col items-center gap-6 sm:gap-8"
+          className="mb-8 sm:mb-10 flex flex-col items-center gap-3"
           variants={labelFadeIn}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          transition={{ delay: 1.0 }}
         >
           <span
             className="font-serif text-[10px] tracking-[0.3em] uppercase sm:text-xs"
@@ -188,9 +174,53 @@ export default function Scene3() {
           >
             Scene III
           </span>
+        </motion.div>
 
-          {/* ── Top ornamental divider ──
-              Gold line that draws from center, like a breath mark in music */}
+        {/* ── Scene Image — two people on terrace at dusk ──
+            Landscape format, sketch-to-cinematic reveal.
+            Breathing space — the image itself feels like a pause. */}
+        <motion.div
+          className="w-full max-w-[500px] sm:max-w-[560px] md:max-w-[620px]"
+          variants={sketchToCinematic}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+        >
+          <div
+            className="relative overflow-hidden rounded-lg md:rounded-xl"
+            style={{
+              aspectRatio: '614 / 378',
+              boxShadow:
+                '0 2px 8px rgba(28,28,28,0.04), 0 8px 24px rgba(28,28,28,0.06), 0 20px 48px rgba(28,28,28,0.04)',
+            }}
+          >
+            <Image
+              src="/template/premium-1/scene-3.webp"
+              alt="Two people sitting together on a terrace at golden hour dusk, a quiet moment of peace"
+              fill
+              sizes="(max-width: 640px) 85vw, (max-width: 768px) 560px, 620px"
+              className="object-cover"
+              priority={false}
+            />
+
+            {/* Subtle warm overlay — golden hour warmth */}
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  'linear-gradient(180deg, rgba(198,167,105,0.03) 0%, transparent 40%), linear-gradient(0deg, rgba(198,167,105,0.04) 0%, transparent 35%)',
+              }}
+              aria-hidden="true"
+            />
+          </div>
+        </motion.div>
+
+        {/* ── Top ornamental divider ── */}
+        <motion.div
+          className="mt-10 sm:mt-12 md:mt-14"
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ delay: 2.0, duration: 0.6 }}
+        >
           <motion.div
             className="h-[1px] w-[60px] origin-center"
             style={{
@@ -200,16 +230,14 @@ export default function Scene3() {
             variants={dividerDraw}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
-            transition={{ delay: 1.6 }}
+            transition={{ delay: 2.2 }}
           />
         </motion.div>
 
         {/* ── Quote text ──
             Two lines, each revealed individually with blur dissolve.
-            After both lines appear, a subtle breathing effect (p1TextBreathe)
-            begins on the entire quote, making it feel alive — like words
-            that breathe with the reader. */}
-        <div className="flex flex-col items-center text-center gap-1">
+            Breathing effect makes the words feel alive. */}
+        <div className="mt-8 sm:mt-10 flex flex-col items-center text-center gap-1">
           {/* Line 1 */}
           <motion.p
             className="font-serif italic text-sm leading-[2.2] tracking-wide sm:text-[15px] sm:leading-[2.3] md:text-base md:leading-[2.4]"
@@ -217,7 +245,7 @@ export default function Scene3() {
             variants={quoteLineReveal}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
-            transition={{ delay: 2.2 }}
+            transition={{ delay: 2.6 }}
           >
             Seringkali rindu itu menyiksa.
           </motion.p>
@@ -233,20 +261,18 @@ export default function Scene3() {
             variants={quoteLineReveal}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
-            transition={{ delay: 2.8 }}
+            transition={{ delay: 3.2 }}
           >
             Namun mereka memilih menitipkannya dalam doa.
           </motion.p>
         </div>
 
-        {/* ── Bottom ornamental divider ──
-            Appears after the quote has fully materialized,
-            closing the breathing space like a gentle period. */}
+        {/* ── Bottom ornamental divider ── */}
         <motion.div
-          className="mt-12 sm:mt-16 md:mt-20 flex flex-col items-center gap-6 sm:gap-8"
+          className="mt-10 sm:mt-12 md:mt-14 flex flex-col items-center gap-6 sm:gap-8"
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ delay: 3.6, duration: 0.6 }}
+          transition={{ delay: 3.8, duration: 0.6 }}
         >
           <motion.div
             className="h-[1px] w-[60px] origin-center"
@@ -257,7 +283,7 @@ export default function Scene3() {
             variants={dividerDraw}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
-            transition={{ delay: 3.8 }}
+            transition={{ delay: 4.0 }}
           />
         </motion.div>
       </div>

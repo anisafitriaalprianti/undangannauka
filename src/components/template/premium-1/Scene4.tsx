@@ -220,14 +220,14 @@ export default function Scene4() {
           <div
             className="relative overflow-hidden rounded-lg md:rounded-xl"
             style={{
-              aspectRatio: '3 / 4',
+              aspectRatio: '606 / 396',
               boxShadow:
                 '0 2px 8px rgba(28,28,28,0.03), 0 8px 24px rgba(28,28,28,0.05), 0 20px 48px rgba(28,28,28,0.03)',
             }}
           >
             <Image
-              src="/template/premium-1/scene4-wedding.png"
-              alt="Faceless wedding silhouette bathed in warm sacred light, the moment of a promise fulfilled"
+              src="/template/premium-1/scene-4.webp"
+              alt="Bride and groom sitting together bathed in warm sacred light, the moment of a promise fulfilled"
               fill
               sizes="(max-width: 640px) 85vw, (max-width: 768px) 450px, 500px"
               className="object-cover"
