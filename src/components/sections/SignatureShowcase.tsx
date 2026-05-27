@@ -7,10 +7,10 @@ import { useRef } from 'react';
 const slowEase = [0.16, 1, 0.3, 1];
 
 const features = [
-  'Artistic Direction',
-  'Handcrafted Storytelling',
-  'Emotional Cinematic Experience',
-  'Opening Signature Nauka',
+  'Pengarahan Visual',
+  'Alur Cerita Personal',
+  'Suasana yang Mendalam',
+  'Opening Khas',
 ];
 
 export default function SignatureShowcase() {
@@ -24,7 +24,7 @@ export default function SignatureShowcase() {
   const mockupY = useTransform(scrollYProgress, [0, 1], [30, -20]);
 
   return (
-    <section ref={sectionRef} id="signature" className="nauka-atmosphere relative py-16 sm:py-20 bg-[#F6F2EE] overflow-hidden">
+    <section ref={sectionRef} id="signature" className="nauka-atmosphere nauka-grain relative py-16 sm:py-20 bg-[#F6F2EE] overflow-hidden">
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
           {/* Text Content */}
@@ -36,7 +36,7 @@ export default function SignatureShowcase() {
             className="flex-1 text-center lg:text-left"
           >
             <p className="text-[10px] tracking-[0.5em] uppercase text-[#C6A769] mb-4 font-sans">
-              Highest Tier
+              Signature
             </p>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#1C1C1C] mb-5 leading-[1.1]">
               Signature
@@ -44,7 +44,7 @@ export default function SignatureShowcase() {
               <span className="text-[#C6A769]">Experience</span>
             </h2>
             <p className="text-[15px] text-[#6B6B6B] leading-[1.7] mb-8 max-w-md mx-auto lg:mx-0">
-              Pengalaman undangan yang disutradarai. Setiap elemen sinkron, motion punya makna.
+              Pengalaman undangan yang dirancang dengan perhatian khusus pada setiap detail dan alur cerita.
             </p>
 
             {/* Signature Features */}

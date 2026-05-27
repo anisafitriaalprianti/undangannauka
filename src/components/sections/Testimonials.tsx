@@ -6,10 +6,10 @@ const slowEase = [0.16, 1, 0.3, 1];
 const cinematicEase = [0.25, 0.46, 0.45, 0.94];
 
 const testimonials = [
-  { text: 'Undangannya keren bikin dimana?', name: 'Rina S.', type: 'Reaction' },
+  { text: 'Undangannya keren, bikin dimana?', name: 'Rina S.', type: 'Reaction' },
   { text: 'Uh so sweet banget cerita cinta kalian.', name: 'Dewi A.', type: 'Emotional' },
-  { text: 'Baru kali ini liat undangan begini.', name: 'Budi P.', type: 'Impression' },
-  { text: 'Tamunya pada kejut semua, nggak nyangka undangan digital bisa sekeren ini.', name: 'Anisa M.', type: 'Reaction', featured: true },
+  { text: 'Detailnya bener-bener diperhatikan, hasilnya cantik.', name: 'Budi P.', type: 'Impression' },
+  { text: 'Undangannya bikin tamu-tamu langsung merasa spesial.', name: 'Anisa M.', type: 'Reaction', featured: true },
 ];
 
 export default function Testimonials() {

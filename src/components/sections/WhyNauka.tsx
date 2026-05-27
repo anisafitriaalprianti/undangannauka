@@ -9,18 +9,18 @@ const cinematicEase = [0.25, 0.46, 0.45, 0.94];
 const principles = [
   {
     number: '01',
-    title: 'Cinematic Clarity',
-    line: 'Pacing, atmosphere, dan hierarchy yang tepat.',
+    title: 'Susunan yang Tepat',
+    line: 'Setiap elemen ditempatkan dengan pertimbangan.',
   },
   {
     number: '02',
-    title: 'Meaningful Motion',
-    line: 'Setiap gerakan punya alasan, bukan dekorasi.',
+    title: 'Gerakan yang Berniat',
+    line: 'Animasi yang hadir untuk mendukung suasana.',
   },
   {
     number: '03',
-    title: 'Emotional Feel',
-    line: 'Dirasakan, bukan sekadar dilihat.',
+    title: 'Suasana yang Terasa',
+    line: 'Undangan yang menghadirkan suasana, bukan sekadar informasi.',
   },
 ];
 
@@ -35,8 +35,12 @@ export default function WhyNauka() {
   const statementY = useTransform(scrollYProgress, [0.5, 1], [30, -20]);
 
   return (
-    <section ref={sectionRef} id="why-nauka" className="nauka-light-warm relative py-16 sm:py-20 bg-[#F6F2EE] overflow-hidden">
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6">
+    <section ref={sectionRef} id="why-nauka" className="nauka-light-warm nauka-grain relative py-16 sm:py-20 bg-[#F6F2EE] overflow-hidden">
+      {/* PRD: Editorial motif — frame lines for cinematic depth */}
+      <div className="nauka-frame-line hidden lg:block" />
+      <div className="nauka-frame-line-right hidden lg:block" />
+
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="text-center mb-16 sm:mb-20">
           <motion.p
@@ -46,7 +50,7 @@ export default function WhyNauka() {
             transition={{ duration: 0.7, ease: cinematicEase }}
             className="text-[10px] tracking-[0.5em] uppercase text-[#C6A769] mb-3 font-sans"
           >
-            Our Belief
+            Pendekatan Kami
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -55,7 +59,7 @@ export default function WhyNauka() {
             transition={{ duration: 0.8, delay: 0.1, ease: slowEase }}
             className="font-serif text-3xl sm:text-4xl font-bold text-[#1C1C1C]"
           >
-            Kenapa Nauka?
+            Pendekatan Kami
           </motion.h2>
         </div>
 
@@ -122,7 +126,7 @@ export default function WhyNauka() {
           <div className="relative inline-block">
             <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#C6A769]/30 to-transparent mx-auto mb-8" />
             <p className="font-serif text-2xl sm:text-3xl md:text-4xl text-[#1C1C1C]/80 italic leading-[1.4] max-w-xl mx-auto">
-              Undangan harus <span className="text-[#C6A769] not-italic font-semibold">dirasakan</span>,
+              Undangan yang <span className="text-[#C6A769] not-italic font-semibold">dirasakan</span>,
               <br />
               bukan sekadar dibaca.
             </p>

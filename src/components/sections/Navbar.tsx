@@ -23,7 +23,7 @@ export default function Navbar() {
 
   const navLinks = [
     { href: '#templates', label: 'Template' },
-    { href: '#why-nauka', label: 'Why Nauka' },
+    { href: '#why-nauka', label: 'Pendekatan' },
     { href: '#process', label: 'Process' },
   ];
 

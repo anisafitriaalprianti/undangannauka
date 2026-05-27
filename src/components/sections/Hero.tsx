@@ -33,7 +33,7 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="nauka-light-warm relative min-h-screen flex items-center bg-[#F6F2EE] overflow-hidden pt-20 pb-16"
+      className="nauka-light-warm nauka-grain nauka-vignette relative min-h-screen flex items-center bg-[#F6F2EE] overflow-hidden pt-20 pb-16"
     >
       {/* PRD: Lighting must be felt — directional warm spotlight from top-left */}
       <motion.div
@@ -71,8 +71,8 @@ export default function Hero() {
         <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] opacity-0"
           style={{
-            background: 'radial-gradient(ellipse at center, rgba(198,167,105,0.1) 0%, transparent 60%)',
-            animation: isLoaded ? 'naukaLightReveal 1.8s ease-out forwards' : 'none',
+            background: 'radial-gradient(ellipse at center, rgba(198,167,105,0.12) 0%, transparent 60%)',
+            animation: isLoaded ? 'naukaLightReveal 1.8s ease-out forwards, naukaCandleFlicker 4s ease-in-out 2s infinite' : 'none',
           }}
         />
       </motion.div>
@@ -99,7 +99,7 @@ export default function Hero() {
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[#C6A769]" />
               <span className="text-[10px] tracking-[0.3em] uppercase text-[#C6A769] font-sans">
-                Curated Cinematic Studio
+                Studio Undangan Digital
               </span>
             </motion.div>
 
@@ -142,7 +142,7 @@ export default function Hero() {
               transition={{ duration: 0.7, delay: 0.7, ease: cinematicEase }}
               className="text-[15px] sm:text-base text-[#6B6B6B] leading-[1.7] mb-10 max-w-md mx-auto lg:mx-0"
             >
-              Setiap undangan dirancang dengan feel, taste, dan cinematic clarity. Bukan template biasa.
+              Dirancang dengan perhatian pada suasana dan detail.
             </motion.p>
 
             {/* CTA Buttons — pill shaped */}
@@ -328,7 +328,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={showContent ? { opacity: 1 } : {}}
         transition={{ delay: 2, duration: 1.2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
       >
         <span className="text-[9px] tracking-[0.4em] uppercase text-[#999]">Scroll</span>
         <motion.div
@@ -337,6 +337,10 @@ export default function Hero() {
           className="w-[1px] h-8 bg-gradient-to-b from-[#C6A769]/40 to-transparent"
         />
       </motion.div>
+
+      {/* PRD: Editorial motif — decorative frame lines like a film frame edge */}
+      <div className="nauka-frame-line hidden lg:block" />
+      <div className="nauka-frame-line-right hidden lg:block" />
     </section>
   );
 }

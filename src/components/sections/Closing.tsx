@@ -17,7 +17,7 @@ export default function Closing() {
   const closingOpacity = useTransform(scrollYProgress, [0, 0.5], [0.6, 1]);
 
   return (
-    <section ref={sectionRef} className="nauka-light-warm relative py-16 sm:py-20 bg-white overflow-hidden">
+    <section ref={sectionRef} className="nauka-light-warm nauka-vignette nauka-grain relative py-16 sm:py-20 bg-white overflow-hidden">
       <div className="relative max-w-2xl mx-auto px-4 sm:px-6 text-center">
         <motion.div
           style={{ opacity: closingOpacity }}
@@ -47,9 +47,9 @@ export default function Closing() {
             transition={{ duration: 0.9, delay: 0.1, ease: slowEase }}
             className="font-serif text-[1.8rem] sm:text-4xl md:text-5xl font-bold text-[#1C1C1C] leading-[1.12] mb-6"
           >
-            Bukan Sekadar Undangan.
+            Undangan yang Bisa Dirasakan.
             <br />
-            <span className="text-[#C6A769]">Sebuah Pengalaman.</span>
+            <span className="text-[#C6A769]">Dengan Sepenuh Hati.</span>
           </motion.h2>
 
           <motion.p
@@ -59,7 +59,7 @@ export default function Closing() {
             transition={{ duration: 0.7, delay: 0.25 }}
             className="text-[15px] text-[#6B6B6B] leading-[1.7] max-w-md mx-auto mb-10"
           >
-            Undangan digital dengan rasa yang lebih hidup.
+            Dirancang dengan perhatian pada suasana dan detail.
           </motion.p>
 
           {/* CTA — pill buttons */}
@@ -99,7 +99,7 @@ export default function Closing() {
             <span className="font-serif text-sm tracking-[0.15em] text-[#999]">NAUKA</span>
           </div>
           <p className="text-[11px] text-[#999] tracking-wider">
-            &copy; 2026 Nauka Studio. Crafted with feel, taste, and soul.
+            &copy; 2026 Nauka Studio. Dibuat dengan penuh perhatian.
           </p>
         </div>
       </div>

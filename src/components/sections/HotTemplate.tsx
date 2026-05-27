@@ -48,6 +48,9 @@ export default function HotTemplate() {
 
   return (
     <section ref={sectionRef} id="templates" className="nauka-atmosphere relative py-16 sm:py-20 bg-white overflow-hidden">
+      {/* PRD: Editorial motif — frame lines */}
+      <div className="nauka-frame-line hidden lg:block" />
+      <div className="nauka-frame-line-right hidden lg:block" />
       <motion.div style={{ y: sectionY }} className="relative max-w-6xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="text-center mb-10 sm:mb-14">
