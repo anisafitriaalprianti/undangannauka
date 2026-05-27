@@ -17,7 +17,9 @@ const templates = [
 
 export default function HotTemplate() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   // PRD: Cinematic scroll — parallax on the whole section
   const { scrollYProgress } = useScroll({
@@ -28,11 +30,22 @@ export default function HotTemplate() {
 
   // Auto-cycle through secondary templates
   useEffect(() => {
+    if (isHovered) return;
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % (templates.length - 1));
-    }, 5000);
+    }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isHovered]);
+
+  // Scroll to active card
+  useEffect(() => {
+    if (!scrollRef.current) return;
+    const cards = scrollRef.current.children;
+    const card = cards[activeIndex] as HTMLElement;
+    if (card) {
+      scrollRef.current.scrollTo({ left: card.offsetLeft - 16, behavior: 'smooth' });
+    }
+  }, [activeIndex]);
 
   const featured = templates[0];
   const secondary = templates.slice(1);
@@ -72,16 +85,15 @@ export default function HotTemplate() {
           />
         </div>
 
-        {/* Editorial Layout — Featured dominant + secondary smaller */}
-        <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12">
-          {/* Featured Template — large, dominant */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.9, ease: slowEase }}
-            className="flex-shrink-0 group cursor-pointer"
-          >
+        {/* Featured Template — standalone, dominant */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.9, ease: slowEase }}
+          className="flex justify-center mb-10 sm:mb-14"
+        >
+          <div className="group cursor-pointer">
             <div className="relative">
               {/* Warm glow behind featured */}
               <div className="absolute -inset-8 pointer-events-none">
@@ -145,81 +157,101 @@ export default function HotTemplate() {
               </div>
 
               {/* Featured info */}
-              <div className="mt-5 text-center lg:text-left">
+              <div className="mt-5 text-center">
                 <h3 className="font-serif text-xl text-[#1C1C1C] font-semibold group-hover:text-[#C6A769] transition-colors duration-300">
                   {featured.name}
                 </h3>
-                <div className="flex items-center gap-2 mt-1.5 justify-center lg:justify-start">
+                <div className="flex items-center gap-2 mt-1.5 justify-center">
                   <span className="text-[11px] text-[#999]">{featured.users} pengguna</span>
                   <span className="w-1 h-1 rounded-full bg-[#C6A769]/40" />
                   <span className="text-[10px] tracking-[0.1em] uppercase text-[#C6A769]">{featured.tier}</span>
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
+        </motion.div>
 
-          {/* Secondary Templates — smaller, editorial column */}
-          <div className="flex-1 w-full">
-            <div className="grid grid-cols-2 gap-4 sm:gap-5">
-              {secondary.map((template, index) => (
-                <motion.div
-                  key={template.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-30px' }}
-                  transition={{ duration: 0.7, delay: 0.15 + index * 0.08, ease: slowEase }}
-                  className={`group cursor-pointer ${index === activeIndex ? 'ring-1 ring-[#C6A769]/15 rounded-[2rem]' : ''}`}
+        {/* Secondary Templates — horizontal slide carousel */}
+        <div
+          className="relative"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <div
+            ref={scrollRef}
+            className="flex gap-5 sm:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-2 -mx-4 px-4"
+          >
+            {secondary.map((template, index) => (
+              <motion.div
+                key={template.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-30px' }}
+                transition={{ duration: 0.7, delay: 0.15 + index * 0.08, ease: slowEase }}
+                className="flex-shrink-0 w-[160px] sm:w-[180px] snap-start group cursor-pointer"
+              >
+                {/* Phone mockup */}
+                <div
+                  className="relative rounded-[2rem] p-1.5 transition-shadow duration-700 group-hover:shadow-[0_10px_32px_rgba(28,28,28,0.1)]"
+                  style={{ backgroundColor: '#1C1C1C', aspectRatio: '9/18' }}
                 >
-                  {/* Smaller phone mockup */}
-                  <div
-                    className="relative rounded-[2rem] p-1.5 transition-shadow duration-700 group-hover:shadow-[0_10px_32px_rgba(28,28,28,0.1)]"
-                    style={{ backgroundColor: '#1C1C1C', aspectRatio: '9/18' }}
-                  >
-                    {/* Top edge highlight */}
-                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent z-30 rounded-t-[2rem]" />
+                  {/* Top edge highlight */}
+                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent z-30 rounded-t-[2rem]" />
 
-                    {/* Notch */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-5 rounded-b-xl z-20" style={{ backgroundColor: '#1C1C1C' }} />
+                  {/* Notch */}
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-5 rounded-b-xl z-20" style={{ backgroundColor: '#1C1C1C' }} />
 
-                    {/* Screen */}
-                    <div className="relative w-full h-full rounded-[1.5rem] overflow-hidden bg-[#F6F2EE]">
-                      <div className="absolute inset-0 bg-[#F0EBE5] animate-pulse" />
-                      <Image
-                        src={template.image}
-                        alt={template.name}
-                        fill
-                        className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
-                        sizes="200px"
+                  {/* Screen */}
+                  <div className="relative w-full h-full rounded-[1.5rem] overflow-hidden bg-[#F6F2EE]">
+                    <div className="absolute inset-0 bg-[#F0EBE5] animate-pulse" />
+                    <Image
+                      src={template.image}
+                      alt={template.name}
+                      fill
+                      className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+                      sizes="200px"
+                    />
+                    {/* Hover lighting */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                      <div
+                        className="absolute top-0 left-0 w-[60%] h-[50%]"
+                        style={{ background: 'radial-gradient(ellipse at 30% 20%, rgba(198,167,105,0.08) 0%, transparent 60%)' }}
                       />
-                      {/* Hover lighting */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-                        <div
-                          className="absolute top-0 left-0 w-[60%] h-[50%]"
-                          style={{ background: 'radial-gradient(ellipse at 30% 20%, rgba(198,167,105,0.08) 0%, transparent 60%)' }}
-                        />
-                      </div>
-                      {/* Tier + vibes badge — subtle */}
-                      <div className="absolute top-5 left-2.5 flex items-center gap-1">
-                        <span className="px-1.5 py-0.5 rounded-full text-[6px] tracking-[0.1em] uppercase text-[#6B6B6B] bg-white/60 backdrop-blur-sm">
-                          {template.vibes}
-                        </span>
-                        <span className="px-1 py-0.5 rounded-full text-[5px] tracking-[0.1em] uppercase text-[#C6A769] bg-[#C6A769]/10">
-                          {template.tier}
-                        </span>
-                      </div>
+                    </div>
+                    {/* Tier + vibes badge */}
+                    <div className="absolute top-5 left-2.5 flex items-center gap-1">
+                      <span className="px-1.5 py-0.5 rounded-full text-[6px] tracking-[0.1em] uppercase text-[#6B6B6B] bg-white/60 backdrop-blur-sm">
+                        {template.vibes}
+                      </span>
+                      <span className="px-1 py-0.5 rounded-full text-[5px] tracking-[0.1em] uppercase text-[#C6A769] bg-[#C6A769]/10">
+                        {template.tier}
+                      </span>
                     </div>
                   </div>
+                </div>
 
-                  {/* Card info — below phone */}
-                  <div className="mt-3 px-0.5">
-                    <h3 className="font-serif text-sm sm:text-[15px] text-[#1C1C1C] font-semibold group-hover:text-[#C6A769] transition-colors duration-300 truncate">
-                      {template.name}
-                    </h3>
-                    <span className="text-[10px] text-[#999]">{template.users} pengguna</span>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+                {/* Card info — below phone */}
+                <div className="mt-3 px-0.5">
+                  <h3 className="font-serif text-sm sm:text-[15px] text-[#1C1C1C] font-semibold group-hover:text-[#C6A769] transition-colors duration-300 truncate">
+                    {template.name}
+                  </h3>
+                  <span className="text-[10px] text-[#999]">{template.users} pengguna</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Progress dots */}
+          <div className="flex items-center justify-center gap-2 mt-5">
+            {secondary.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setActiveIndex(index)}
+                className={`h-1.5 rounded-full transition-all duration-500 ${
+                  index === activeIndex ? 'w-6 bg-[#C6A769]' : 'w-1.5 bg-[#1C1C1C]/10 hover:bg-[#1C1C1C]/20'
+                }`}
+              />
+            ))}
           </div>
         </div>
 
