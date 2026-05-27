@@ -8,26 +8,22 @@ const cinematicEase = [0.25, 0.46, 0.45, 0.94];
 
 const principles = [
   {
-    number: '01',
-    title: 'Susunan yang Tepat',
-    line: 'Setiap elemen ditempatkan dengan pertimbangan. Tipografi, jarak, dan warna — bukan kebetulan, tapi pilihan.',
+    mark: '~',
+    word: 'Susunan yang Tepat',
   },
   {
-    number: '02',
-    title: 'Gerakan yang Berniat',
-    line: 'Animasi yang hadir untuk mendukung suasana, bukan mengejutkan. Setiap transisi punya alasan.',
+    mark: '~',
+    word: 'Gerakan yang Berniat',
   },
   {
-    number: '03',
-    title: 'Suasana yang Terasa',
-    line: 'Undangan yang menghadirkan suasana, bukan sekadar informasi. Tamu merasakan sebelum membaca.',
+    mark: '~',
+    word: 'Suasana yang Terasa',
   },
 ];
 
 export default function WhyNauka() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  // PRD: Cinematic scroll — subtle parallax on statement
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
@@ -35,42 +31,31 @@ export default function WhyNauka() {
   const statementY = useTransform(scrollYProgress, [0.5, 1], [30, -20]);
 
   return (
-    <section ref={sectionRef} id="why-nauka" className="nauka-light-warm nauka-grain relative py-16 sm:py-20 bg-[#F6F2EE] overflow-hidden">
-      {/* PRD: Editorial motif — frame lines for cinematic depth */}
+    <section ref={sectionRef} id="why-nauka" className="nauka-light-warm nauka-grain nauka-ink relative py-24 sm:py-32 bg-[#F6F2EE] overflow-hidden">
       <div className="nauka-frame-line hidden lg:block" />
       <div className="nauka-frame-line-right hidden lg:block" />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
-        {/* The manifesto — this is the star, not an afterthought */}
+      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6">
+        {/* The manifesto — huge breathing space, let it land */}
         <motion.div
           style={{ y: statementY }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 1.2, ease: slowEase }}
-          className="text-center mb-16 sm:mb-24"
+          className="text-center mb-20 sm:mb-28"
         >
-          {/* PRD: Lighting felt — subtle warm spotlight on the quote */}
+          {/* Warm spotlight on the quote */}
           <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] pointer-events-none"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[250px] pointer-events-none"
             style={{
               background: 'radial-gradient(ellipse at center, rgba(198,167,105,0.04) 0%, transparent 60%)',
               animation: 'naukaBreathLight 8s ease-in-out infinite',
             }}
           />
 
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.7, ease: cinematicEase }}
-            className="text-[10px] tracking-[0.5em] uppercase text-[#C6A769] mb-6 font-sans"
-          >
-            Cara Kami Berpikir
-          </motion.p>
-
           <div className="relative inline-block">
-            <p className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#1C1C1C]/80 italic leading-[1.3] max-w-2xl mx-auto">
+            <p className="font-serif text-4xl sm:text-5xl md:text-6xl text-[#1C1C1C]/70 italic leading-[1.25] max-w-2xl mx-auto">
               Undangan yang <span className="text-[#C6A769] not-italic font-semibold">dirasakan</span>,
               <br />
               bukan sekadar dibaca.
@@ -82,48 +67,29 @@ export default function WhyNauka() {
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.4, ease: slowEase }}
-            className="mt-8 mx-auto w-16 h-px bg-gradient-to-r from-transparent via-[#C6A769]/30 to-transparent"
+            className="mt-10 mx-auto w-16 h-px bg-gradient-to-r from-transparent via-[#C6A769]/25 to-transparent"
           />
         </motion.div>
 
-        {/* Principles — quiet, confident, like beliefs not features */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+        {/* Three words — not cards, not explanations. Just beliefs hanging in space */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-16">
           {principles.map((principle, index) => (
             <motion.div
-              key={principle.number}
-              initial={{ opacity: 0, y: 30 }}
+              key={index}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.8, delay: index * 0.12, ease: slowEase }}
-              className="group relative bg-white rounded-2xl p-8 sm:p-10 ring-1 ring-black/5 hover:ring-[#C6A769]/15 transition-all duration-500 hover:shadow-[0_8px_30px_rgba(198,167,105,0.08)] overflow-hidden"
+              transition={{ duration: 0.8, delay: index * 0.15, ease: slowEase }}
+              className="group text-center"
             >
-              {/* PRD: Lighting must be felt — subtle directional highlight on hover */}
-              <div className="absolute top-0 left-0 w-[50%] h-[40%] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background: 'radial-gradient(ellipse at 30% 20%, rgba(198,167,105,0.06) 0%, transparent 60%)',
-                  }}
-                />
-              </div>
-
-              {/* Number — like a chapter marker */}
-              <span className="block font-mono text-[11px] tracking-[0.3em] text-[#C6A769]/30 mb-6 group-hover:text-[#C6A769]/50 transition-colors duration-500">
-                {principle.number}
+              {/* Tiny tilde mark — like a handwritten accent */}
+              <span className="block text-[#C6A769]/25 text-sm mb-3 group-hover:text-[#C6A769]/50 transition-colors duration-500">
+                {principle.mark}
               </span>
-
-              {/* Title */}
-              <h3 className="font-serif text-2xl sm:text-[1.65rem] font-semibold text-[#1C1C1C] mb-3 group-hover:text-[#C6A769] transition-colors duration-500">
-                {principle.title}
-              </h3>
-
-              {/* Description — give it depth, not just one line */}
-              <p className="text-[14px] text-[#6B6B6B] leading-[1.7]">
-                {principle.line}
+              {/* The word — just the word, nothing else */}
+              <p className="font-serif text-lg sm:text-xl text-[#1C1C1C]/50 italic group-hover:text-[#1C1C1C]/80 group-hover:text-[#C6A769] transition-colors duration-500">
+                {principle.word}
               </p>
-
-              {/* Bottom accent on hover — subtle reveal */}
-              <div className="absolute bottom-0 left-8 right-8 h-[2px] rounded-full bg-gradient-to-r from-transparent via-[#C6A769]/25 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left" />
             </motion.div>
           ))}
         </div>

@@ -375,7 +375,7 @@ body {
    Paper — subtle handcrafted touch, not vintage
    ============================================================ */
 
-/* Subtle film grain — warmer, like shooting on film. Slightly increased warmth */
+/* Subtle film grain — warmer, like shooting on film. Increased for handcrafted feel */
 .nauka-grain {
   position: relative;
 }
@@ -383,17 +383,17 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  opacity: 0.022;
+  opacity: 0.035;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   background-size: 128px 128px;
   mix-blend-mode: overlay;
   z-index: 1;
 }
 
-/* PRD: Handcrafted touch — paper texture sangat subtle
+/* PRD: Handcrafted touch — paper texture
    Adds organic warmth, seperti kertas berkualitas tinggi
-   Bukan vintage, bukan noisy — just a gentle tactile quality */
+   Increased slightly for more tactile feel */
 .nauka-paper {
   position: relative;
 }
@@ -401,10 +401,44 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  opacity: 0.015;
+  opacity: 0.022;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)'/%3E%3C/svg%3E");
   background-size: 180px 180px;
+  mix-blend-mode: multiply;
+  z-index: 1;
+}
+
+/* Warm linen texture — subtle crosshatch like fine fabric
+   Adds handcrafted warmth without being vintage */
+.nauka-linen {
+  position: relative;
+}
+.nauka-linen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.012;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='linen'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='6' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23linen)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  mix-blend-mode: overlay;
+  z-index: 1;
+}
+
+/* Subtle ink texture — like a faint wash of ink on paper
+   Adds depth and organic feel, like a letterpress print */
+.nauka-ink {
+  position: relative;
+}
+.nauka-ink::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.008;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='ink'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.03' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23ink)'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
   mix-blend-mode: multiply;
   z-index: 1;
 }

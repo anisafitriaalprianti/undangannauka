@@ -30,7 +30,7 @@ const steps = [
 
 export default function Process() {
   return (
-    <section id="process" className="nauka-atmosphere nauka-grain relative py-16 sm:py-20 bg-[#F6F2EE]">
+    <section id="process" className="nauka-atmosphere nauka-grain nauka-paper relative py-16 sm:py-20 bg-[#F6F2EE]">
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6">
         {/* Section Header — not "Simple & Clear", more like a quiet promise */}
         <div className="text-center mb-14 sm:mb-20">

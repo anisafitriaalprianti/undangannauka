@@ -25,7 +25,7 @@ export default function SignatureShowcase() {
   const mockupY = useTransform(scrollYProgress, [0, 1], [30, -20]);
 
   return (
-    <section ref={sectionRef} id="signature" className="nauka-atmosphere nauka-grain relative py-16 sm:py-20 bg-[#F6F2EE] overflow-hidden">
+    <section ref={sectionRef} id="signature" className="nauka-atmosphere nauka-grain nauka-paper nauka-ink relative py-16 sm:py-20 bg-[#F6F2EE] overflow-hidden">
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
           {/* Text Content */}
@@ -113,6 +113,26 @@ export default function SignatureShowcase() {
                 />
                 {/* Subtle veil — not fully revealing, creating anticipation */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#F6F2EE]/30 via-transparent to-[#F6F2EE]/10 pointer-events-none z-[5]" />
+              </div>
+
+              {/* Reflection — like sitting on a surface */}
+              <div
+                className="relative w-[240px] sm:w-[270px] mx-auto mt-1 overflow-hidden pointer-events-none"
+                style={{ height: '40px' }}
+              >
+                <div
+                  className="w-full rounded-[2rem] overflow-hidden opacity-[0.04] blur-[2px]"
+                  style={{ backgroundColor: '#1C1C1C', aspectRatio: '9/16', transform: 'scaleY(-1)', maskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 80%)', WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 80%)' }}
+                />
+              </div>
+
+              {/* Warm surface glow */}
+              <div
+                className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[150%] h-10 pointer-events-none"
+                style={{
+                  background: 'radial-gradient(ellipse at center, rgba(198,167,105,0.05) 0%, transparent 60%)',
+                }}
+              />
               </div>
 
               {/* Signature badge — subtle, premium */}

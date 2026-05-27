@@ -17,7 +17,7 @@ export default function Testimonials() {
   const others = testimonials.filter((t) => !t.featured);
 
   return (
-    <section id="testimonials" className="nauka-light-warm nauka-grain relative py-16 sm:py-20 bg-white overflow-hidden">
+    <section id="testimonials" className="nauka-light-warm nauka-grain nauka-paper relative py-16 sm:py-20 bg-white overflow-hidden">
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6">
         {/* Section Header — not "Real Reactions", something warmer */}
         <div className="text-center mb-10 sm:mb-14">

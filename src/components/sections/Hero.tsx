@@ -35,7 +35,7 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="nauka-light-warm nauka-grain nauka-vignette nauka-paper relative min-h-screen flex items-center bg-[#F6F2EE] overflow-hidden pt-20 pb-16"
+      className="nauka-light-warm nauka-grain nauka-vignette nauka-paper nauka-ink relative min-h-screen flex items-center bg-[#F6F2EE] overflow-hidden pt-20 pb-16"
     >
       {/* PRD: Lighting must be felt — directional warm spotlight from top-left */}
       <motion.div
@@ -188,32 +188,34 @@ export default function Hero() {
 
             {/* Gentle float animation wrapper */}
             <div style={{ animation: 'naukaGentleFloat 6s ease-in-out infinite' }}>
-              {/* Phone frame */}
-              <div
-                className="relative w-[260px] sm:w-[280px] rounded-[2.5rem] p-2 nauka-shadow-premium ring-1 ring-white/40"
-                style={{ backgroundColor: '#1C1C1C', aspectRatio: '9/18' }}
-              >
-                {/* PRD: Lighting on mockup — subtle top edge highlight */}
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent z-30 rounded-t-[2.5rem]" />
-
-                {/* Light reflection that moves slowly across the phone surface */}
+              {/* Table surface — warm wood tone beneath the phone, like it's sitting on a real surface */}
+              <div className="relative">
+                {/* Phone frame */}
                 <div
-                  className="absolute inset-0 rounded-[2.5rem] z-20 pointer-events-none overflow-hidden"
-                  style={{ animation: 'naukaReflectionShift 8s ease-in-out infinite' }}
+                  className="relative w-[260px] sm:w-[280px] rounded-[2.5rem] p-2 nauka-shadow-premium ring-1 ring-white/40"
+                  style={{ backgroundColor: '#1C1C1C', aspectRatio: '9/18' }}
                 >
-                  <div
-                    className="absolute -inset-full"
-                    style={{
-                      background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.03) 45%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 55%, transparent 60%)',
-                    }}
-                  />
-                </div>
+                  {/* PRD: Lighting on mockup — subtle top edge highlight */}
+                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent z-30 rounded-t-[2.5rem]" />
 
-                {/* Notch */}
-                <div
-                  className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 rounded-b-2xl z-20"
-                  style={{ backgroundColor: '#1C1C1C' }}
-                />
+                  {/* Light reflection that moves slowly across the phone surface */}
+                  <div
+                    className="absolute inset-0 rounded-[2.5rem] z-20 pointer-events-none overflow-hidden"
+                    style={{ animation: 'naukaReflectionShift 8s ease-in-out infinite' }}
+                  >
+                    <div
+                      className="absolute -inset-full"
+                      style={{
+                        background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.03) 45%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 55%, transparent 60%)',
+                      }}
+                    />
+                  </div>
+
+                  {/* Notch */}
+                  <div
+                    className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 rounded-b-2xl z-20"
+                    style={{ backgroundColor: '#1C1C1C' }}
+                  />
 
                 {/* Screen */}
                 <div
@@ -293,6 +295,26 @@ export default function Hero() {
                     <div style={{ height: '30%' }} />
                   </div>
                 </div>
+              </div>
+
+              {/* Reflection — phone casts a soft reflection below, like sitting on a polished surface */}
+              <div
+                className="relative w-[260px] sm:w-[280px] mx-auto mt-1 overflow-hidden pointer-events-none"
+                style={{ height: '50px' }}
+              >
+                <div
+                  className="w-full rounded-[2.5rem] overflow-hidden opacity-[0.04] blur-[3px]"
+                  style={{ backgroundColor: '#1C1C1C', aspectRatio: '9/18', transform: 'scaleY(-1)', maskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 70%)', WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 70%)' }}
+                />
+              </div>
+
+              {/* Warm surface light — like light hitting a wooden table */}
+              <div
+                className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[140%] h-8 pointer-events-none"
+                style={{
+                  background: 'radial-gradient(ellipse at center, rgba(198,167,105,0.04) 0%, transparent 60%)',
+                }}
+              />
               </div>
             </div>
 
