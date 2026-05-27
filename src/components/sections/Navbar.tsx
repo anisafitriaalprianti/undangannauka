@@ -63,7 +63,7 @@ export default function Navbar() {
               alt="Nauka"
               width={180}
               height={54}
-              className="h-10 sm:h-12 w-auto group-hover:opacity-80 transition-opacity duration-400"
+              className="h-14 sm:h-16 w-auto group-hover:opacity-80 transition-opacity duration-400"
               priority
             />
           </a>
