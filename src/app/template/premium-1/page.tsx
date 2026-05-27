@@ -80,22 +80,19 @@ export default function Premium1Page() {
             {/* Scene I: "Menjaga Dalam Diam" */}
             <Scene1 />
 
-            {/* PRIORITY 1: Breathing spacer — LONG
-                Emotional distance between "menjaga" and "sujud"
-                Warm ivory background with subtle centered gold dot */}
+            {/* Breathing spacer — Scene 1 → Scene 2
+                Tall warm ivory space with a thin horizontal gold line
+                that draws slowly from center. Emotional distance. */}
             <div
-              className="relative flex items-center justify-center"
-              style={{
-                backgroundColor: '#F5F0E8',
-                height: '20vh',
-              }}
+              className="template-p1 relative flex items-center justify-center"
+              style={{ backgroundColor: 'var(--p1-ivory)', height: '25vh' }}
             >
               <div
+                className="w-[80px] origin-center"
                 style={{
-                  width: '3px',
-                  height: '3px',
-                  borderRadius: '50%',
-                  backgroundColor: 'rgba(198, 167, 105, 0.2)',
+                  height: '1px',
+                  background: 'linear-gradient(to right, transparent, var(--p1-gold), transparent)',
+                  animation: 'p1LineDrawSlow 2.5s ease-out forwards',
                 }}
               />
             </div>
@@ -103,44 +100,31 @@ export default function Premium1Page() {
             {/* Scene II: "Menitipkan Dalam Sujud" */}
             <Scene2 />
 
-            {/* PRIORITY 1: Breathing spacer — MEDIUM
-                Between sujud and breathing space
-                Warm ivory background with subtle centered gold dot */}
+            {/* Breathing spacer — Scene 2 → Scene 3
+                Medium pure breathing whitespace. Nothing else.
+                Just the warm ivory background. */}
             <div
-              className="relative flex items-center justify-center"
-              style={{
-                backgroundColor: '#F5F0E8',
-                height: '14vh',
-              }}
-            >
-              <div
-                style={{
-                  width: '2px',
-                  height: '2px',
-                  borderRadius: '50%',
-                  backgroundColor: 'rgba(198, 167, 105, 0.18)',
-                }}
-              />
-            </div>
+              className="template-p1"
+              style={{ backgroundColor: 'var(--p1-ivory)', height: '18vh' }}
+            />
 
             {/* Scene III: Breathing space — emotional pause */}
             <Scene3 />
 
-            {/* PRIORITY 1: Breathing spacer — SHORT
-                Building toward payoff
-                Warm ivory background with subtle thin gold line */}
+            {/* Breathing spacer — Scene 3 → Scene 4
+                Short space with a very thin vertical gold line.
+                Building tension toward the payoff. */}
             <div
-              className="relative flex items-center justify-center"
-              style={{
-                backgroundColor: '#F5F0E8',
-                height: '8vh',
-              }}
+              className="template-p1 relative flex items-center justify-center"
+              style={{ backgroundColor: 'var(--p1-ivory)', height: '12vh' }}
             >
               <div
+                className="origin-center"
                 style={{
-                  width: '30px',
-                  height: '1px',
-                  background: 'linear-gradient(to right, transparent, rgba(198, 167, 105, 0.15), transparent)',
+                  width: '1px',
+                  height: '3px',
+                  background: 'var(--p1-gold)',
+                  animation: 'p1VerticalLineDraw 1.5s ease-out forwards',
                 }}
               />
             </div>

@@ -5,116 +5,115 @@ import { motion, useInView, type Variants } from 'framer-motion';
 import { useRef } from 'react';
 
 /* ──────────────────────────────────────────────────────────────
-   Scene1 — "Menjaga Dalam Diam"
+   Scene1 — "Menjaga Dalam Diam" (Guarding in Silence)
    Premium-1 Islamic Faceless Cinematic Wedding Invitation
 
-   Concept: Faceless hijab woman silhouette behind window with
-   moonlight, a man walking away outside (implied through
-   composition), emotional distance feeling.
+   Emotion: Distance, longing, quiet interior vs cold exterior
 
-   Composition:
-   • Near-full viewport height, warm ivory background
-   • Image centered or slightly above, ~55-60% of space
-   • Below image: scene title in small caps tracking
-   • Below title: quote text in italic serif
-   • Generous whitespace/padding
+   Composition: ASYMMETRIC — Image offset to the LEFT (~55-60%),
+   text zone on the RIGHT with generous whitespace.
+   Visual tension matching the emotional distance.
 
-   Animation sequence (scroll-triggered, whileInView):
-   1. Image reveals with sketch-to-cinematic effect:
-      grayscale blur → partial color → full sharp cinematic
-   2. Title appears after image is ~70% revealed
-   3. Quote text fades in slowly after title
-   4. Subtle ambient warm glow that breathes
+   Image treatment:
+   • Thin gold outline frame appears FIRST (like a sketch)
+   • Image slowly materializes behind it with opacity only (NO blur)
+   • The outline frame fades away as image becomes fully present
+   • Directional lighting overlay: cool moonlight from top, warm lamp from bottom-left
 
-   Atmosphere: warm room inside, moonlight outside,
-               emotional distance, calm and intimate
+   Text treatment:
+   • Scene label "Scene I" is subtle, far to the right, small
+   • Title appears after image is ~70% revealed, right of image area
+   • Quote text appears last, in the right whitespace zone
+   • No quotation marks — just the words themselves
+   • Single thin gold line between title and quote
    ────────────────────────────────────────────────────────────── */
 
 // ── Animation variants ──────────────────────────────────────────
 
-/**
- * Sketch-to-cinematic image reveal — TRUE multi-stage reveal.
- * PRIORITY 2: Four perceptual stages via Framer Motion keyframes.
- *   Stage 1 (0→30%)  — thin sketch lines: heavy blur, full grayscale, very low opacity
- *   Stage 2 (30→55%) — shading added: slightly more opacity, less blur, still mostly grayscale
- *   Stage 3 (55→80%) — lighting added: color emerging, less blur
- *   Stage 4 (80→100%) — cinematic alive: full color, sharp, warm
- * Total duration: 3.2s (slower than previous 2.2s)
- */
-const sketchToCinematic: Variants = {
+/** Sketch frame — thin gold border appears first, then fades */
+const sketchFrameIn: Variants = {
   hidden: {
-    opacity: 0.08,
-    filter: 'blur(10px) grayscale(100%)',
-    scale: 1.04,
+    opacity: 0,
+    scale: 1.02,
   },
   visible: {
-    opacity: [0.08, 0.25, 0.6, 1],
-    filter: [
-      'blur(10px) grayscale(100%)',
-      'blur(6px) grayscale(85%)',
-      'blur(2.5px) grayscale(35%)',
-      'blur(0px) grayscale(0%)',
-    ],
-    scale: 1,
+    opacity: [0, 1, 1, 0],
+    scale: [1.02, 1, 1, 0.98],
     transition: {
-      duration: 3.2,
+      duration: 3.6,
       ease: [0.16, 1, 0.3, 1],
       opacity: {
-        duration: 3.2,
-        times: [0, 0.3, 0.55, 0.8],
-        ease: 'easeOut',
-      },
-      filter: {
-        duration: 3.2,
-        times: [0, 0.3, 0.55, 0.8],
+        duration: 3.6,
+        times: [0, 0.15, 0.65, 1],
         ease: 'easeOut',
       },
       scale: {
-        duration: 3.4,
+        duration: 3.6,
         ease: [0.16, 1, 0.3, 1],
       },
     },
   },
 };
 
-/** Scene title — fades in with gentle blur-to-sharp */
-const titleFadeIn: Variants = {
+/** Image materialize — opacity + slight scale, NO blur */
+const imageMaterialize: Variants = {
   hidden: {
     opacity: 0,
-    y: 10,
-    filter: 'blur(3px)',
+    scale: 1.03,
   },
   visible: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
+    opacity: [0, 0, 0.3, 0.7, 1],
+    scale: 1,
     transition: {
-      duration: 1.2,
+      duration: 3.4,
       ease: [0.16, 1, 0.3, 1],
+      opacity: {
+        duration: 3.4,
+        times: [0, 0.1, 0.3, 0.6, 1],
+        ease: 'easeOut',
+      },
+      scale: {
+        duration: 3.6,
+        ease: [0.16, 1, 0.3, 1],
+      },
     },
   },
 };
 
-/** Scene label ("Scene I") — appears just before title */
+/** Scene label — subtle, far right */
 const labelFadeIn: Variants = {
   hidden: {
     opacity: 0,
-    y: 6,
-    filter: 'blur(2px)',
+    x: 10,
   },
   visible: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
+    opacity: 0.5,
+    x: 0,
     transition: {
-      duration: 0.8,
+      duration: 1.0,
       ease: [0.16, 1, 0.3, 1],
     },
   },
 };
 
-/** Decorative divider — draws from center outward */
-const dividerDraw: Variants = {
+/** Title — appears after image is ~70% revealed */
+const titleFadeIn: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 12,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 1.4,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
+
+/** Gold line — draws from center outward */
+const lineDraw: Variants = {
   hidden: {
     scaleX: 0,
     opacity: 0,
@@ -129,26 +128,20 @@ const dividerDraw: Variants = {
   },
 };
 
-/** Quote text — fades in slowly, like words settling on paper */
+/** Quote text — fades in slowly */
 const quoteFadeIn: Variants = {
   hidden: {
     opacity: 0,
     y: 16,
-    filter: 'blur(4px)',
   },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: {
       duration: 1.8,
       ease: [0.16, 1, 0.3, 1],
       opacity: {
         duration: 2.0,
-        ease: 'easeOut',
-      },
-      filter: {
-        duration: 1.4,
         ease: 'easeOut',
       },
     },
@@ -167,190 +160,175 @@ export default function Scene1() {
   return (
     <section
       ref={sectionRef}
-      className="template-p1 nauka-paper nauka-grain nauka-ink-wash nauka-vignette relative w-full min-h-dvh overflow-hidden flex flex-col items-center justify-center"
-      style={{
-        backgroundColor: '#F5F0E8',
-      }}
+      className="template-p1 nauka-paper nauka-grain nauka-ink-wash nauka-vignette relative w-full min-h-dvh overflow-hidden"
+      style={{ backgroundColor: 'var(--p1-ivory)' }}
     >
-      {/* ── Warm ambient light layers ──
-          PRIORITY 4: Stronger directional lighting
-          Top-center: STRONGER moonlight (cool blue-grey) — outside cold
-          Bottom-left: STRONGER warm lamp (warm gold) — inside warm
-          The contrast creates "outside cold / inside warm" emotional distance */}
+      {/* ── Directional lighting overlays ──
+          Cool moonlight from top, warm lamp from bottom-left */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background: [
-            // STRONGER Moonlight from top-center — cool, outside
-            'radial-gradient(ellipse 70% 40% at 50% 3%, rgba(138,155,174,0.09) 0%, transparent 50%)',
-            // STRONGER Warm lamp from bottom-left — warm, inside
-            'radial-gradient(ellipse 65% 55% at 35% 80%, rgba(198,167,105,0.10) 0%, transparent 50%)',
-            // Secondary warm glow — subtle ambient
-            'radial-gradient(ellipse 50% 40% at 30% 60%, rgba(198,167,105,0.04) 0%, transparent 50%)',
+            'radial-gradient(ellipse 70% 40% at 35% 5%, rgba(138,155,174,0.08) 0%, transparent 50%)',
+            'radial-gradient(ellipse 65% 55% at 25% 75%, rgba(198,167,105,0.08) 0%, transparent 50%)',
+            'radial-gradient(ellipse 50% 40% at 20% 55%, rgba(198,167,105,0.03) 0%, transparent 50%)',
           ].join(', '),
         }}
         aria-hidden="true"
       />
 
-      {/* ── Breathing ambient warm glow ──
-          Subtle pulse that makes the scene feel alive,
-          like warm lamplight breathing in a quiet room */}
+      {/* ── Breathing ambient warm glow ── */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
-            'radial-gradient(ellipse 40% 30% at 50% 65%, rgba(198,167,105,0.05) 0%, transparent 60%)',
+            'radial-gradient(ellipse 40% 30% at 35% 60%, rgba(198,167,105,0.04) 0%, transparent 60%)',
           animation: 'naukaBreathLight 8s ease-in-out infinite',
         }}
         aria-hidden="true"
       />
 
-      {/* ── Content wrapper ── */}
-      <div className="relative z-10 mx-auto w-full max-w-3xl px-6 py-16 sm:px-8 sm:py-20 md:px-12 md:py-24 flex flex-col items-center">
-        {/* ── Scene Image — faceless woman behind window ──
-            Takes up ~55-60% of the visual space.
-            Sketch-to-cinematic reveal with staggered stages. */}
-        <motion.div
-          className="w-full max-w-[420px] sm:max-w-[480px] md:max-w-[520px]"
-          variants={sketchToCinematic}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-        >
-          <div
-            className="nauka-edge-soft relative overflow-hidden rounded-lg md:rounded-xl"
-            style={{
-              aspectRatio: '574 / 388',
-              boxShadow:
-                '0 2px 8px rgba(28,28,28,0.04), 0 8px 24px rgba(28,28,28,0.06), 0 20px 48px rgba(28,28,28,0.04)',
-            }}
-          >
-            <Image
-              src="/template/premium-1/scene-1.webp"
-              alt="Faceless hijab woman silhouette behind a window bathed in moonlight, a quiet room aglow with warmth"
-              fill
-              sizes="(max-width: 640px) 85vw, (max-width: 768px) 480px, 520px"
-              className="object-cover"
-              priority={false}
-            />
+      {/* ── Asymmetric content wrapper ──
+          Image LEFT, text RIGHT. Two-column on md+, stacked on mobile. */}
+      <div className="relative z-10 mx-auto w-full max-w-5xl px-6 py-16 sm:px-8 sm:py-20 md:px-12 md:py-24 min-h-dvh flex items-center">
+        <div className="w-full flex flex-col md:flex-row md:items-center gap-8 md:gap-10 lg:gap-16">
 
-            {/* PRIORITY 4: Cinematic warm overlay — stronger directional lighting
-                Cool moonlight from top-center, warm lamp from bottom-left */}
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background: [
-                  // STRONGER Moonlight cast from top — cool, outside
-                  'linear-gradient(180deg, rgba(138,155,174,0.10) 0%, transparent 40%)',
-                  // STRONGER Warm room glow from bottom-left — inside
-                  'linear-gradient(315deg, rgba(198,167,105,0.09) 0%, transparent 45%)',
-                ].join(', '),
-              }}
-              aria-hidden="true"
-            />
-
-            {/* PRIORITY 4: Stronger directional warm light — bottom-left, like a lamp in the room */}
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  'radial-gradient(ellipse 60% 45% at 25% 70%, rgba(198,167,105,0.07) 0%, transparent 55%)',
-              }}
-              aria-hidden="true"
-            />
-          </div>
-        </motion.div>
-
-        {/* ── Scene Label — "Scene I" ──
-            Appears when image is ~60% revealed */}
-        <motion.div
-          className="mt-10 sm:mt-12 md:mt-14 flex flex-col items-center gap-3"
-          variants={labelFadeIn}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          transition={{ delay: 1.8 }}
-        >
-          <span
-            className="font-serif text-[10px] tracking-[0.3em] uppercase sm:text-xs"
-            style={{ color: 'var(--p1-gold-dim, #8A7444)' }}
-          >
-            Scene I
-          </span>
-        </motion.div>
-
-        {/* ── Scene Title — small caps ──
-            Appears after image is ~70% revealed */}
-        <motion.div
-          className="mt-2 flex flex-col items-center gap-3"
-          variants={titleFadeIn}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          transition={{ delay: 2.2 }}
-        >
-          <h2
-            className="font-serif text-lg font-medium tracking-wide sm:text-xl md:text-2xl"
-            style={{ color: 'var(--p1-warm-brown, #6B5B4A)' }}
-          >
-            <span style={{ fontVariant: 'small-caps' }}>
-              Menjaga Dalam Diam
-            </span>
-          </h2>
-
-          {/* Decorative gold divider — draws from center */}
-          <motion.div
-            className="h-[1px] w-[60px] origin-center"
-            style={{
-              background:
-                'linear-gradient(to right, transparent, var(--p1-gold, #C6A769), transparent)',
-            }}
-            variants={dividerDraw}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            transition={{ delay: 2.6 }}
-          />
-        </motion.div>
-
-        {/* ── Quote text — italic serif ──
-            Fades in slowly after title has settled.
-            Breathing text effect via p1TextBreathe keyframe. */}
-        <motion.div
-          className="mt-8 sm:mt-10 md:mt-12 px-2 sm:px-4 text-center max-w-md"
-          variants={quoteFadeIn}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          transition={{ delay: 3.0 }}
-        >
-          {/* Decorative opening quotation mark */}
-          <span
-            className="mb-3 block font-serif text-2xl leading-none sm:text-3xl"
-            style={{ color: 'var(--p1-gold, #C6A769)', opacity: 0.4 }}
-            aria-hidden="true"
-          >
-            &ldquo;
-          </span>
-
-          <blockquote>
-            <p
-              className="font-serif italic text-sm leading-[2] tracking-wide sm:text-[15px] sm:leading-[2.1] md:text-base"
-              style={{
-                color: 'var(--p1-warm-brown, #6B5B4A)',
-                animation: 'p1TextBreathe 8s ease-in-out infinite',
-              }}
+          {/* ── LEFT: Image zone — offset to left, ~55-60% on desktop ── */}
+          <div className="w-full md:w-[58%] flex-shrink-0">
+            <motion.div
+              className="relative"
+              style={{ maxWidth: '520px' }}
+              variants={imageMaterialize}
+              initial="hidden"
+              animate={isInView ? 'visible' : 'hidden'}
             >
-              Kami saling mengenal sejak lama.
-              <br />
-              Namun memilih menjaga hati sebelum waktunya tiba.
-            </p>
-          </blockquote>
+              <div
+                className="nauka-edge-soft relative overflow-hidden rounded-lg md:rounded-xl"
+                style={{
+                  aspectRatio: '574 / 388',
+                  boxShadow:
+                    '0 2px 8px rgba(28,28,28,0.04), 0 8px 24px rgba(28,28,28,0.06), 0 20px 48px rgba(28,28,28,0.04)',
+                }}
+              >
+                <Image
+                  src="/template/premium-1/scene-1.webp"
+                  alt="Faceless hijab woman silhouette behind a window bathed in moonlight, a quiet room aglow with warmth"
+                  fill
+                  sizes="(max-width: 768px) 85vw, 520px"
+                  className="object-cover"
+                  priority={false}
+                />
 
-          {/* Decorative closing quotation mark */}
-          <span
-            className="mt-3 block font-serif text-2xl leading-none sm:text-3xl"
-            style={{ color: 'var(--p1-gold, #C6A769)', opacity: 0.4 }}
-            aria-hidden="true"
-          >
-            &rdquo;
-          </span>
-        </motion.div>
+                {/* Directional lighting on image
+                    Cool moonlight from top, warm lamp from bottom-left */}
+                <div
+                  className="pointer-events-none absolute inset-0"
+                  style={{
+                    background: [
+                      'linear-gradient(180deg, rgba(138,155,174,0.08) 0%, transparent 40%)',
+                      'linear-gradient(315deg, rgba(198,167,105,0.07) 0%, transparent 45%)',
+                    ].join(', '),
+                  }}
+                  aria-hidden="true"
+                />
+                <div
+                  className="pointer-events-none absolute inset-0"
+                  style={{
+                    background:
+                      'radial-gradient(ellipse 60% 45% at 25% 70%, rgba(198,167,105,0.05) 0%, transparent 55%)',
+                  }}
+                  aria-hidden="true"
+                />
+              </div>
+
+              {/* ── Sketch frame — thin gold outline that appears first, then fades ── */}
+              <motion.div
+                className="absolute inset-[-4px] rounded-lg md:rounded-xl pointer-events-none"
+                style={{
+                  border: '1px solid var(--p1-gold)',
+                  opacity: 0.6,
+                }}
+                variants={sketchFrameIn}
+                initial="hidden"
+                animate={isInView ? 'visible' : 'hidden'}
+              />
+            </motion.div>
+          </div>
+
+          {/* ── RIGHT: Text zone — generous whitespace ── */}
+          <div className="w-full md:w-[42%] flex flex-col md:items-start items-center md:text-left text-center">
+
+            {/* Scene label — subtle, small */}
+            <motion.div
+              className="mb-4 md:mb-6"
+              variants={labelFadeIn}
+              initial="hidden"
+              animate={isInView ? 'visible' : 'hidden'}
+              transition={{ delay: 1.6 }}
+            >
+              <span
+                className="font-serif text-[10px] tracking-[0.3em] uppercase sm:text-xs"
+                style={{ color: 'var(--p1-gold-dim)' }}
+              >
+                Scene I
+              </span>
+            </motion.div>
+
+            {/* Title */}
+            <motion.div
+              className="mb-4 md:mb-5"
+              variants={titleFadeIn}
+              initial="hidden"
+              animate={isInView ? 'visible' : 'hidden'}
+              transition={{ delay: 2.2 }}
+            >
+              <h2
+                className="font-serif text-lg font-medium tracking-wide sm:text-xl md:text-2xl"
+                style={{ color: 'var(--p1-warm-brown)' }}
+              >
+                <span style={{ fontVariant: 'small-caps' }}>
+                  Menjaga Dalam Diam
+                </span>
+              </h2>
+            </motion.div>
+
+            {/* Single thin gold line */}
+            <motion.div
+              className="mb-5 md:mb-6 w-[50px] origin-center md:origin-left"
+              style={{
+                height: '1px',
+                background: 'linear-gradient(to right, var(--p1-gold), transparent)',
+              }}
+              variants={lineDraw}
+              initial="hidden"
+              animate={isInView ? 'visible' : 'hidden'}
+              transition={{ delay: 2.6 }}
+            />
+
+            {/* Quote text — no quotation marks */}
+            <motion.div
+              className="max-w-xs"
+              variants={quoteFadeIn}
+              initial="hidden"
+              animate={isInView ? 'visible' : 'hidden'}
+              transition={{ delay: 3.0 }}
+            >
+              <blockquote>
+                <p
+                  className="font-serif italic text-sm leading-[2] tracking-wide sm:text-[15px] sm:leading-[2.1] md:text-base"
+                  style={{
+                    color: 'var(--p1-warm-brown)',
+                    animation: 'p1TextBreathe 8s ease-in-out infinite',
+                  }}
+                >
+                  Kami saling mengenal sejak lama.
+                  <br />
+                  Namun memilih menjaga hati sebelum waktunya tiba.
+                </p>
+              </blockquote>
+            </motion.div>
+          </div>
+        </div>
       </div>
 
       {/* ── Bottom edge — soft fade into next scene ── */}

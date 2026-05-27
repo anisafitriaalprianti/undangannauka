@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 /* ============================================================
@@ -9,6 +8,10 @@ import { motion } from 'framer-motion';
 
    Concept: Elegant faceless cover with moonlight and warm atmosphere.
    Intimate and calm, NOT dramatic. Subtle movement only.
+
+   CSS-only atmospheric effects — no external images.
+   Moon: CSS radial gradient with warm glow pulse
+   Curtains: CSS gradients with subtle sway
    ============================================================ */
 
 // --- Animation Variants ---
@@ -40,21 +43,19 @@ const curtainVariant = {
 };
 
 const bismillahVariant = {
-  hidden: { opacity: 0, y: 8, filter: 'blur(4px)' },
+  hidden: { opacity: 0, y: 8 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: { duration: 1.4, ease: [0.25, 0.46, 0.45, 0.94], delay: 1.0 },
   },
 };
 
 const namesVariant = {
-  hidden: { opacity: 0, y: 20, filter: 'blur(6px)' },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: { duration: 1.6, ease: [0.25, 0.46, 0.45, 0.94], delay: 1.4 },
   },
 };
@@ -69,17 +70,15 @@ const dividerVariant = {
 };
 
 const dateVariant = {
-  hidden: { opacity: 0, y: 10, filter: 'blur(3px)' },
+  hidden: { opacity: 0, y: 10 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: { duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94], delay: 2.4 },
   },
 };
 
 // --- Dust Particles Data — PRIMARY layer ---
-// Positions scattered across the cover, simulating dust floating in moonlight
 const dustParticles = [
   { left: '15%', top: '20%', size: 2, delay: 0, duration: 8 },
   { left: '30%', top: '15%', size: 1.5, delay: 1.2, duration: 10 },
@@ -98,8 +97,7 @@ const dustParticles = [
   { left: '40%', top: '75%', size: 1.8, delay: 3.0, duration: 8 },
 ];
 
-// --- Dust Particles Data — DISTANT layer (PRIORITY 3) ---
-// Even smaller (1px) and slower (15-20s) — like distant dust in moonlight
+// --- Dust Particles Data — DISTANT layer ---
 const distantDustParticles = [
   { left: '12%', top: '18%', delay: 0.5, duration: 16 },
   { left: '28%', top: '32%', delay: 2.3, duration: 18 },
@@ -128,7 +126,7 @@ export default function Cover() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
       >
-        {/* --- Warm ambient gradient layers --- */}
+        {/* Warm ambient gradient layers */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -153,51 +151,59 @@ export default function Cover() {
         />
       </motion.div>
 
-      {/* === MOON ELEMENT === */}
+      {/* === CSS MOON — radial gradient instead of image === */}
       <motion.div
         className="absolute pointer-events-none z-[2]"
         style={{
           top: '6%',
           left: '50%',
           transform: 'translateX(-50%)',
-          width: 'clamp(120px, 35vw, 220px)',
-          height: 'clamp(120px, 35vw, 220px)',
+          width: 'clamp(100px, 28vw, 180px)',
+          height: 'clamp(100px, 28vw, 180px)',
         }}
         variants={moonVariant}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
       >
-        {/* Moon glow — soft pulsing light behind moon image
-            PRIORITY 3: Added subtle p1WarmDrift alongside p1MoonPulse */}
+        {/* Moon glow — soft pulsing light behind moon */}
         <div
-          className="absolute inset-[-30%] rounded-full pointer-events-none"
+          className="absolute rounded-full pointer-events-none"
           style={{
+            inset: '-30%',
             background:
               'radial-gradient(circle at center, rgba(198, 167, 105, 0.15) 0%, rgba(198, 167, 105, 0.05) 40%, transparent 70%)',
             animation: 'p1MoonPulse 6s ease-in-out infinite, p1WarmDrift 12s ease-in-out infinite',
           }}
         />
-        {/* Moon image */}
-        <Image
-          src="/template/premium-1/cover-moon.png"
-          alt="Moonlight ambience"
-          fill
-          className="object-contain"
-          style={{ animation: 'p1MoonPulse 6s ease-in-out infinite' }}
-          sizes="(max-width: 640px) 35vw, 220px"
-          priority
+        {/* Moon body — CSS circle with warm gradient */}
+        <div
+          className="absolute inset-0 rounded-full"
+          style={{
+            background:
+              'radial-gradient(circle at 45% 40%, rgba(245, 235, 215, 0.35) 0%, rgba(220, 200, 165, 0.15) 40%, rgba(198, 167, 105, 0.06) 70%, transparent 100%)',
+            animation: 'p1MoonPulse 6s ease-in-out infinite',
+          }}
+        />
+        {/* Moon inner highlight — gives it dimension */}
+        <div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            inset: '25%',
+            background:
+              'radial-gradient(circle at 40% 35%, rgba(255, 250, 235, 0.20) 0%, transparent 70%)',
+          }}
         />
       </motion.div>
 
-      {/* === CURTAIN ELEMENTS === */}
+      {/* === CSS CURTAINS — gradients instead of images === */}
       {/* Left curtain */}
       <motion.div
         className="absolute pointer-events-none z-[3]"
         style={{
           top: 0,
           left: 0,
-          width: 'clamp(80px, 25vw, 200px)',
+          width: 'clamp(60px, 18vw, 140px)',
           height: '100%',
           animation: 'p1CurtainSway 10s ease-in-out infinite',
         }}
@@ -206,13 +212,30 @@ export default function Cover() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
       >
-        <Image
-          src="/template/premium-1/cover-curtains.png"
-          alt=""
-          fill
-          className="object-cover object-left"
-          sizes="(max-width: 640px) 25vw, 200px"
-          aria-hidden="true"
+        {/* Curtain body — warm gradient fading from edge */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(to right, rgba(139, 125, 107, 0.06) 0%, rgba(139, 125, 107, 0.03) 40%, rgba(139, 125, 107, 0.01) 70%, transparent 100%)',
+          }}
+        />
+        {/* Curtain folds — subtle vertical lines */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(90deg, transparent 0%, rgba(198, 167, 105, 0.015) 20%, transparent 25%, rgba(198, 167, 105, 0.01) 45%, transparent 50%, rgba(198, 167, 105, 0.015) 70%, transparent 75%, rgba(198, 167, 105, 0.01) 90%, transparent 100%)',
+          }}
+        />
+        {/* Curtain top gather — slightly darker at top */}
+        <div
+          className="absolute top-0 left-0 right-0"
+          style={{
+            height: '15%',
+            background:
+              'linear-gradient(180deg, rgba(139, 125, 107, 0.04) 0%, transparent 100%)',
+          }}
         />
       </motion.div>
 
@@ -222,7 +245,7 @@ export default function Cover() {
         style={{
           top: 0,
           right: 0,
-          width: 'clamp(80px, 25vw, 200px)',
+          width: 'clamp(60px, 18vw, 140px)',
           height: '100%',
           transform: 'scaleX(-1)',
           animation: 'p1CurtainSway 10s ease-in-out infinite',
@@ -233,13 +256,30 @@ export default function Cover() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
       >
-        <Image
-          src="/template/premium-1/cover-curtains.png"
-          alt=""
-          fill
-          className="object-cover object-left"
-          sizes="(max-width: 640px) 25vw, 200px"
-          aria-hidden="true"
+        {/* Curtain body */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(to right, rgba(139, 125, 107, 0.06) 0%, rgba(139, 125, 107, 0.03) 40%, rgba(139, 125, 107, 0.01) 70%, transparent 100%)',
+          }}
+        />
+        {/* Curtain folds */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(90deg, transparent 0%, rgba(198, 167, 105, 0.015) 20%, transparent 25%, rgba(198, 167, 105, 0.01) 45%, transparent 50%, rgba(198, 167, 105, 0.015) 70%, transparent 75%, rgba(198, 167, 105, 0.01) 90%, transparent 100%)',
+          }}
+        />
+        {/* Curtain top gather */}
+        <div
+          className="absolute top-0 left-0 right-0"
+          style={{
+            height: '15%',
+            background:
+              'linear-gradient(180deg, rgba(139, 125, 107, 0.04) 0%, transparent 100%)',
+          }}
         />
       </motion.div>
 
@@ -261,8 +301,7 @@ export default function Cover() {
         ))}
       </div>
 
-      {/* === FLOATING DUST PARTICLES — DISTANT LAYER (PRIORITY 3) ===
-          Even smaller (1px) and slower (15-20s) — like distant dust in moonlight */}
+      {/* === FLOATING DUST PARTICLES — DISTANT LAYER === */}
       <div className="absolute inset-0 pointer-events-none z-[4]" aria-hidden="true">
         {distantDustParticles.map((particle, i) => (
           <div
@@ -280,9 +319,7 @@ export default function Cover() {
         ))}
       </div>
 
-      {/* === MOONLIGHT BEAM (PRIORITY 3) ===
-          A very faint diagonal gradient line that slowly shifts position
-          Like a thin shaft of moonlight cutting across the scene */}
+      {/* === MOONLIGHT BEAM === */}
       <div
         className="absolute inset-0 pointer-events-none z-[3]"
         style={{
@@ -293,8 +330,7 @@ export default function Cover() {
         aria-hidden="true"
       />
 
-      {/* === SOFT REFLECTION AT BOTTOM (PRIORITY 3) ===
-          Very subtle horizontal gradient suggesting moonlight reflecting off a surface */}
+      {/* === SOFT REFLECTION AT BOTTOM === */}
       <div
         className="absolute bottom-0 left-0 right-0 pointer-events-none z-[3]"
         style={{
@@ -380,13 +416,9 @@ export default function Cover() {
       </div>
 
       {/* === TEXTURE OVERLAYS — applied last for proper layering === */}
-      {/* Paper texture */}
       <div className="nauka-paper absolute inset-0 pointer-events-none z-[6]" />
-      {/* Ink wash — PRIORITY 7: organic depth */}
       <div className="nauka-ink-wash absolute inset-0 pointer-events-none z-[6]" />
-      {/* Film grain */}
       <div className="nauka-grain absolute inset-0 pointer-events-none z-[7]" />
-      {/* Vignette */}
       <div className="nauka-vignette absolute inset-0 pointer-events-none z-[8]" />
     </section>
   );

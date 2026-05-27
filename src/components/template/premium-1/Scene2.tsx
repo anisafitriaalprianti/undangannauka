@@ -5,82 +5,65 @@ import { motion, useInView, type Variants } from 'framer-motion';
 import { useRef } from 'react';
 
 /* ──────────────────────────────────────────────────────────────
-   Scene2 — "Menitipkan Dalam Sujud"
+   Scene2 — "Menitipkan Dalam Sujud" (Entrusting in Prostration)
    Premium-1 Islamic Faceless Cinematic Wedding Invitation
 
-   Composition:
-   • Single cinematic image showing both figures in sujud
-   • Centered image, landscape format (1024x380)
-   • Scene label + title above image
-   • Quote text below image
-   • Generous whitespace
+   Emotion: Spiritual devotion, surrender, warm dawn light
 
-   Animation sequence (scroll-triggered):
-   1. Image reveals with sketch-to-cinematic effect
-   2. Title appears after image is ~60% revealed
-   3. Quote text fades in slowly after title
+   Composition: WIDE EDITORIAL — Full-width image in the upper
+   portion, large breathing space below with LEFT-ALIGNED text.
+   Like a film still with credits below.
 
-   Atmosphere: warm dawn / subuh, spiritual calmness,
-               soft cinematic lighting, warm ivory background
+   Image treatment:
+   • Image spans wider (~85% of container), sitting in upper portion
+   • Reveals with slow opacity rise + subtle upward drift (translateY), NO blur
+   • Warm dawn light overlay from top-left
+   • After image is visible, a very thin horizontal line fades in below it
+
+   Text treatment:
+   • Label + Title LEFT-ALIGNED, generous left margin
+   • Quote text left-aligned, italic serif, generous line-height
+   • Asymmetry of left-aligned text vs centered image = editorial tension
+   • No quotation marks, minimal decoration
    ────────────────────────────────────────────────────────────── */
 
 // ── Animation variants ──────────────────────────────────────────
 
-/**
- * Sketch-to-cinematic image reveal — TRUE multi-stage reveal.
- * PRIORITY 2: Four perceptual stages via Framer Motion keyframes.
- *   Stage 1 (0→30%)  — thin sketch lines: heavy blur, full grayscale, very low opacity
- *   Stage 2 (30→55%) — shading added: slightly more opacity, less blur, still mostly grayscale
- *   Stage 3 (55→80%) — lighting added: color emerging, less blur
- *   Stage 4 (80→100%) — cinematic alive: full color, sharp, warm
- * Total duration: 3.0s
- */
-const sketchToCinematic: Variants = {
+/** Image reveal — opacity rise + subtle upward drift, NO blur */
+const imageDriftIn: Variants = {
   hidden: {
-    opacity: 0.08,
-    filter: 'blur(10px) grayscale(100%)',
-    scale: 1.04,
+    opacity: 0,
+    y: 20,
+    scale: 1.01,
   },
   visible: {
-    opacity: [0.08, 0.25, 0.6, 1],
-    filter: [
-      'blur(10px) grayscale(100%)',
-      'blur(6px) grayscale(85%)',
-      'blur(2.5px) grayscale(35%)',
-      'blur(0px) grayscale(0%)',
-    ],
+    opacity: 1,
+    y: 0,
     scale: 1,
     transition: {
-      duration: 3.0,
+      duration: 2.8,
       ease: [0.16, 1, 0.3, 1],
       opacity: {
-        duration: 3.0,
-        times: [0, 0.3, 0.55, 0.8],
+        duration: 2.6,
         ease: 'easeOut',
       },
-      filter: {
-        duration: 3.0,
-        times: [0, 0.3, 0.55, 0.8],
-        ease: 'easeOut',
-      },
-      scale: {
-        duration: 3.2,
+      y: {
+        duration: 2.8,
         ease: [0.16, 1, 0.3, 1],
       },
     },
   },
 };
 
-const titleFadeIn: Variants = {
+/** Scene label — subtle left-aligned */
+const labelFadeIn: Variants = {
   hidden: {
     opacity: 0,
-    y: 10,
-    filter: 'blur(2px)',
+    x: -10,
   },
   visible: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
+    opacity: 0.5,
+    x: 0,
     transition: {
       duration: 1.0,
       ease: [0.16, 1, 0.3, 1],
@@ -88,31 +71,15 @@ const titleFadeIn: Variants = {
   },
 };
 
-const labelFadeIn: Variants = {
+/** Title — left-aligned, appears after image */
+const titleFadeIn: Variants = {
   hidden: {
     opacity: 0,
-    y: 6,
-    filter: 'blur(2px)',
+    y: 12,
   },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
-    transition: {
-      duration: 0.8,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
-};
-
-const dividerDraw: Variants = {
-  hidden: {
-    scaleX: 0,
-    opacity: 0,
-  },
-  visible: {
-    scaleX: 1,
-    opacity: 1,
     transition: {
       duration: 1.2,
       ease: [0.16, 1, 0.3, 1],
@@ -120,25 +87,36 @@ const dividerDraw: Variants = {
   },
 };
 
+/** Thin line below image — fades in */
+const lineFadeIn: Variants = {
+  hidden: {
+    scaleX: 0,
+    opacity: 0,
+  },
+  visible: {
+    scaleX: 1,
+    opacity: 0.4,
+    transition: {
+      duration: 1.6,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
+
+/** Quote text — left-aligned, slow fade */
 const quoteFadeIn: Variants = {
   hidden: {
     opacity: 0,
-    y: 20,
-    filter: 'blur(4px)',
+    y: 14,
   },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: {
-      duration: 1.6,
+      duration: 1.8,
       ease: [0.16, 1, 0.3, 1],
       opacity: {
-        duration: 1.8,
-        ease: 'easeOut',
-      },
-      filter: {
-        duration: 1.4,
+        duration: 2.0,
         ease: 'easeOut',
       },
     },
@@ -157,80 +135,32 @@ export default function Scene2() {
   return (
     <section
       ref={sectionRef}
-      className="template-p1 nauka-paper nauka-grain nauka-ink-wash nauka-vignette relative w-full min-h-dvh overflow-hidden flex flex-col items-center justify-center"
+      className="template-p1 nauka-paper nauka-grain nauka-ink-wash nauka-vignette relative w-full min-h-dvh overflow-hidden"
       style={{
         background:
           'linear-gradient(160deg, #F5F0E8 0%, #F2EDE4 30%, #F5F0E8 60%, #F0EBE1 100%)',
       }}
     >
-      {/* ── Warm ambient light — PRIORITY 4: Stronger directional sunlight from top-left (subuh window light)
-          Casting subtle shadow on the right side */}
+      {/* ── Warm dawn light from top-left ── */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
-            'radial-gradient(ellipse 80% 55% at 20% 10%, rgba(198, 167, 105, 0.10) 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 75% 80%, rgba(198, 167, 105, 0.03) 0%, transparent 50%)',
+            'radial-gradient(ellipse 80% 55% at 20% 10%, rgba(198, 167, 105, 0.09) 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 75% 80%, rgba(198, 167, 105, 0.03) 0%, transparent 50%)',
         }}
         aria-hidden="true"
       />
 
-      {/* ── Content wrapper ── */}
-      <div className="relative z-10 mx-auto w-full max-w-3xl px-6 py-16 sm:px-8 sm:py-20 md:px-12 md:py-24 flex flex-col items-center">
-        {/* ── Scene Label — "Scene II" ── */}
+      {/* ── Content wrapper — editorial layout ── */}
+      <div className="relative z-10 mx-auto w-full max-w-4xl px-6 py-16 sm:px-8 sm:py-20 md:px-12 md:py-24 min-h-dvh flex flex-col justify-center">
+
+        {/* ── Wide image — upper portion, ~85% of container width ── */}
         <motion.div
-          className="mb-6 sm:mb-8 flex flex-col items-center gap-3"
-          variants={labelFadeIn}
+          className="w-full mx-auto"
+          style={{ maxWidth: '85%' }}
+          variants={imageDriftIn}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-        >
-          <span
-            className="font-serif text-[10px] tracking-[0.3em] uppercase sm:text-xs"
-            style={{ color: 'var(--p1-gold-dim, #8A7444)' }}
-          >
-            Scene II
-          </span>
-        </motion.div>
-
-        {/* ── Scene Title ── */}
-        <motion.div
-          className="mb-8 sm:mb-10 md:mb-12 flex flex-col items-center gap-3"
-          variants={titleFadeIn}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          transition={{ delay: 0.4 }}
-        >
-          <h2
-            className="font-serif text-lg font-medium tracking-wide sm:text-xl md:text-2xl"
-            style={{ color: 'var(--p1-warm-brown, #6B5B4A)' }}
-          >
-            <span style={{ fontVariant: 'small-caps' }}>
-              Menitipkan Dalam Sujud
-            </span>
-          </h2>
-
-          {/* Decorative divider */}
-          <motion.div
-            className="h-[1px] w-[60px] origin-center"
-            style={{
-              background:
-                'linear-gradient(to right, transparent, var(--p1-gold, #C6A769), transparent)',
-            }}
-            variants={dividerDraw}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            transition={{ delay: 0.8 }}
-          />
-        </motion.div>
-
-        {/* ── Scene Image — two figures in sujud ──
-            Single cinematic image, landscape format.
-            Sketch-to-cinematic reveal with warm dawn light. */}
-        <motion.div
-          className="w-full max-w-[560px] sm:max-w-[640px] md:max-w-[720px]"
-          variants={sketchToCinematic}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          transition={{ delay: 0.3 }}
         >
           <div
             className="nauka-edge-soft relative overflow-hidden rounded-lg md:rounded-xl"
@@ -244,89 +174,108 @@ export default function Scene2() {
               src="/template/premium-1/scene-2.webp"
               alt="Two figures in sujud, entrusting their feelings in long prostrations at dawn"
               fill
-              sizes="(max-width: 640px) 85vw, (max-width: 768px) 640px, 720px"
+              sizes="85vw"
               className="object-cover"
               priority={false}
             />
 
-            {/* PRIORITY 4: Directional sunlight from top-left + subtle shadow on right
-                Sunlight casts from top-left, with a very thin shadow on the right edge */}
+            {/* Warm dawn light overlay from top-left */}
             <div
               className="pointer-events-none absolute inset-0"
               style={{
                 background:
-                  'linear-gradient(135deg, rgba(198,167,105,0.07) 0%, transparent 55%)',
+                  'linear-gradient(135deg, rgba(198,167,105,0.06) 0%, transparent 55%)',
               }}
               aria-hidden="true"
             />
-            {/* PRIORITY 4: Right-side subtle shadow — sunlight from left casts shadow on right */}
+            {/* Subtle right-side shadow — light from left */}
             <div
               className="pointer-events-none absolute inset-0"
               style={{
                 background:
-                  'linear-gradient(270deg, rgba(42,36,32,0.04) 0%, transparent 15%)',
+                  'linear-gradient(270deg, rgba(42,36,32,0.03) 0%, transparent 12%)',
               }}
               aria-hidden="true"
             />
           </div>
         </motion.div>
 
-        {/* ── Quote text ── */}
+        {/* ── Thin horizontal line below image ── */}
         <motion.div
-          className="mt-10 sm:mt-12 md:mt-14 px-2 sm:px-4 text-center max-w-md"
-          variants={quoteFadeIn}
+          className="mx-auto mt-8 sm:mt-10 md:mt-12 w-[60px] origin-center"
+          style={{
+            height: '1px',
+            background: 'linear-gradient(to right, transparent, var(--p1-gold), transparent)',
+          }}
+          variants={lineFadeIn}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
           transition={{ delay: 2.0 }}
-        >
-          {/* Decorative opening quotation mark */}
-          <span
-            className="mb-3 block font-serif text-2xl leading-none sm:text-3xl"
-            style={{ color: 'var(--p1-gold, #C6A769)', opacity: 0.5 }}
-            aria-hidden="true"
-          >
-            &ldquo;
-          </span>
+        />
 
-          <blockquote>
-            <p
-              className="font-serif italic text-sm leading-[2] tracking-wide sm:text-[15px] sm:leading-[2.1] md:text-base"
-              style={{
-                color: 'var(--p1-warm-brown, #6B5B4A)',
-                animation: 'p1TextBreathe 8s ease-in-out infinite',
-              }}
-            >
-              Mereka memilih jalan yang sunyi:
-              <br />
-              menitipkan rasa itu dalam sujud-sujud panjang.
-            </p>
-          </blockquote>
+        {/* ── Text zone — LEFT-ALIGNED, generous left margin ── */}
+        <div className="mt-8 sm:mt-10 md:mt-12 w-full pl-4 sm:pl-8 md:pl-16 lg:pl-24">
 
-          {/* Decorative closing quotation mark */}
-          <span
-            className="mt-3 block font-serif text-2xl leading-none sm:text-3xl"
-            style={{ color: 'var(--p1-gold, #C6A769)', opacity: 0.5 }}
-            aria-hidden="true"
-          >
-            &rdquo;
-          </span>
-
-          {/* Small decorative line under quote */}
+          {/* Scene label */}
           <motion.div
-            className="mx-auto mt-5 h-[1px] w-[40px] origin-center"
-            style={{
-              background:
-                'linear-gradient(to right, transparent, var(--p1-gold, #C6A769), transparent)',
-            }}
-            variants={dividerDraw}
+            className="mb-3"
+            variants={labelFadeIn}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
-            transition={{ delay: 2.6 }}
-          />
-        </motion.div>
+            transition={{ delay: 2.2 }}
+          >
+            <span
+              className="font-serif text-[10px] tracking-[0.3em] uppercase sm:text-xs"
+              style={{ color: 'var(--p1-gold-dim)' }}
+            >
+              Scene II
+            </span>
+          </motion.div>
+
+          {/* Title */}
+          <motion.div
+            className="mb-4"
+            variants={titleFadeIn}
+            initial="hidden"
+            animate={isInView ? 'visible' : 'hidden'}
+            transition={{ delay: 2.4 }}
+          >
+            <h2
+              className="font-serif text-lg font-medium tracking-wide sm:text-xl md:text-2xl"
+              style={{ color: 'var(--p1-warm-brown)' }}
+            >
+              <span style={{ fontVariant: 'small-caps' }}>
+                Menitipkan Dalam Sujud
+              </span>
+            </h2>
+          </motion.div>
+
+          {/* Quote — left-aligned, no quotation marks */}
+          <motion.div
+            className="max-w-sm"
+            variants={quoteFadeIn}
+            initial="hidden"
+            animate={isInView ? 'visible' : 'hidden'}
+            transition={{ delay: 3.0 }}
+          >
+            <blockquote>
+              <p
+                className="font-serif italic text-sm leading-[2.2] tracking-wide sm:text-[15px] sm:leading-[2.3] md:text-base md:leading-[2.4]"
+                style={{
+                  color: 'var(--p1-warm-brown)',
+                  animation: 'p1TextBreathe 8s ease-in-out infinite',
+                }}
+              >
+                Mereka memilih jalan yang sunyi:
+                <br />
+                menitipkan rasa itu dalam sujud-sujud panjang.
+              </p>
+            </blockquote>
+          </motion.div>
+        </div>
       </div>
 
-      {/* ── Bottom edge — soft fade into next scene ── */}
+      {/* ── Bottom edge ── */}
       <div
         className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-20"
         style={{
@@ -336,7 +285,7 @@ export default function Scene2() {
         aria-hidden="true"
       />
 
-      {/* ── Top edge — soft fade from previous scene ── */}
+      {/* ── Top edge ── */}
       <div
         className="pointer-events-none absolute top-0 left-0 right-0 z-10 h-16"
         style={{

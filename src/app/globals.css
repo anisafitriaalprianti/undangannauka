@@ -1034,3 +1034,114 @@ body {
     opacity: 0;
   }
 }
+
+/* ============================================================
+   CINEMATIC SCENE REWRITE KEYFRAMES
+   No-blur reveals, directed framing, asymmetric compositions
+   ============================================================ */
+
+/* Sketch frame appearing — thin gold border draws in first
+   Used in Scene1: frame appears before image, then fades as image materializes */
+@keyframes p1SketchFrameIn {
+  0% {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Image materialize — opacity + slight scale settle, NO blur
+   Used in Scene1: image appears behind the sketch frame */
+@keyframes p1ImageMaterialize {
+  0% {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Radial reveal — expanding from center via clip-path circle
+   Used in Scene4: image materializes from center outward */
+@keyframes p1RadialReveal {
+  0% {
+    clip-path: circle(0% at 50% 50%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    clip-path: circle(75% at 50% 50%);
+    opacity: 1;
+  }
+}
+
+/* Sepia fade — starts with sepia tone and fades to full color
+   Used in Scene3: memory being recalled */
+@keyframes p1SepiaFade {
+  0% {
+    filter: sepia(40%);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.7;
+  }
+  100% {
+    filter: sepia(0%);
+    opacity: 1;
+  }
+}
+
+/* Slow line draw — horizontal gold line that draws from center outward
+   Used in breathing spacers between scenes */
+@keyframes p1LineDrawSlow {
+  0% {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+/* Warm glow pulse — breathing warm pulse for sacred glow
+   Used in Scene4: light emanating from the fulfilled promise */
+@keyframes p1WarmGlowPulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1.04);
+  }
+}
+
+/* Vertical line draw — thin vertical line appearing from center
+   Used in spacer between Scene3 and Scene4 */
+@keyframes p1VerticalLineDraw {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}

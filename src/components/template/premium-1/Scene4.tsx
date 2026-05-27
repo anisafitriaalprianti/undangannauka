@@ -5,89 +5,83 @@ import { motion, useInView, type Variants } from 'framer-motion';
 import { useRef } from 'react';
 
 /* ──────────────────────────────────────────────────────────────
-   Scene4 — "Hari Yang Dijanjikan"
+   Scene4 — "Hari Yang Dijanjikan" (The Promised Day)
    Premium-1 Islamic Faceless Cinematic Wedding Invitation
 
-   Concept: The emotional payoff. When the promise is fulfilled,
-   everything becomes warmer. This is the sacred moment when
-   ijab kabul is spoken and everything changes.
+   Emotion: Fulfillment, sacred warmth, intimate closeness —
+   the emotional climax
 
-   Composition:
-   • Near-full viewport height, warmer golden-tinted background
-   • Image centered, ~50-55% of visual space
-   • Below image: scene title in small caps tracking
-   • Below title: "Hari Yang Dijanjikan" title
-   • Below: quote text in italic serif
-   • Generous whitespace/padding
+   Composition: INTIMATE & CLOSE — Image is LARGER and closer
+   than other scenes, more immersive. Text feels connected to
+   the image, not separated. The warmest composition.
 
-   Animation sequence (scroll-triggered, whileInView):
-   1. Image reveals with warm sunrise transition:
-      warm golden blur → partial color → full sharp cinematic
-      (Instead of grayscale → color, this feels like dawn breaking)
-   2. Title and text appear with warm dissolve
-   3. Extra warm ambient glow around the image — sacred light
+   Image treatment:
+   • Image is wider/larger, taking up more visual space
+   • RADIAL REVEAL: A soft warm glow appears first at center,
+     then the image materializes from center outward — using
+     a CSS clip-path circle that expands
+   • Extra warm sacred glow around the image
+   • Warm golden overlay from center
 
-   Atmosphere: warmer than all previous scenes, brighter,
-               softer, peaceful — like the first light of
-               a promise fulfilled
+   Text treatment:
+   • Text positioned closer to the image — less gap
+   • Title in warmer gold tone (not the standard brown)
+   • Quote appears with warm dissolve, slightly faster than
+     other scenes (this is the payoff)
+   • Single thin gold line, warmer than other scenes
    ────────────────────────────────────────────────────────────── */
 
 // ── Animation variants ──────────────────────────────────────────
 
-/**
- * Warm sunrise image reveal — PRIORITY 4: Slower, with clearer center-radiating light.
- * Scene4 starts from a warm golden blur — like dawn breaking.
- * The reveal feels like sunrise: warm light spreading outward from center,
- * gradually sharpening into a beautiful, vivid cinematic image.
- * Total duration: 3.0s (up from 2.4s)
- */
-const sunriseReveal: Variants = {
+/** Radial reveal — warm glow at center, then image materializes outward */
+const radialReveal: Variants = {
   hidden: {
-    opacity: 0.08,
-    filter: 'blur(8px) sepia(60%) saturate(0.4) brightness(1.15)',
-    scale: 1.05,
+    clipPath: 'circle(0% at 50% 50%)',
+    opacity: 0,
   },
   visible: {
-    opacity: [0.08, 0.3, 0.65, 1],
-    filter: [
-      'blur(8px) sepia(60%) saturate(0.4) brightness(1.15)',
-      'blur(5px) sepia(35%) saturate(0.6) brightness(1.10)',
-      'blur(2px) sepia(12%) saturate(0.85) brightness(1.03)',
-      'blur(0px) sepia(0%) saturate(1) brightness(1)',
-    ],
-    scale: 1,
+    clipPath: 'circle(75% at 50% 50%)',
+    opacity: 1,
     transition: {
       duration: 3.0,
       ease: [0.16, 1, 0.3, 1],
-      opacity: {
+      clipPath: {
         duration: 3.0,
-        times: [0, 0.3, 0.6, 0.85],
-        ease: 'easeOut',
-      },
-      filter: {
-        duration: 3.0,
-        times: [0, 0.3, 0.6, 0.85],
-        ease: 'easeOut',
-      },
-      scale: {
-        duration: 3.2,
         ease: [0.16, 1, 0.3, 1],
+      },
+      opacity: {
+        duration: 1.0,
+        ease: 'easeOut',
       },
     },
   },
 };
 
-/** Scene label ("Scene IV") — appears with warm gentle dissolve */
+/** Sacred glow — appears before image, then breathes */
+const sacredGlowIn: Variants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.95,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 2.0,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
+
+/** Scene label — warm gentle dissolve */
 const labelFadeIn: Variants = {
   hidden: {
     opacity: 0,
     y: 6,
-    filter: 'blur(2px)',
   },
   visible: {
-    opacity: 1,
+    opacity: 0.5,
     y: 0,
-    filter: 'blur(0px)',
     transition: {
       duration: 0.9,
       ease: [0.16, 1, 0.3, 1],
@@ -95,33 +89,15 @@ const labelFadeIn: Variants = {
   },
 };
 
-/** Scene title — warm dissolve, slightly slower than other scenes */
+/** Title — warm dissolve, warmer gold tone */
 const titleFadeIn: Variants = {
   hidden: {
     opacity: 0,
-    y: 12,
-    filter: 'blur(3px)',
+    y: 10,
   },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
-    transition: {
-      duration: 1.4,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
-};
-
-/** Decorative divider — draws from center outward, warmer glow */
-const dividerDraw: Variants = {
-  hidden: {
-    scaleX: 0,
-    opacity: 0,
-  },
-  visible: {
-    scaleX: 1,
-    opacity: 1,
     transition: {
       duration: 1.2,
       ease: [0.16, 1, 0.3, 1],
@@ -129,25 +105,35 @@ const dividerDraw: Variants = {
   },
 };
 
-/** Quote text — warm dissolve, like words settling in sacred light */
+/** Gold line — draws from center, warmer */
+const lineDraw: Variants = {
+  hidden: {
+    scaleX: 0,
+    opacity: 0,
+  },
+  visible: {
+    scaleX: 1,
+    opacity: 0.6,
+    transition: {
+      duration: 1.0,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
+
+/** Quote — warm dissolve, slightly faster (payoff) */
 const quoteFadeIn: Variants = {
   hidden: {
     opacity: 0,
-    y: 18,
-    filter: 'blur(4px)',
+    y: 14,
   },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: {
-      duration: 2.0,
+      duration: 1.4,
       ease: [0.16, 1, 0.3, 1],
       opacity: {
-        duration: 2.2,
-        ease: 'easeOut',
-      },
-      filter: {
         duration: 1.6,
         ease: 'easeOut',
       },
@@ -167,216 +153,180 @@ export default function Scene4() {
   return (
     <section
       ref={sectionRef}
-      className="template-p1 nauka-paper nauka-grain nauka-ink-wash nauka-vignette relative w-full min-h-dvh overflow-hidden flex flex-col items-center justify-center"
+      className="template-p1 nauka-paper nauka-grain nauka-ink-wash nauka-vignette relative w-full min-h-dvh overflow-hidden"
       style={{
         // Warmer background than other scenes — slightly more golden tint
-        // Other scenes use #F5F0E8; this leans warmer, like dawn light on parchment
         background:
           'linear-gradient(170deg, #F7F1E4 0%, #F5EFE3 25%, #F4EDE0 50%, #F3ECE0 75%, #F5F0E6 100%)',
       }}
     >
-      {/* ── Warm ambient light layers ──
-          This scene has MORE warm light than other scenes.
-          The feeling: sacred warmth radiating from the center,
-          like the first light after a promise is fulfilled.
-          Multiple layers create a warm, breathing atmosphere. */}
+      {/* ── Multiple warm light layers — sacred warmth from center ── */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background: [
-            // Primary warm glow — center, like sacred light from the image
-            'radial-gradient(ellipse 60% 45% at 50% 40%, rgba(212, 186, 130, 0.08) 0%, transparent 55%)',
-            // Secondary warm wash — broader ambient warmth filling the scene
-            'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(198, 167, 105, 0.05) 0%, transparent 60%)',
-            // Tertiary warm glow — subtle, from below, like warmth rising
-            'radial-gradient(ellipse 70% 40% at 50% 85%, rgba(198, 167, 105, 0.04) 0%, transparent 50%)',
+            'radial-gradient(ellipse 60% 45% at 50% 40%, rgba(212, 186, 130, 0.07) 0%, transparent 55%)',
+            'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(198, 167, 105, 0.04) 0%, transparent 60%)',
+            'radial-gradient(ellipse 70% 40% at 50% 85%, rgba(198, 167, 105, 0.03) 0%, transparent 50%)',
           ].join(', '),
         }}
         aria-hidden="true"
       />
 
-      {/* ── Breathing sacred warm glow ──
-          A subtle pulse that makes the scene feel alive and sacred,
-          like the warmth of a fulfilled promise breathing gently */}
+      {/* ── Breathing sacred warm glow ── */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
-            'radial-gradient(ellipse 45% 35% at 50% 40%, rgba(212, 186, 130, 0.07) 0%, transparent 60%)',
-          animation: 'naukaBreathLight 7s ease-in-out infinite',
+            'radial-gradient(ellipse 45% 35% at 50% 40%, rgba(212, 186, 130, 0.06) 0%, transparent 60%)',
+          animation: 'p1WarmGlowPulse 7s ease-in-out infinite',
         }}
         aria-hidden="true"
       />
 
       {/* ── Content wrapper ── */}
-      <div className="relative z-10 mx-auto w-full max-w-3xl px-6 py-16 sm:px-8 sm:py-20 md:px-12 md:py-24 flex flex-col items-center">
-        {/* ── Scene Image — faceless wedding silhouette ──
-            Takes up ~50-55% of the visual space.
-            Sunrise reveal: warm golden blur → vivid cinematic.
-            Surrounded by extra warm sacred glow. */}
+      <div className="relative z-10 mx-auto w-full max-w-3xl px-6 py-16 sm:px-8 sm:py-20 md:px-12 md:py-24 min-h-dvh flex flex-col items-center justify-center">
+
+        {/* ── Sacred glow halo — appears before image ── */}
         <motion.div
-          className="w-full max-w-[400px] sm:max-w-[450px] md:max-w-[500px]"
-          variants={sunriseReveal}
+          className="relative"
+          style={{ width: '100%', maxWidth: '540px' }}
+          variants={sacredGlowIn}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
         >
+          {/* Glow halo behind image */}
           <div
+            className="pointer-events-none absolute inset-[-12%] -z-10"
+            style={{
+              background:
+                'radial-gradient(ellipse at center, rgba(212, 186, 130, 0.12) 0%, rgba(198, 167, 105, 0.04) 35%, transparent 65%)',
+              animation: 'p1WarmGlowPulse 9s ease-in-out infinite',
+            }}
+            aria-hidden="true"
+          />
+
+          {/* ── Image — LARGER, radial reveal ── */}
+          <motion.div
             className="nauka-edge-soft relative overflow-hidden rounded-lg md:rounded-xl"
             style={{
               aspectRatio: '606 / 396',
               boxShadow:
                 '0 2px 8px rgba(28,28,28,0.03), 0 8px 24px rgba(28,28,28,0.05), 0 20px 48px rgba(28,28,28,0.03)',
             }}
+            variants={radialReveal}
+            initial="hidden"
+            animate={isInView ? 'visible' : 'hidden'}
+            transition={{ delay: 0.3 }}
           >
             <Image
               src="/template/premium-1/scene-4.webp"
               alt="Bride and groom sitting together bathed in warm sacred light, the moment of a promise fulfilled"
               fill
-              sizes="(max-width: 640px) 85vw, (max-width: 768px) 450px, 500px"
+              sizes="(max-width: 640px) 85vw, 540px"
               className="object-cover"
               priority={false}
             />
 
-            {/* PRIORITY 4: Warm cinematic overlay — sacred warm light radiating FROM center
-                More prominent to convey warmth, clearer direction from center outward */}
+            {/* Warm cinematic overlay — sacred light from center */}
             <div
               className="pointer-events-none absolute inset-0"
               style={{
                 background: [
-                  // Warm glow from bottom — like sacred light rising
-                  'linear-gradient(0deg, rgba(198,167,105,0.07) 0%, transparent 45%)',
-                  // Soft warm cast from top — like dawn light filtering in
-                  'linear-gradient(180deg, rgba(212,186,130,0.04) 0%, transparent 30%)',
+                  'linear-gradient(0deg, rgba(198,167,105,0.06) 0%, transparent 40%)',
+                  'linear-gradient(180deg, rgba(212,186,130,0.03) 0%, transparent 25%)',
                 ].join(', '),
               }}
               aria-hidden="true"
             />
-
-            {/* PRIORITY 4: Extra sacred warm glow — clearer warm gradient FROM center outward
-                like a blessing radiating from the scene's heart */}
+            {/* Extra sacred warm glow from center outward */}
             <div
               className="pointer-events-none absolute inset-0"
               style={{
                 background:
-                  'radial-gradient(ellipse 80% 60% at 50% 55%, rgba(198,167,105,0.07) 0%, transparent 60%)',
+                  'radial-gradient(ellipse 80% 60% at 50% 55%, rgba(198,167,105,0.05) 0%, transparent 60%)',
               }}
               aria-hidden="true"
             />
-          </div>
-
-          {/* ── Sacred light halo around the image ──
-              Extra warm ambient glow radiating outward from the image,
-              like sacred light emanating from the fulfilled promise.
-              This is what makes Scene4 feel distinctly warmer. */}
-          <div
-            className="pointer-events-none absolute inset-[-15%] -z-10"
-            style={{
-              background:
-                'radial-gradient(ellipse at center, rgba(212, 186, 130, 0.10) 0%, rgba(198, 167, 105, 0.04) 35%, transparent 65%)',
-              animation: 'naukaBreathLight 9s ease-in-out infinite',
-            }}
-            aria-hidden="true"
-          />
+          </motion.div>
         </motion.div>
 
-        {/* ── Scene Label — "Scene IV" ──
-            Appears when image is beginning its warm reveal */}
-        <motion.div
-          className="mt-10 sm:mt-12 md:mt-14 flex flex-col items-center gap-3"
-          variants={labelFadeIn}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          transition={{ delay: 1.4 }}
-        >
-          <span
-            className="font-serif text-[10px] tracking-[0.3em] uppercase sm:text-xs"
-            style={{ color: 'var(--p1-gold-dim, #8A7444)' }}
-          >
-            Scene IV
-          </span>
-        </motion.div>
+        {/* ── Text — closer to image than other scenes ── */}
+        <div className="mt-6 sm:mt-8 md:mt-10 flex flex-col items-center text-center">
 
-        {/* ── Scene Title — small caps ──
-            Warm dissolve — appears as the image sharpens */}
-        <motion.div
-          className="mt-2 flex flex-col items-center gap-3"
-          variants={titleFadeIn}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          transition={{ delay: 1.8 }}
-        >
-          <h2
-            className="font-serif text-lg font-medium tracking-wide sm:text-xl md:text-2xl"
-            style={{ color: 'var(--p1-warm-brown, #6B5B4A)' }}
-          >
-            <span style={{ fontVariant: 'small-caps' }}>
-              Hari Yang Dijanjikan
-            </span>
-          </h2>
-
-          {/* Decorative gold divider — draws from center
-              Slightly warmer glow on the divider for this scene */}
+          {/* Scene label */}
           <motion.div
-            className="h-[1px] w-[60px] origin-center"
-            style={{
-              background:
-                'linear-gradient(to right, transparent, var(--p1-gold-light, #D4BA82), transparent)',
-            }}
-            variants={dividerDraw}
+            className="mb-2"
+            variants={labelFadeIn}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
-            transition={{ delay: 2.2 }}
-          />
-        </motion.div>
-
-        {/* ── Quote text — italic serif ──
-            Fades in with warm dissolve after title has settled.
-            The words carry the emotional weight — when ijab kabul
-            is spoken, everything changes. Breathing text effect
-            via p1TextBreathe keyframe, but gentler. */}
-        <motion.div
-          className="mt-8 sm:mt-10 md:mt-12 px-2 sm:px-4 text-center max-w-md"
-          variants={quoteFadeIn}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          transition={{ delay: 2.6 }}
-        >
-          {/* Decorative opening quotation mark */}
-          <span
-            className="mb-3 block font-serif text-2xl leading-none sm:text-3xl"
-            style={{ color: 'var(--p1-gold-light, #D4BA82)', opacity: 0.45 }}
-            aria-hidden="true"
+            transition={{ delay: 2.0 }}
           >
-            &ldquo;
-          </span>
-
-          <blockquote>
-            <p
-              className="font-serif italic text-sm leading-[2] tracking-wide sm:text-[15px] sm:leading-[2.1] md:text-base"
-              style={{
-                color: 'var(--p1-warm-brown, #6B5B4A)',
-                animation: 'p1TextBreathe 9s ease-in-out infinite',
-              }}
+            <span
+              className="font-serif text-[10px] tracking-[0.3em] uppercase sm:text-xs"
+              style={{ color: 'var(--p1-gold-light)' }}
             >
-              Ketika ijab kabul terucap,
-              <br />
-              segalanya berubah.
-            </p>
-          </blockquote>
+              Scene IV
+            </span>
+          </motion.div>
 
-          {/* Decorative closing quotation mark */}
-          <span
-            className="mt-3 block font-serif text-2xl leading-none sm:text-3xl"
-            style={{ color: 'var(--p1-gold-light, #D4BA82)', opacity: 0.45 }}
-            aria-hidden="true"
+          {/* Title — warmer gold tone */}
+          <motion.div
+            className="mb-3"
+            variants={titleFadeIn}
+            initial="hidden"
+            animate={isInView ? 'visible' : 'hidden'}
+            transition={{ delay: 2.3 }}
           >
-            &rdquo;
-          </span>
-        </motion.div>
+            <h2
+              className="font-serif text-lg font-medium tracking-wide sm:text-xl md:text-2xl"
+              style={{ color: 'var(--p1-gold-light)' }}
+            >
+              <span style={{ fontVariant: 'small-caps' }}>
+                Hari Yang Dijanjikan
+              </span>
+            </h2>
+          </motion.div>
+
+          {/* Single thin warm gold line */}
+          <motion.div
+            className="mb-4 w-[50px] origin-center"
+            style={{
+              height: '1px',
+              background: 'linear-gradient(to right, transparent, var(--p1-gold-light), transparent)',
+            }}
+            variants={lineDraw}
+            initial="hidden"
+            animate={isInView ? 'visible' : 'hidden'}
+            transition={{ delay: 2.6 }}
+          />
+
+          {/* Quote — warm dissolve, slightly faster (payoff) */}
+          <motion.div
+            className="max-w-sm"
+            variants={quoteFadeIn}
+            initial="hidden"
+            animate={isInView ? 'visible' : 'hidden'}
+            transition={{ delay: 2.9 }}
+          >
+            <blockquote>
+              <p
+                className="font-serif italic text-sm leading-[2] tracking-wide sm:text-[15px] sm:leading-[2.1] md:text-base"
+                style={{
+                  color: 'var(--p1-warm-brown)',
+                  animation: 'p1TextBreathe 9s ease-in-out infinite',
+                }}
+              >
+                Ketika ijab kabul terucap,
+                <br />
+                segalanya berubah.
+              </p>
+            </blockquote>
+          </motion.div>
+        </div>
       </div>
 
-      {/* ── Bottom edge — soft warm fade into next scene ──
-          Warmer tint than other scenes to maintain the sacred glow */}
+      {/* ── Bottom edge ── */}
       <div
         className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-24"
         style={{
@@ -386,7 +336,7 @@ export default function Scene4() {
         aria-hidden="true"
       />
 
-      {/* ── Top edge — soft warm fade from previous scene ── */}
+      {/* ── Top edge ── */}
       <div
         className="pointer-events-none absolute top-0 left-0 right-0 z-10 h-16"
         style={{
