@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 const cinematicEase = [0.25, 0.46, 0.45, 0.94];
@@ -42,13 +43,15 @@ export default function Navbar() {
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-[72px] flex items-center justify-between">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#C6A769] to-[#8A7444] flex items-center justify-center group-hover:shadow-[0_0_16px_rgba(198,167,105,0.25)] transition-shadow duration-400">
-              <span className="text-white font-serif font-bold text-sm">N</span>
-            </div>
-            <span className="font-serif text-lg font-semibold tracking-[0.15em] text-[#1C1C1C] group-hover:text-[#C6A769] transition-colors duration-400">
-              NAUKA
-            </span>
+          <a href="#" className="flex items-center group">
+            <Image
+              src="/nauka-logo.png"
+              alt="Nauka"
+              width={120}
+              height={36}
+              className="h-8 sm:h-9 w-auto group-hover:opacity-80 transition-opacity duration-400"
+              priority
+            />
           </a>
 
           {/* Nav Links — desktop */}

@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
+import Image from 'next/image';
 import { useRef } from 'react';
 
 const slowEase = [0.16, 1, 0.3, 1];
@@ -93,10 +94,13 @@ export default function Closing() {
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 mt-20 md:mt-28 pt-6 border-t border-black/[0.04]">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#C6A769] to-[#8A7444] flex items-center justify-center">
-              <span className="text-white font-serif font-bold text-[8px]">N</span>
-            </div>
-            <span className="font-serif text-sm tracking-[0.15em] text-[#999]">NAUKA</span>
+            <Image
+              src="/nauka-logo.png"
+              alt="Nauka"
+              width={80}
+              height={24}
+              className="h-5 w-auto opacity-60"
+            />
           </div>
           <p className="text-[11px] text-[#999] tracking-wider">
             &copy; 2026 Nauka Studio. Dibuat dengan penuh perhatian.
