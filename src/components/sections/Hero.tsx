@@ -9,6 +9,7 @@ const cinematicEase = [0.25, 0.46, 0.45, 0.94];
 export default function Hero() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [showContent, setShowContent] = useState(false);
+  const [showWhisper, setShowWhisper] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // PRD: Cinematic parallax — scroll-driven transforms
@@ -23,11 +24,12 @@ export default function Hero() {
   const textOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
   const spotlightIntensity = useTransform(scrollYProgress, [0, 0.3], [1, 0.4]);
 
-  // PRD: Opening Nauka — light reveal sequence
+  // PRD: Opening Nauka — light reveal sequence with delayed whisper
   useEffect(() => {
     const t1 = setTimeout(() => setIsLoaded(true), 200);
     const t2 = setTimeout(() => setShowContent(true), 600);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
+    const t3 = setTimeout(() => setShowWhisper(true), 2200);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, []);
 
   return (
@@ -90,20 +92,20 @@ export default function Hero() {
             transition={{ duration: 0.8 }}
             className="flex-1 text-center lg:text-left max-w-xl lg:max-w-none"
           >
-            {/* Pill badge */}
+            {/* Pill badge — with a breathing gold dot */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={showContent ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.1, ease: slowEase }}
               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C6A769]/10 border border-[#C6A769]/20 mb-8"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C6A769]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C6A769]" style={{ animation: 'naukaBreathLight 3s ease-in-out infinite' }} />
               <span className="text-[10px] tracking-[0.3em] uppercase text-[#C6A769] font-sans">
                 Studio Undangan Digital
               </span>
             </motion.div>
 
-            {/* Hero Headline — staggered line reveal */}
+            {/* Hero Headline — cinematic rhythm: statement, pause, hook */}
             <div className="overflow-hidden mb-2">
               <motion.h1
                 initial={{ y: 50, opacity: 0 }}
@@ -111,7 +113,7 @@ export default function Hero() {
                 transition={{ duration: 1, delay: 0.2, ease: slowEase }}
                 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.08] text-[#1C1C1C]"
               >
-                Undangan Digital
+                Undangan yang
               </motion.h1>
             </div>
             <div className="overflow-hidden mb-2">
@@ -121,29 +123,21 @@ export default function Hero() {
                 transition={{ duration: 1, delay: 0.35, ease: slowEase }}
                 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.08] text-[#C6A769]"
               >
-                Dengan Rasa
-              </motion.h1>
-            </div>
-            <div className="overflow-hidden mb-8">
-              <motion.h1
-                initial={{ y: 50, opacity: 0 }}
-                animate={showContent ? { y: 0, opacity: 1 } : {}}
-                transition={{ duration: 1, delay: 0.5, ease: slowEase }}
-                className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.08] text-[#1C1C1C]"
-              >
-                Yang Lebih Hidup
+                Bisa Dirasakan
               </motion.h1>
             </div>
 
-            {/* Subtitle — short, no manifesto */}
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={showContent ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, delay: 0.7, ease: cinematicEase }}
-              className="text-[15px] sm:text-base text-[#6B6B6B] leading-[1.7] mb-10 max-w-md mx-auto lg:mx-0"
+            {/* Whisper — the emotional hook that appears late, like a quiet afterthought */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={showWhisper ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 1.4, ease: cinematicEase }}
+              className="mt-6 mb-8"
             >
-              Dirancang dengan perhatian pada suasana dan detail.
-            </motion.p>
+              <p className="text-[15px] sm:text-base text-[#6B6B6B]/70 leading-[1.7] italic max-w-md mx-auto lg:mx-0">
+                Bukan sekadar dikirim — tapi diterima dengan senyum.
+              </p>
+            </motion.div>
 
             {/* CTA Buttons — pill shaped */}
             <motion.div
@@ -302,7 +296,7 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Floating notification badge — more emotional */}
+            {/* Floating notification badge — emotional, like a message from the heart */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={showContent ? { opacity: 1, y: 0 } : {}}

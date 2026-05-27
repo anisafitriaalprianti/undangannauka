@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRef } from 'react';
 
 const slowEase = [0.16, 1, 0.3, 1];
+const cinematicEase = [0.25, 0.46, 0.45, 0.94];
 
 const features = [
   'Pengarahan Visual',
@@ -36,7 +37,7 @@ export default function SignatureShowcase() {
             className="flex-1 text-center lg:text-left"
           >
             <p className="text-[10px] tracking-[0.5em] uppercase text-[#C6A769] mb-4 font-sans">
-              Signature
+              Segera Hadir
             </p>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#1C1C1C] mb-5 leading-[1.1]">
               Signature
@@ -47,7 +48,7 @@ export default function SignatureShowcase() {
               Pengalaman undangan yang dirancang dengan perhatian khusus pada setiap detail dan alur cerita.
             </p>
 
-            {/* Signature Features */}
+            {/* Signature Features — like ingredients of something special */}
             <div className="space-y-3 mb-10">
               {features.map((feature, i) => (
                 <motion.div
@@ -68,14 +69,14 @@ export default function SignatureShowcase() {
 
             <a
               href="#"
-              className="group inline-flex items-center gap-2 px-8 py-3.5 rounded-full border border-[#C6A769]/20 text-[#C6A769] text-[12px] tracking-[0.15em] uppercase hover:border-[#C6A769]/40 hover:bg-[#C6A769]/5 transition-all duration-400"
+              className="group inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full border border-[#C6A769]/20 text-[#C6A769] text-[12px] tracking-[0.15em] uppercase hover:border-[#C6A769]/40 hover:bg-[#C6A769]/5 transition-all duration-400"
             >
-              Coming Soon
+              Dapatkan Akses Awal
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#C6A769]/40 group-hover:bg-[#C6A769] transition-colors duration-300" />
             </a>
           </motion.div>
 
-          {/* Signature Template Preview — PRD: cinematic depth */}
+          {/* Signature Template Preview — cinematic depth */}
           <motion.div
             style={{ y: mockupY }}
             initial={{ opacity: 0, x: 30 }}
@@ -101,6 +102,7 @@ export default function SignatureShowcase() {
                 {/* PRD: Lighting on mockup — top edge highlight */}
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent z-10" />
 
+                {/* Mysterious overlay — hint at something special, don't reveal everything */}
                 <div className="absolute inset-0 bg-[#F0EBE5] animate-pulse" />
                 <Image
                   src="/template-signature.png"
@@ -109,10 +111,12 @@ export default function SignatureShowcase() {
                   className="object-cover transition-transform duration-[1000ms] group-hover:scale-[1.02]"
                   sizes="270px"
                 />
+                {/* Subtle veil — not fully revealing, creating anticipation */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#F6F2EE]/30 via-transparent to-[#F6F2EE]/10 pointer-events-none z-[5]" />
               </div>
 
-              {/* Signature badge — PRD: premium polish */}
-              <div className="absolute -top-2 -right-2 bg-[#C6A769] text-white text-[8px] font-bold tracking-[0.2em] uppercase px-3 py-1.5 rounded-full shadow-[0_4px_12px_rgba(198,167,105,0.25)]">
+              {/* Signature badge — subtle, premium */}
+              <div className="absolute -top-2 -right-2 bg-[#1C1C1C] text-[#C6A769] text-[8px] font-semibold tracking-[0.2em] uppercase px-3 py-1.5 rounded-full shadow-[0_4px_12px_rgba(28,28,28,0.15)]">
                 Signature
               </div>
             </div>

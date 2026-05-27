@@ -8,11 +8,11 @@ const slowEase = [0.16, 1, 0.3, 1];
 const cinematicEase = [0.25, 0.46, 0.45, 0.94];
 
 const templates = [
-  { id: 1, name: 'Eternal Bloom', vibes: 'Elegant', image: '/template-premium-1.png', users: '2,847', tier: 'Premium' },
-  { id: 2, name: 'Silent Vow', vibes: 'Modern', image: '/template-premium-2.png', users: '3,214', tier: 'Premium' },
-  { id: 3, name: 'Timeless Grace', vibes: 'Vintage', image: '/template-premium-3.png', users: '1,926', tier: 'Premium' },
-  { id: 4, name: 'Golden Hour', vibes: 'Cinematic', image: '/template-premium-1.png', users: '1,543', tier: 'Premium' },
-  { id: 5, name: 'Whispered Promise', vibes: 'Luxury', image: '/template-premium-2.png', users: '987', tier: 'Premium' },
+  { id: 1, name: 'Eternal Bloom', vibes: 'Elegant', image: '/template-premium-1.png', tier: 'Premium' },
+  { id: 2, name: 'Silent Vow', vibes: 'Modern', image: '/template-premium-2.png', tier: 'Premium' },
+  { id: 3, name: 'Timeless Grace', vibes: 'Vintage', image: '/template-premium-3.png', tier: 'Premium' },
+  { id: 4, name: 'Golden Hour', vibes: 'Cinematic', image: '/template-premium-1.png', tier: 'Premium' },
+  { id: 5, name: 'Whispered Promise', vibes: 'Luxury', image: '/template-premium-2.png', tier: 'Premium' },
 ];
 
 export default function HotTemplate() {
@@ -56,7 +56,7 @@ export default function HotTemplate() {
       <div className="nauka-frame-line hidden lg:block" />
       <div className="nauka-frame-line-right hidden lg:block" />
       <motion.div style={{ y: sectionY }} className="relative max-w-6xl mx-auto px-4 sm:px-6">
-        {/* Section Header — editorial, not marketplace */}
+        {/* Section Header — editorial, like a magazine spread */}
         <div className="text-center mb-12 sm:mb-16">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
@@ -65,7 +65,7 @@ export default function HotTemplate() {
             transition={{ duration: 0.7, ease: cinematicEase }}
             className="text-[10px] tracking-[0.5em] uppercase text-[#C6A769] mb-3 font-sans"
           >
-            Curated Collection
+            Mulai dari Sini
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -74,7 +74,7 @@ export default function HotTemplate() {
             transition={{ duration: 0.8, delay: 0.1, ease: slowEase }}
             className="font-serif text-3xl sm:text-4xl font-bold text-[#1C1C1C]"
           >
-            Koleksi Template
+            Temukan Suasanamu
           </motion.h2>
           <motion.div
             initial={{ opacity: 0, scaleX: 0 }}
@@ -85,7 +85,7 @@ export default function HotTemplate() {
           />
         </div>
 
-        {/* Featured Template — standalone, dominant */}
+        {/* Featured Template — standalone, dominant, like a magazine cover */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -156,14 +156,12 @@ export default function HotTemplate() {
                 </div>
               </div>
 
-              {/* Featured info */}
+              {/* Featured info — editorial caption style */}
               <div className="mt-5 text-center">
                 <h3 className="font-serif text-xl text-[#1C1C1C] font-semibold group-hover:text-[#C6A769] transition-colors duration-300">
                   {featured.name}
                 </h3>
                 <div className="flex items-center gap-2 mt-1.5 justify-center">
-                  <span className="text-[11px] text-[#999]">{featured.users} pengguna</span>
-                  <span className="w-1 h-1 rounded-full bg-[#C6A769]/40" />
                   <span className="text-[10px] tracking-[0.1em] uppercase text-[#C6A769]">{featured.tier}</span>
                 </div>
               </div>
@@ -230,12 +228,11 @@ export default function HotTemplate() {
                   </div>
                 </div>
 
-                {/* Card info — below phone */}
+                {/* Card info — editorial caption */}
                 <div className="mt-3 px-0.5">
                   <h3 className="font-serif text-sm sm:text-[15px] text-[#1C1C1C] font-semibold group-hover:text-[#C6A769] transition-colors duration-300 truncate">
                     {template.name}
                   </h3>
-                  <span className="text-[10px] text-[#999]">{template.users} pengguna</span>
                 </div>
               </motion.div>
             ))}
@@ -255,7 +252,7 @@ export default function HotTemplate() {
           </div>
         </div>
 
-        {/* View All CTA — editorial, not marketplace */}
+        {/* View All CTA — editorial, like "turn the page" */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -268,7 +265,7 @@ export default function HotTemplate() {
             <svg className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path d="M5 12h14m-7-7 7 7-7 7" /></svg>
           </a>
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 }

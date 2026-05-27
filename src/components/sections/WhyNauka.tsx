@@ -10,17 +10,17 @@ const principles = [
   {
     number: '01',
     title: 'Susunan yang Tepat',
-    line: 'Setiap elemen ditempatkan dengan pertimbangan.',
+    line: 'Setiap elemen ditempatkan dengan pertimbangan. Tipografi, jarak, dan warna — bukan kebetulan, tapi pilihan.',
   },
   {
     number: '02',
     title: 'Gerakan yang Berniat',
-    line: 'Animasi yang hadir untuk mendukung suasana.',
+    line: 'Animasi yang hadir untuk mendukung suasana, bukan mengejutkan. Setiap transisi punya alasan.',
   },
   {
     number: '03',
     title: 'Suasana yang Terasa',
-    line: 'Undangan yang menghadirkan suasana, bukan sekadar informasi.',
+    line: 'Undangan yang menghadirkan suasana, bukan sekadar informasi. Tamu merasakan sebelum membaca.',
   },
 ];
 
@@ -41,29 +41,52 @@ export default function WhyNauka() {
       <div className="nauka-frame-line-right hidden lg:block" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
-        {/* Section Header */}
-        <div className="text-center mb-16 sm:mb-20">
+        {/* The manifesto — this is the star, not an afterthought */}
+        <motion.div
+          style={{ y: statementY }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 1.2, ease: slowEase }}
+          className="text-center mb-16 sm:mb-24"
+        >
+          {/* PRD: Lighting felt — subtle warm spotlight on the quote */}
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] pointer-events-none"
+            style={{
+              background: 'radial-gradient(ellipse at center, rgba(198,167,105,0.04) 0%, transparent 60%)',
+              animation: 'naukaBreathLight 8s ease-in-out infinite',
+            }}
+          />
+
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.7, ease: cinematicEase }}
-            className="text-[10px] tracking-[0.5em] uppercase text-[#C6A769] mb-3 font-sans"
+            className="text-[10px] tracking-[0.5em] uppercase text-[#C6A769] mb-6 font-sans"
           >
-            Pendekatan Kami
+            Cara Kami Berpikir
           </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.8, delay: 0.1, ease: slowEase }}
-            className="font-serif text-3xl sm:text-4xl font-bold text-[#1C1C1C]"
-          >
-            Pendekatan Kami
-          </motion.h2>
-        </div>
 
-        {/* Principles — clean grid with cinematic stagger */}
+          <div className="relative inline-block">
+            <p className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#1C1C1C]/80 italic leading-[1.3] max-w-2xl mx-auto">
+              Undangan yang <span className="text-[#C6A769] not-italic font-semibold">dirasakan</span>,
+              <br />
+              bukan sekadar dibaca.
+            </p>
+          </div>
+
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4, ease: slowEase }}
+            className="mt-8 mx-auto w-16 h-px bg-gradient-to-r from-transparent via-[#C6A769]/30 to-transparent"
+          />
+        </motion.div>
+
+        {/* Principles — quiet, confident, like beliefs not features */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           {principles.map((principle, index) => (
             <motion.div
@@ -84,7 +107,7 @@ export default function WhyNauka() {
                 />
               </div>
 
-              {/* Number */}
+              {/* Number — like a chapter marker */}
               <span className="block font-mono text-[11px] tracking-[0.3em] text-[#C6A769]/30 mb-6 group-hover:text-[#C6A769]/50 transition-colors duration-500">
                 {principle.number}
               </span>
@@ -94,44 +117,16 @@ export default function WhyNauka() {
                 {principle.title}
               </h3>
 
-              {/* Single line */}
-              <p className="text-[15px] text-[#6B6B6B] leading-[1.6]">
+              {/* Description — give it depth, not just one line */}
+              <p className="text-[14px] text-[#6B6B6B] leading-[1.7]">
                 {principle.line}
               </p>
 
-              {/* Bottom accent on hover — PRD: proper pacing, subtle reveal */}
+              {/* Bottom accent on hover — subtle reveal */}
               <div className="absolute bottom-0 left-8 right-8 h-[2px] rounded-full bg-gradient-to-r from-transparent via-[#C6A769]/25 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left" />
             </motion.div>
           ))}
         </div>
-
-        {/* Single statement — cinematic breathing space */}
-        <motion.div
-          style={{ y: statementY }}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: '-50px' }}
-          transition={{ duration: 1.2, delay: 0.3, ease: slowEase }}
-          className="mt-20 sm:mt-28 text-center relative"
-        >
-          {/* PRD: Lighting felt — subtle warm spotlight on the quote */}
-          <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] pointer-events-none"
-            style={{
-              background: 'radial-gradient(ellipse at center, rgba(198,167,105,0.04) 0%, transparent 60%)',
-              animation: 'naukaBreathLight 8s ease-in-out infinite',
-            }}
-          />
-
-          <div className="relative inline-block">
-            <div className="w-12 h-px bg-gradient-to-r from-transparent via-[#C6A769]/30 to-transparent mx-auto mb-8" />
-            <p className="font-serif text-2xl sm:text-3xl md:text-4xl text-[#1C1C1C]/80 italic leading-[1.4] max-w-xl mx-auto">
-              Undangan yang <span className="text-[#C6A769] not-italic font-semibold">dirasakan</span>,
-              <br />
-              bukan sekadar dibaca.
-            </p>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

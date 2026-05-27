@@ -85,7 +85,7 @@ export default function AIFinder() {
                 transition={{ duration: 0.7, ease: cinematicEase }}
                 className="text-[10px] tracking-[0.5em] uppercase text-[#C6A769] mb-3 font-sans"
               >
-                Guided Recommendation
+                Bantuan Pilih
               </motion.p>
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
@@ -103,7 +103,7 @@ export default function AIFinder() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-[14px] text-[#6B6B6B] mb-8"
               >
-                Kami bantu pilihkan yang paling cocok, cukup klik mulai.
+                Tiga pertanyaan, kami carikan yang paling cocok.
               </motion.p>
               <motion.button
                 initial={{ opacity: 0, y: 12 }}
@@ -192,7 +192,7 @@ export default function AIFinder() {
             </motion.div>
           )}
 
-          {/* ===== RESULT ===== */}
+          {/* ===== RESULT — more exciting, less anticlimactic ===== */}
           {phase === 'result' && (
             <motion.div
               key="result"
@@ -208,13 +208,13 @@ export default function AIFinder() {
                 </svg>
               </div>
               <h3 className="font-serif text-xl text-[#1C1C1C] mb-2">
-                Kami Punya Rekomendasi
+                Kami Udah Temukan
               </h3>
               <p className="text-[13px] text-[#6B6B6B] leading-[1.7] mb-4 max-w-sm mx-auto">
-                Berdasarkan pilihanmu, kami sudah menemukan template yang paling cocok. Fitur ini segera hadir.
+                Berdasarkan pilihanmu, kami sudah punya rekomendasi yang cocok. Segera hadir.
               </p>
 
-              {/* Selection summary */}
+              {/* Selection summary — like a mood board */}
               <div className="flex items-center justify-center gap-2 mb-6">
                 {answers.filter(Boolean).map((answer, i) => (
                   <span key={i} className="px-3 py-1 rounded-full text-[11px] bg-[#C6A769]/10 text-[#C6A769]">

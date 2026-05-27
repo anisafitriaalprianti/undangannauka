@@ -18,7 +18,7 @@ export default function Closing() {
   const closingOpacity = useTransform(scrollYProgress, [0, 0.5], [0.6, 1]);
 
   return (
-    <section ref={sectionRef} className="nauka-light-warm nauka-vignette nauka-grain nauka-paper relative py-16 sm:py-20 bg-white overflow-hidden">
+    <section ref={sectionRef} className="nauka-light-warm nauka-vignette nauka-grain nauka-paper relative py-20 sm:py-28 bg-white overflow-hidden">
       {/* Cinematic closing ambience — warm glow that breathes */}
       <div className="absolute inset-0 pointer-events-none">
         <div
@@ -54,7 +54,7 @@ export default function Closing() {
             whileInView={{ opacity: 1, filter: 'blur(0px)' }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: cinematicEase }}
-            className="flex items-center justify-center gap-3 mb-8"
+            className="flex items-center justify-center gap-3 mb-10"
           >
             <motion.div
               initial={{ scaleX: 0 }}
@@ -73,7 +73,7 @@ export default function Closing() {
             />
           </motion.div>
 
-          {/* Closing statement — emotional reveal */}
+          {/* Closing statement — the emotional peak, like the final scene */}
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -81,9 +81,9 @@ export default function Closing() {
             transition={{ duration: 0.9, delay: 0.1, ease: slowEase }}
             className="font-serif text-[1.8rem] sm:text-4xl md:text-5xl font-bold text-[#1C1C1C] leading-[1.12] mb-6"
           >
-            Undangan yang Bisa Dirasakan.
+            Hari Besarmu,
             <br />
-            <span className="text-[#C6A769]">Dengan Sepenuh Hati.</span>
+            <span className="text-[#C6A769]">Layak Dirasakan Semua.</span>
           </motion.h2>
 
           <motion.p
@@ -91,22 +91,22 @@ export default function Closing() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.25 }}
-            className="text-[15px] text-[#6B6B6B] leading-[1.7] max-w-md mx-auto mb-10"
+            className="text-[15px] text-[#6B6B6B] leading-[1.7] max-w-md mx-auto mb-12"
           >
-            Dirancang dengan perhatian pada suasana dan detail.
+            Kami bantu buat undangan yang tamu-tamu mu benar-benar rasakan.
           </motion.p>
 
-          {/* CTA — pill buttons with subtle warm glow */}
+          {/* CTA — single, focused, like the final note */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.35, ease: cinematicEase }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3"
+            className="flex flex-col items-center gap-4"
           >
             <a
               href="#templates"
-              className="group relative inline-flex items-center gap-2 px-10 py-4 rounded-full bg-[#C6A769] text-white text-[12px] font-medium tracking-[0.15em] uppercase hover:bg-[#D4BA82] transition-all duration-400 overflow-hidden"
+              className="group relative inline-flex items-center gap-2.5 px-12 py-4 rounded-full bg-[#C6A769] text-white text-[13px] font-medium tracking-[0.15em] uppercase hover:bg-[#D4BA82] transition-all duration-500 overflow-hidden"
             >
               {/* Warm glow behind button */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -119,64 +119,45 @@ export default function Closing() {
             </a>
             <a
               href="#ai-finder"
-              className="inline-flex items-center gap-2 px-10 py-4 rounded-full border border-[#1C1C1C]/8 text-[#6B6B6B] text-[12px] tracking-[0.15em] uppercase hover:border-[#C6A769]/25 hover:text-[#C6A769] transition-all duration-400"
+              className="text-[#6B6B6B] text-[11px] tracking-[0.2em] uppercase hover:text-[#C6A769] transition-colors duration-300"
             >
-              Bantuan Pilih
+              Atau, kami bantu pilihkan
             </a>
           </motion.div>
         </motion.div>
       </div>
 
-      {/* Footer */}
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 mt-20 md:mt-28 pt-10 border-t border-black/[0.04]">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          {/* Brand column */}
-          <div className="sm:col-span-2 lg:col-span-1">
-            <Image
-              src="/logo-nauka.png"
-              alt="Nauka"
-              width={180}
-              height={54}
-              className="h-32 sm:h-36 w-auto mb-6"
-            />
-            <p className="text-[13px] text-[#999] leading-[1.7] max-w-[240px]">
-              Studio undangan digital dengan perhatian pada suasana dan detail.
-            </p>
-          </div>
+      {/* Footer — minimal, warm, personal */}
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 mt-24 md:mt-32 pt-8 border-t border-black/[0.04]">
+        <div className="flex flex-col items-center gap-6">
+          {/* Logo */}
+          <Image
+            src="/logo-nauka.png"
+            alt="Nauka"
+            width={180}
+            height={54}
+            className="h-32 sm:h-36 w-auto"
+          />
 
-          {/* Product */}
-          <div>
-            <h4 className="text-[10px] tracking-[0.25em] uppercase text-[#1C1C1C] font-semibold mb-4">Produk</h4>
-            <ul className="space-y-2.5">
-              <li><a href="#templates" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">Koleksi Template</a></li>
-              <li><a href="#signature" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">Signature Experience</a></li>
-              <li><a href="#ai-finder" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">Bantuan Pilih</a></li>
-            </ul>
-          </div>
+          {/* Tagline */}
+          <p className="text-[13px] text-[#999] leading-[1.7] text-center max-w-xs">
+            Studio undangan digital dengan perhatian pada suasana dan detail.
+          </p>
 
-          {/* Company */}
-          <div>
-            <h4 className="text-[10px] tracking-[0.25em] uppercase text-[#1C1C1C] font-semibold mb-4">Studio</h4>
-            <ul className="space-y-2.5">
-              <li><a href="#why-nauka" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">Pendekatan Kami</a></li>
-              <li><a href="#process" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">Cara Kerja</a></li>
-              <li><a href="#testimonials" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">Kata Mereka</a></li>
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="text-[10px] tracking-[0.25em] uppercase text-[#1C1C1C] font-semibold mb-4">Hubungi</h4>
-            <ul className="space-y-2.5">
-              <li><a href="#" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">Instagram</a></li>
-              <li><a href="#" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">WhatsApp</a></li>
-              <li><a href="#" className="text-[13px] text-[#6B6B6B] hover:text-[#C6A769] transition-colors duration-300">Email</a></li>
-            </ul>
+          {/* Links — single row, minimal */}
+          <div className="flex items-center gap-6">
+            <a href="#templates" className="text-[10px] tracking-[0.15em] uppercase text-[#999] hover:text-[#C6A769] transition-colors duration-300">Template</a>
+            <span className="w-1 h-1 rounded-full bg-[#C6A769]/20" />
+            <a href="#why-nauka" className="text-[10px] tracking-[0.15em] uppercase text-[#999] hover:text-[#C6A769] transition-colors duration-300">Pendekatan</a>
+            <span className="w-1 h-1 rounded-full bg-[#C6A769]/20" />
+            <a href="#" className="text-[10px] tracking-[0.15em] uppercase text-[#999] hover:text-[#C6A769] transition-colors duration-300">Instagram</a>
+            <span className="w-1 h-1 rounded-full bg-[#C6A769]/20" />
+            <a href="#" className="text-[10px] tracking-[0.15em] uppercase text-[#999] hover:text-[#C6A769] transition-colors duration-300">WhatsApp</a>
           </div>
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t border-black/[0.03]">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-8 mt-8 border-t border-black/[0.03]">
           <p className="text-[11px] text-[#999] tracking-wider">
             &copy; 2026 Nauka Motion ~ small movement, real impact ~
           </p>

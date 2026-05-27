@@ -6,10 +6,10 @@ const slowEase = [0.16, 1, 0.3, 1];
 const cinematicEase = [0.25, 0.46, 0.45, 0.94];
 
 const testimonials = [
-  { text: 'Undangannya keren, bikin dimana?', name: 'Rina S.', type: 'Reaction' },
-  { text: 'Uh so sweet banget cerita cinta kalian.', name: 'Dewi A.', type: 'Emotional' },
-  { text: 'Detailnya bener-bener diperhatikan, hasilnya cantik.', name: 'Budi P.', type: 'Impression' },
-  { text: 'Undangannya bikin tamu-tamu langsung merasa spesial.', name: 'Anisa M.', type: 'Reaction', featured: true },
+  { text: 'Tamu-tamu langsung bilang, "Undangannya beda banget." Itu yang bikin senang.', name: 'Rina S.' },
+  { text: 'Detailnya bener-bener diperhatikan. Dari font sampai animasi, semuanya selaras.', name: 'Budi P.' },
+  { text: 'Bikin tamu-tamu langsung merasa spesial sebelum datang ke acara.', name: 'Anisa M.', featured: true },
+  { text: 'Ga nyangka undangan digital bisa terasa begitu personal dan hangat.', name: 'Dewi A.' },
 ];
 
 export default function Testimonials() {
@@ -17,9 +17,9 @@ export default function Testimonials() {
   const others = testimonials.filter((t) => !t.featured);
 
   return (
-    <section id="testimonials" className="nauka-light-warm relative py-16 sm:py-20 bg-white overflow-hidden">
+    <section id="testimonials" className="nauka-light-warm nauka-grain relative py-16 sm:py-20 bg-white overflow-hidden">
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6">
-        {/* Section Header */}
+        {/* Section Header — not "Real Reactions", something warmer */}
         <div className="text-center mb-10 sm:mb-14">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
@@ -28,7 +28,7 @@ export default function Testimonials() {
             transition={{ duration: 0.7, ease: cinematicEase }}
             className="text-[10px] tracking-[0.5em] uppercase text-[#C6A769] mb-3 font-sans"
           >
-            Real Reactions
+            Yang Mereka Rasakan
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -41,7 +41,7 @@ export default function Testimonials() {
           </motion.h2>
         </div>
 
-        {/* Featured Testimonial — PRD: premium depth, elevated */}
+        {/* Featured Testimonial — like a pull quote in a magazine */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -67,17 +67,11 @@ export default function Testimonials() {
             <div className="w-8 h-8 rounded-full bg-[#C6A769]/20 flex items-center justify-center text-[10px] font-semibold text-[#C6A769]">
               {featured.name.charAt(0)}
             </div>
-            <div>
-              <span className="text-[13px] text-white/80 font-medium">{featured.name}</span>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <div className="w-1 h-1 rounded-full bg-[#C6A769]/50" />
-                <span className="text-[9px] tracking-[0.15em] uppercase text-white/30">{featured.type}</span>
-              </div>
-            </div>
+            <span className="text-[13px] text-white/80 font-medium">{featured.name}</span>
           </div>
         </motion.div>
 
-        {/* Other Testimonials — PRD: cinematic pacing, stagger reveal */}
+        {/* Other Testimonials — human, no labels */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           {others.map((testimonial, index) => (
             <motion.div
@@ -103,13 +97,7 @@ export default function Testimonials() {
                 <div className="w-6 h-6 rounded-full bg-[#C6A769]/10 flex items-center justify-center text-[8px] font-semibold text-[#C6A769]">
                   {testimonial.name.charAt(0)}
                 </div>
-                <div>
-                  <span className="text-[12px] text-[#1C1C1C]/70">{testimonial.name}</span>
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-0.5 h-0.5 rounded-full bg-[#C6A769]/30" />
-                    <span className="text-[8px] tracking-[0.15em] uppercase text-[#999]">{testimonial.type}</span>
-                  </div>
-                </div>
+                <span className="text-[12px] text-[#1C1C1C]/70">{testimonial.name}</span>
               </div>
             </motion.div>
           ))}

@@ -13,6 +13,8 @@ import Closing from '@/components/sections/Closing';
 export default function Home() {
   return (
     <main className="bg-[#F6F2EE] min-h-screen">
+      {/* Page load curtain — warm cream fades away like lights dimming before a film */}
+      <div className="nauka-curtain" />
       <Navbar />
       <Hero />
       <HotTemplate />

@@ -74,7 +74,7 @@ export default function Navbar() {
               href="#ai-finder"
               className="text-[12px] tracking-[0.2em] uppercase px-5 py-2 rounded-full border border-[#C6A769]/20 text-[#C6A769] hover:border-[#C6A769]/40 hover:bg-[#C6A769]/5 transition-all duration-400"
             >
-              AI Finder
+              Bantuan Pilih
             </a>
           </div>
 
@@ -125,7 +125,7 @@ export default function Navbar() {
             transition={{ duration: 0.3, delay: 0.2, ease: cinematicEase }}
             className="font-serif text-2xl text-[#C6A769] tracking-[0.15em]"
           >
-            AI Finder
+            Bantuan Pilih
           </motion.a>
         </div>
       </motion.div>
