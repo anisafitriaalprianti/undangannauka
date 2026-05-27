@@ -34,13 +34,14 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Nauka Studio" }],
   icons: {
-    icon: "/logo-nauka.svg",
+    icon: "/favicon.svg",
   },
   openGraph: {
     title: "Nauka — Curated Cinematic Invitation Studio",
     description:
       "Undangan digital dengan rasa yang lebih hidup. Bukan sekadar undangan, sebuah pengalaman.",
     type: "website",
+    images: ["/og-image.svg"],
   },
 };
 
