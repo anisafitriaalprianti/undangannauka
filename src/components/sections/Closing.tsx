@@ -18,7 +18,28 @@ export default function Closing() {
   const closingOpacity = useTransform(scrollYProgress, [0, 0.5], [0.6, 1]);
 
   return (
-    <section ref={sectionRef} className="nauka-light-warm nauka-vignette nauka-grain relative py-16 sm:py-20 bg-white overflow-hidden">
+    <section ref={sectionRef} className="nauka-light-warm nauka-vignette nauka-grain nauka-paper relative py-16 sm:py-20 bg-white overflow-hidden">
+      {/* Cinematic closing ambience — warm glow that breathes */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute top-0 left-1/4 w-[50%] h-[60%]"
+          style={{
+            background: 'radial-gradient(ellipse at 50% 30%, rgba(198,167,105,0.06) 0%, transparent 60%)',
+            animation: 'naukaBreathLight 8s ease-in-out infinite',
+          }}
+        />
+      </div>
+      {/* Secondary warm ambient from bottom */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute bottom-0 right-1/4 w-[40%] h-[40%]"
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(198,167,105,0.03) 0%, transparent 50%)',
+            animation: 'naukaBreathLight 10s ease-in-out 2s infinite',
+          }}
+        />
+      </div>
+
       <div className="relative max-w-2xl mx-auto px-4 sm:px-6 text-center">
         <motion.div
           style={{ opacity: closingOpacity }}
@@ -27,7 +48,7 @@ export default function Closing() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.9, ease: slowEase }}
         >
-          {/* Brand marker */}
+          {/* Brand marker — with subtle gold line animation */}
           <motion.div
             initial={{ opacity: 0, filter: 'blur(4px)' }}
             whileInView={{ opacity: 1, filter: 'blur(0px)' }}
@@ -35,12 +56,24 @@ export default function Closing() {
             transition={{ duration: 0.7, ease: cinematicEase }}
             className="flex items-center justify-center gap-3 mb-8"
           >
-            <div className="h-px w-8 bg-gradient-to-r from-transparent to-[#C6A769]/25" />
+            <motion.div
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.2, ease: slowEase }}
+              className="h-px w-10 bg-gradient-to-r from-transparent to-[#C6A769]/30 origin-right"
+            />
             <span className="text-[10px] tracking-[0.4em] uppercase text-[#C6A769] font-sans">Nauka</span>
-            <div className="h-px w-8 bg-gradient-to-l from-transparent to-[#C6A769]/25" />
+            <motion.div
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.2, ease: slowEase }}
+              className="h-px w-10 bg-gradient-to-l from-transparent to-[#C6A769]/30 origin-left"
+            />
           </motion.div>
 
-          {/* Closing statement */}
+          {/* Closing statement — emotional reveal */}
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -63,7 +96,7 @@ export default function Closing() {
             Dirancang dengan perhatian pada suasana dan detail.
           </motion.p>
 
-          {/* CTA — pill buttons */}
+          {/* CTA — pill buttons with subtle warm glow */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -75,6 +108,10 @@ export default function Closing() {
               href="#templates"
               className="group relative inline-flex items-center gap-2 px-10 py-4 rounded-full bg-[#C6A769] text-white text-[12px] font-medium tracking-[0.15em] uppercase hover:bg-[#D4BA82] transition-all duration-400 overflow-hidden"
             >
+              {/* Warm glow behind button */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{ boxShadow: '0 0 30px rgba(198,167,105,0.3)' }}
+              />
               <span className="relative z-10">Mulai Sekarang</span>
               <svg className="w-4 h-4 relative z-10 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path d="M5 12h14m-7-7 7 7-7 7" />
@@ -100,7 +137,7 @@ export default function Closing() {
               alt="Nauka"
               width={180}
               height={54}
-              className="h-26 sm:h-30 w-auto mb-6"
+              className="h-32 sm:h-36 w-auto mb-6"
             />
             <p className="text-[13px] text-[#999] leading-[1.7] max-w-[240px]">
               Studio undangan digital dengan perhatian pada suasana dan detail.

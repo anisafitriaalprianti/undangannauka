@@ -41,7 +41,7 @@ export default function Navbar() {
             : 'bg-transparent border-b border-transparent'
         }`}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-[72px] flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-20 sm:h-24 flex items-center justify-between">
           {/* Nav Links — desktop (left) */}
           <div className="hidden md:flex items-center gap-8 flex-1">
             {navLinks.map((link) => (
@@ -56,14 +56,14 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Logo — centered */}
-          <a href="#" className="flex items-center group absolute left-1/2 -translate-x-1/2">
+          {/* Logo — centered with breathing space */}
+          <a href="#" className="flex items-center group absolute left-1/2 -translate-x-1/2 px-4">
             <Image
               src="/logo-nauka.png"
               alt="Nauka"
-              width={180}
-              height={54}
-              className="h-26 sm:h-30 w-auto group-hover:opacity-80 transition-opacity duration-400"
+              width={220}
+              height={66}
+              className="h-32 sm:h-36 w-auto group-hover:opacity-80 transition-opacity duration-400"
               priority
             />
           </a>
