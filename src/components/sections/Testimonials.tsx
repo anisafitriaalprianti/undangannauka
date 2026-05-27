@@ -2,24 +2,27 @@
 
 import { motion } from 'framer-motion';
 
-const cinematicEase = [0.25, 0.46, 0.45, 0.94];
 const slowEase = [0.16, 1, 0.3, 1];
 
 const testimonials = [
   {
     text: 'Undangannya keren bikin dimana?',
+    name: 'Rina S.',
     type: 'Reaction',
   },
   {
     text: 'Uh so sweet banget cerita cinta kalian.',
+    name: 'Dewi A.',
     type: 'Emotional',
   },
   {
     text: 'Baru kali ini liat undangan begini.',
+    name: 'Budi P.',
     type: 'Impression',
   },
   {
     text: 'Tamunya pada kejut semua, nggak nyangka undangan digital bisa sekeren ini.',
+    name: 'Anisa M.',
     type: 'Reaction',
     featured: true,
   },
@@ -30,101 +33,95 @@ export default function Testimonials() {
   const others = testimonials.filter((t) => !t.featured);
 
   return (
-    <section id="testimonials" className="nauka-atmosphere-intimate relative py-28 md:py-36">
-      {/* Warm transition from luxury */}
-      <div className="nauka-transition-warm" />
-
-      {/* Section divider */}
-      <div className="nauka-divider-warm" />
-
-      <div className="relative max-w-5xl mx-auto px-5 sm:px-8">
+    <section id="testimonials" className="relative py-16 sm:py-20 bg-white">
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
-        <div className="text-center mb-14 md:mb-18">
+        <div className="text-center mb-10 sm:mb-14">
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.8, ease: cinematicEase }}
-            className="text-[10px] sm:text-[11px] tracking-[0.35em] uppercase text-[#c9a96e] mb-5 font-sans"
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.7, ease: slowEase }}
+            className="text-[10px] tracking-[0.5em] uppercase text-[#C6A769] mb-3 font-sans"
           >
             Real Reactions
           </motion.p>
           <motion.h2
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.9, delay: 0.1, ease: slowEase }}
-            className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#f5f0e8] mb-5"
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.8, delay: 0.1, ease: slowEase }}
+            className="font-serif text-3xl sm:text-4xl font-bold text-[#1C1C1C]"
           >
             Kata Mereka
           </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.25 }}
-            className="text-[#8a8578] text-[15px] max-w-md mx-auto leading-[1.7]"
-          >
-            Bukan testimoni biasa. Ini reaksi emosional asli dari orang yang menerima undangan Nauka.
-          </motion.p>
         </div>
 
-        {/* Featured Testimonial — warm intimate feel */}
+        {/* Featured Testimonial — elevated */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 1, ease: slowEase }}
-          className="group relative bg-[#0a0908] border border-[#c9a96e]/[0.05] p-10 sm:p-14 mb-5 md:mb-6 hover:border-[#c9a96e]/8 transition-all duration-700 overflow-hidden"
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.9, ease: slowEase }}
+          className="group relative bg-[#1C1C1C] rounded-2xl p-8 sm:p-10 md:-translate-y-3 shadow-xl mb-5"
         >
-          {/* Atmospheric glow */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-[#c9a96e]/[0.012] rounded-full blur-[100px] pointer-events-none" />
+          <span className="absolute top-4 left-6 text-white/[0.05] font-serif text-6xl leading-none select-none">
+            &ldquo;
+          </span>
 
-          <span className="absolute top-5 left-8 text-[#c9a96e]/[0.05] font-serif text-7xl leading-none select-none">&ldquo;</span>
-
-          <p className="font-serif text-xl sm:text-2xl md:text-3xl text-[#f5f0e8]/90 italic leading-[1.5] mb-8 relative z-10 max-w-3xl">
+          <p className="font-serif text-xl sm:text-2xl text-white/90 italic leading-[1.5] mb-6 relative z-10 max-w-3xl">
             {featured.text}
           </p>
 
-          <div className="flex items-center gap-2.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#c9a96e]/40 group-hover:bg-[#c9a96e]/60 transition-colors duration-500" />
-            <span className="text-[10px] tracking-[0.2em] uppercase text-[#5a5650] group-hover:text-[#8a8578] transition-colors duration-500">
-              {featured.type}
-            </span>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-[#C6A769]/20 flex items-center justify-center text-[10px] font-semibold text-[#C6A769]">
+              {featured.name.charAt(0)}
+            </div>
+            <div>
+              <span className="text-[13px] text-white/80 font-medium">{featured.name}</span>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <div className="w-1 h-1 rounded-full bg-[#C6A769]/50" />
+                <span className="text-[9px] tracking-[0.15em] uppercase text-white/30">
+                  {featured.type}
+                </span>
+              </div>
+            </div>
           </div>
-
-          <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-gradient-to-r from-[#c9a96e]/30 to-transparent group-hover:w-full transition-all duration-[1000ms]" />
         </motion.div>
 
-        {/* Other Testimonials */}
+        {/* Other Testimonials — 3 column grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           {others.map((testimonial, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{
-                duration: 0.8,
-                delay: index * 0.1,
-                ease: slowEase,
-              }}
-              className="group relative bg-[#090808] border border-white/[0.03] p-7 sm:p-8 hover:border-[#c9a96e]/8 transition-all duration-700"
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.7, delay: index * 0.08, ease: slowEase }}
+              className="group relative bg-[#F6F2EE] rounded-2xl p-6 sm:p-8 ring-1 ring-black/5 hover:ring-[#C6A769]/15 transition-all duration-500"
             >
-              <span className="absolute top-3 left-5 text-[#c9a96e]/[0.05] font-serif text-3xl leading-none select-none">&ldquo;</span>
+              <span className="absolute top-3 left-4 text-[#C6A769]/[0.08] font-serif text-3xl leading-none select-none">
+                &ldquo;
+              </span>
 
-              <p className="font-serif text-lg text-[#f5f0e8]/80 italic leading-[1.6] mb-5 relative z-10">
+              <p className="font-serif text-lg text-[#1C1C1C]/80 italic leading-[1.6] mb-5 relative z-10">
                 {testimonial.text}
               </p>
 
               <div className="flex items-center gap-2.5">
-                <div className="w-1 h-1 rounded-full bg-[#c9a96e]/25 group-hover:bg-[#c9a96e]/50 transition-colors duration-500" />
-                <span className="text-[9px] tracking-[0.2em] uppercase text-[#5a5650] group-hover:text-[#8a8578] transition-colors duration-500">
-                  {testimonial.type}
-                </span>
+                <div className="w-6 h-6 rounded-full bg-[#C6A769]/10 flex items-center justify-center text-[8px] font-semibold text-[#C6A769]">
+                  {testimonial.name.charAt(0)}
+                </div>
+                <div>
+                  <span className="text-[12px] text-[#1C1C1C]/70">{testimonial.name}</span>
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-0.5 h-0.5 rounded-full bg-[#C6A769]/30" />
+                    <span className="text-[8px] tracking-[0.15em] uppercase text-[#999]">
+                      {testimonial.type}
+                    </span>
+                  </div>
+                </div>
               </div>
-
-              <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-gradient-to-r from-[#c9a96e]/20 to-transparent group-hover:w-full transition-all duration-[800ms]" />
             </motion.div>
           ))}
         </div>

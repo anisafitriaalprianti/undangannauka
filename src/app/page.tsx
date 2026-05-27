@@ -12,7 +12,7 @@ import Closing from '@/components/sections/Closing';
 
 export default function Home() {
   return (
-    <main className="bg-[#050505] min-h-screen">
+    <main className="bg-[#F6F2EE] min-h-screen">
       <Navbar />
       <Hero />
       <HotTemplate />

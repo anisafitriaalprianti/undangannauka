@@ -3,7 +3,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 
-const cinematicEase = [0.25, 0.46, 0.45, 0.94];
 const slowEase = [0.16, 1, 0.3, 1];
 
 const tones = ['Islam', 'Umum'];
@@ -30,31 +29,25 @@ export default function AIFinder() {
   const selectionCount = [selectedTone, selectedCulture, selectedVibes].filter(Boolean).length;
 
   return (
-    <section id="ai-finder" className="nauka-atmosphere-tool relative py-28 md:py-36">
-      {/* Cool transition from gallery */}
-      <div className="nauka-transition-cool" />
-
-      {/* Section divider — cool toned */}
-      <div className="nauka-divider-cool" />
-
-      <div className="relative max-w-2xl mx-auto px-5 sm:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-14">
+    <section id="ai-finder" className="relative py-16 sm:py-20 bg-white">
+      <div className="relative max-w-3xl mx-auto px-4 sm:px-6">
+        {/* Section Header — smaller, helper feel */}
+        <div className="text-center mb-10">
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.8, ease: cinematicEase }}
-            className="text-[10px] sm:text-[11px] tracking-[0.35em] uppercase text-[#c9a96e] mb-5 font-sans"
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.7, ease: slowEase }}
+            className="text-[10px] tracking-[0.5em] uppercase text-[#C6A769] mb-3 font-sans"
           >
             Guided Recommendation
           </motion.p>
           <motion.h2
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.9, delay: 0.1, ease: slowEase }}
-            className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#f5f0e8] mb-5"
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.8, delay: 0.1, ease: slowEase }}
+            className="font-serif text-2xl sm:text-3xl font-bold text-[#1C1C1C] mb-2"
           >
             Belum Punya Konsep?
           </motion.h2>
@@ -62,20 +55,20 @@ export default function AIFinder() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.25 }}
-            className="text-[#8a8578] text-[15px] max-w-md mx-auto leading-[1.7]"
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-[14px] text-[#6B6B6B]"
           >
-            Kami bantu pilihkan template yang paling cocok dengan kebutuhanmu.
+            Kami bantu pilihkan yang paling cocok.
           </motion.p>
         </div>
 
         {/* Finder Card */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
-          transition={{ duration: 0.9, delay: 0.2, ease: slowEase }}
-          className="bg-[#090910] border border-white/[0.03] p-7 sm:p-10"
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.8, delay: 0.15, ease: slowEase }}
+          className="bg-[#F6F2EE] rounded-2xl p-6 sm:p-8 ring-1 ring-black/5"
         >
           <AnimatePresence mode="wait">
             {!showResult ? (
@@ -84,24 +77,24 @@ export default function AIFinder() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.4 }}
-                className="space-y-9"
+                transition={{ duration: 0.3 }}
+                className="space-y-7"
               >
                 {/* Step 1 */}
                 <div>
-                  <label className="flex items-center gap-3 text-[10px] tracking-[0.25em] uppercase text-[#8a8578] mb-4">
-                    <span className="font-mono text-[#c9a96e]/30">01</span>
+                  <label className="flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase text-[#6B6B6B] mb-3">
+                    <span className="font-mono text-[#C6A769]/40">01</span>
                     Nuansa Agama
                   </label>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-2">
                     {tones.map((tone) => (
                       <button
                         key={tone}
                         onClick={() => setSelectedTone(selectedTone === tone ? null : tone)}
-                        className={`px-6 py-3 text-[13px] tracking-[0.1em] border transition-all duration-400 ${
+                        className={`px-5 py-2 rounded-full text-[13px] transition-all duration-300 ${
                           selectedTone === tone
-                            ? 'border-[#c9a96e]/30 text-[#c9a96e] bg-[#c9a96e]/[0.05] shadow-[0_0_20px_rgba(201,169,110,0.05)]'
-                            : 'border-white/[0.05] text-[#5a5650] hover:border-white/[0.1] hover:text-[#8a8578]'
+                            ? 'bg-[#C6A769] text-white shadow-[0_2px_12px_rgba(198,167,105,0.2)]'
+                            : 'bg-white text-[#6B6B6B] ring-1 ring-black/5 hover:ring-[#C6A769]/20 hover:text-[#1C1C1C]'
                         }`}
                       >
                         {tone}
@@ -112,19 +105,19 @@ export default function AIFinder() {
 
                 {/* Step 2 */}
                 <div>
-                  <label className="flex items-center gap-3 text-[10px] tracking-[0.25em] uppercase text-[#8a8578] mb-4">
-                    <span className="font-mono text-[#c9a96e]/30">02</span>
+                  <label className="flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase text-[#6B6B6B] mb-3">
+                    <span className="font-mono text-[#C6A769]/40">02</span>
                     Tema Budaya
                   </label>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-2">
                     {cultures.map((culture) => (
                       <button
                         key={culture}
                         onClick={() => setSelectedCulture(selectedCulture === culture ? null : culture)}
-                        className={`px-6 py-3 text-[13px] tracking-[0.1em] border transition-all duration-400 ${
+                        className={`px-5 py-2 rounded-full text-[13px] transition-all duration-300 ${
                           selectedCulture === culture
-                            ? 'border-[#c9a96e]/30 text-[#c9a96e] bg-[#c9a96e]/[0.05] shadow-[0_0_20px_rgba(201,169,110,0.05)]'
-                            : 'border-white/[0.05] text-[#5a5650] hover:border-white/[0.1] hover:text-[#8a8578]'
+                            ? 'bg-[#C6A769] text-white shadow-[0_2px_12px_rgba(198,167,105,0.2)]'
+                            : 'bg-white text-[#6B6B6B] ring-1 ring-black/5 hover:ring-[#C6A769]/20 hover:text-[#1C1C1C]'
                         }`}
                       >
                         {culture}
@@ -135,19 +128,19 @@ export default function AIFinder() {
 
                 {/* Step 3 */}
                 <div>
-                  <label className="flex items-center gap-3 text-[10px] tracking-[0.25em] uppercase text-[#8a8578] mb-4">
-                    <span className="font-mono text-[#c9a96e]/30">03</span>
+                  <label className="flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase text-[#6B6B6B] mb-3">
+                    <span className="font-mono text-[#C6A769]/40">03</span>
                     Suasana
                   </label>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-2">
                     {vibes.map((vibe) => (
                       <button
                         key={vibe}
                         onClick={() => setSelectedVibes(selectedVibes === vibe ? null : vibe)}
-                        className={`px-6 py-3 text-[13px] tracking-[0.1em] border transition-all duration-400 ${
+                        className={`px-5 py-2 rounded-full text-[13px] transition-all duration-300 ${
                           selectedVibes === vibe
-                            ? 'border-[#c9a96e]/30 text-[#c9a96e] bg-[#c9a96e]/[0.05] shadow-[0_0_20px_rgba(201,169,110,0.05)]'
-                            : 'border-white/[0.05] text-[#5a5650] hover:border-white/[0.1] hover:text-[#8a8578]'
+                            ? 'bg-[#C6A769] text-white shadow-[0_2px_12px_rgba(198,167,105,0.2)]'
+                            : 'bg-white text-[#6B6B6B] ring-1 ring-black/5 hover:ring-[#C6A769]/20 hover:text-[#1C1C1C]'
                         }`}
                       >
                         {vibe}
@@ -156,11 +149,11 @@ export default function AIFinder() {
                   </div>
                 </div>
 
-                {/* Find Button */}
+                {/* Find Button — pill */}
                 <button
                   onClick={handleFind}
                   disabled={selectionCount === 0}
-                  className="w-full py-4 bg-[#c9a96e] text-[#050505] text-[12px] font-medium tracking-[0.25em] uppercase hover:bg-[#e0c992] transition-all duration-500 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-[#c9a96e]"
+                  className="w-full py-3.5 rounded-full bg-[#C6A769] text-white text-[12px] font-medium tracking-[0.2em] uppercase hover:bg-[#D4BA82] transition-all duration-400 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-[#C6A769]"
                 >
                   Temukan Template
                 </button>
@@ -168,26 +161,26 @@ export default function AIFinder() {
             ) : (
               <motion.div
                 key="result"
-                initial={{ opacity: 0, y: 15, scale: 0.97 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.6, ease: slowEase }}
-                className="text-center py-10"
+                transition={{ duration: 0.5, ease: slowEase }}
+                className="text-center py-8"
               >
-                <div className="w-16 h-16 mx-auto mb-7 rounded-full bg-[#c9a96e]/[0.06] border border-[#c9a96e]/10 flex items-center justify-center">
-                  <svg className="w-7 h-7 text-[#c9a96e]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                <div className="w-14 h-14 mx-auto mb-5 rounded-full bg-[#C6A769]/10 flex items-center justify-center">
+                  <svg className="w-6 h-6 text-[#C6A769]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
                     <path d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
                   </svg>
                 </div>
-                <h3 className="font-serif text-2xl text-[#f5f0e8] mb-3">
+                <h3 className="font-serif text-xl text-[#1C1C1C] mb-2">
                   Kami Punya Rekomendasi
                 </h3>
-                <p className="text-[#8a8578] text-[14px] leading-[1.7] mb-10 max-w-sm mx-auto">
-                  Berdasarkan pilihanmu, kami sudah menemukan template yang paling cocok. Fitur ini segera hadir di Phase 3.
+                <p className="text-[13px] text-[#6B6B6B] leading-[1.7] mb-8 max-w-sm mx-auto">
+                  Berdasarkan pilihanmu, kami sudah menemukan template yang paling cocok. Fitur ini segera hadir.
                 </p>
                 <button
                   onClick={handleReset}
-                  className="text-[#c9a96e]/70 text-[12px] tracking-[0.2em] uppercase hover:text-[#c9a96e] transition-colors duration-400"
+                  className="text-[#C6A769]/70 text-[11px] tracking-[0.2em] uppercase hover:text-[#C6A769] transition-colors duration-300"
                 >
                   Pilih Ulang
                 </button>

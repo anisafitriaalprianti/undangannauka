@@ -1,10 +1,9 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef, useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
 const cinematicEase = [0.25, 0.46, 0.45, 0.94];
-const slowEase = [0.16, 1, 0.3, 1];
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -18,7 +17,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu on resize
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) setIsMobileOpen(false);
@@ -36,41 +34,41 @@ export default function Navbar() {
   return (
     <>
       <motion.nav
-        initial={{ opacity: 0, y: -15 }}
+        initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.1, ease: cinematicEase }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
+        transition={{ duration: 0.7, delay: 0.1, ease: cinematicEase }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
-            ? 'bg-[#050505]/90 backdrop-blur-2xl border-b border-white/[0.04]'
+            ? 'bg-[#F6F2EE]/80 backdrop-blur-lg border-b border-black/[0.04]'
             : 'bg-transparent border-b border-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 sm:h-[72px] flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-[72px] flex items-center justify-between">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#c9a96e] to-[#8a7444] flex items-center justify-center group-hover:shadow-[0_0_20px_rgba(201,169,110,0.2)] transition-shadow duration-500">
-              <span className="text-[#050505] font-serif font-bold text-sm">N</span>
+          <a href="#" className="flex items-center gap-2 group">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#C6A769] to-[#8A7444] flex items-center justify-center group-hover:shadow-[0_0_16px_rgba(198,167,105,0.25)] transition-shadow duration-400">
+              <span className="text-white font-serif font-bold text-sm">N</span>
             </div>
-            <span className="font-serif text-lg font-semibold tracking-[0.15em] text-[#f5f0e8] group-hover:text-[#c9a96e] transition-colors duration-500">
+            <span className="font-serif text-lg font-semibold tracking-[0.15em] text-[#1C1C1C] group-hover:text-[#C6A769] transition-colors duration-400">
               NAUKA
             </span>
           </a>
 
           {/* Nav Links — desktop */}
-          <div className="hidden md:flex items-center gap-10">
+          <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="relative text-[12px] tracking-[0.25em] uppercase text-[#8a8578] hover:text-[#f5f0e8] transition-colors duration-400 group"
+                className="relative text-[12px] tracking-[0.2em] uppercase text-[#6B6B6B] hover:text-[#1C1C1C] transition-colors duration-300 group"
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-[#c9a96e]/50 group-hover:w-full transition-all duration-500" />
+                <span className="absolute -bottom-1 left-0 w-0 h-px bg-[#C6A769]/50 group-hover:w-full transition-all duration-400" />
               </a>
             ))}
             <a
               href="#ai-finder"
-              className="text-[12px] tracking-[0.25em] uppercase px-6 py-2.5 border border-[#c9a96e]/20 text-[#c9a96e]/80 hover:border-[#c9a96e]/40 hover:text-[#c9a96e] hover:bg-[#c9a96e]/[0.04] transition-all duration-500"
+              className="text-[12px] tracking-[0.2em] uppercase px-5 py-2 rounded-full border border-[#C6A769]/20 text-[#C6A769] hover:border-[#C6A769]/40 hover:bg-[#C6A769]/5 transition-all duration-400"
             >
               AI Finder
             </a>
@@ -79,13 +77,13 @@ export default function Navbar() {
           {/* Mobile menu button */}
           <button
             onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className="md:hidden relative w-10 h-10 flex items-center justify-center text-[#8a8578] hover:text-[#f5f0e8] transition-colors duration-300"
+            className="md:hidden relative w-10 h-10 flex items-center justify-center text-[#6B6B6B] hover:text-[#1C1C1C] transition-colors duration-300"
             aria-label="Toggle menu"
           >
             <div className="relative w-5 h-3.5">
-              <span className={`absolute left-0 w-5 h-[1px] bg-current transition-all duration-300 ${isMobileOpen ? 'top-[50%] rotate-45' : 'top-0'}`} />
-              <span className={`absolute left-0 top-[50%] w-5 h-[1px] bg-current transition-all duration-300 ${isMobileOpen ? 'opacity-0' : 'opacity-100'}`} />
-              <span className={`absolute left-0 w-3.5 h-[1px] bg-current transition-all duration-300 ${isMobileOpen ? 'top-[50%] -rotate-45 w-5' : 'bottom-0'}`} />
+              <span className={`absolute left-0 w-5 h-px bg-current transition-all duration-300 ${isMobileOpen ? 'top-[50%] rotate-45' : 'top-0'}`} />
+              <span className={`absolute left-0 top-[50%] w-5 h-px bg-current transition-all duration-300 ${isMobileOpen ? 'opacity-0' : 'opacity-100'}`} />
+              <span className={`absolute left-0 w-3.5 h-px bg-current transition-all duration-300 ${isMobileOpen ? 'top-[50%] -rotate-45 w-5' : 'bottom-0'}`} />
             </div>
           </button>
         </div>
@@ -98,8 +96,8 @@ export default function Navbar() {
           opacity: isMobileOpen ? 1 : 0,
           pointerEvents: isMobileOpen ? ('auto' as const) : ('none' as const),
         }}
-        transition={{ duration: 0.4, ease: cinematicEase }}
-        className="fixed inset-0 z-40 bg-[#050505]/95 backdrop-blur-xl md:hidden"
+        transition={{ duration: 0.3, ease: cinematicEase }}
+        className="fixed inset-0 z-40 bg-[#F6F2EE]/95 backdrop-blur-xl md:hidden"
       >
         <div className="flex flex-col items-center justify-center h-full gap-8">
           {navLinks.map((link, i) => (
@@ -107,10 +105,10 @@ export default function Navbar() {
               key={link.href}
               href={link.href}
               onClick={() => setIsMobileOpen(false)}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isMobileOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.4, delay: i * 0.08, ease: cinematicEase }}
-              className="font-serif text-2xl text-[#f5f0e8] tracking-[0.15em] hover:text-[#c9a96e] transition-colors duration-300"
+              initial={{ opacity: 0, y: 16 }}
+              animate={isMobileOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+              transition={{ duration: 0.3, delay: i * 0.06, ease: cinematicEase }}
+              className="font-serif text-2xl text-[#1C1C1C] tracking-[0.15em] hover:text-[#C6A769] transition-colors duration-300"
             >
               {link.label}
             </motion.a>
@@ -118,10 +116,10 @@ export default function Navbar() {
           <motion.a
             href="#ai-finder"
             onClick={() => setIsMobileOpen(false)}
-            initial={{ opacity: 0, y: 20 }}
-            animate={isMobileOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.4, delay: 0.3, ease: cinematicEase }}
-            className="font-serif text-2xl text-[#c9a96e] tracking-[0.15em]"
+            initial={{ opacity: 0, y: 16 }}
+            animate={isMobileOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+            transition={{ duration: 0.3, delay: 0.2, ease: cinematicEase }}
+            className="font-serif text-2xl text-[#C6A769] tracking-[0.15em]"
           >
             AI Finder
           </motion.a>
