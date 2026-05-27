@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useInView, type Variants } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
 /* ──────────────────────────────────────────────────────────────
    Closing — "Terima kasih telah menungguku dalam ketaatan."
@@ -115,10 +115,23 @@ export default function Closing() {
     margin: '-10% 0px -10% 0px',
   });
 
+  // PRIORITY 8: Lingering fade — barely perceptible opacity shift after 5s
+  useEffect(() => {
+    if (!isInView) return;
+    const timer = setTimeout(() => {
+      const el = document.getElementById('closing-content');
+      if (el) {
+        el.style.transition = 'opacity 4s ease-out';
+        el.style.opacity = '0.85';
+      }
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [isInView]);
+
   return (
     <section
       ref={sectionRef}
-      className="template-p1 relative w-full min-h-dvh overflow-hidden flex items-center justify-center"
+      className="template-p1 template-p1-dark relative w-full min-h-dvh overflow-hidden flex items-center justify-center"
       style={{ backgroundColor: '#2A2420' }}
     >
       {/* ─── Candle ambience glow ───
@@ -183,8 +196,12 @@ export default function Closing() {
       </div>
 
       {/* ─── Content ───
-          Vertically centered, sequential reveal with generous breathing room */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-20 sm:py-28 md:py-36">
+          Vertically centered, sequential reveal with generous breathing room
+          PRIORITY 8: Lingering fade — see useEffect above */}
+      <div
+        className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-20 sm:py-28 md:py-36"
+        id="closing-content"
+      >
         {/* ── Closing quote ──
             Blur dissolve — words settling into the darkness */}
         <motion.div
@@ -308,11 +325,34 @@ export default function Closing() {
           </h3>
         </motion.div>
 
+        {/* ── Arabic blessing text (PRIORITY 8) ──
+            Between names and brand mark. Very small, warm gold at low opacity,
+            with blur dissolve. Like a whispered blessing. */}
+        <motion.div
+          className="mt-8 sm:mt-10 flex flex-col items-center"
+          initial={{ opacity: 0, filter: 'blur(3px)' }}
+          animate={isInView ? { opacity: 0.25, filter: 'blur(0px)' } : { opacity: 0, filter: 'blur(3px)' }}
+          transition={{ delay: 2.4, duration: 2.0, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <p
+            className="font-serif select-none leading-relaxed"
+            style={{
+              color: 'rgba(212, 186, 130, 1)',
+              fontSize: 'clamp(10px, 2vw, 12px)',
+              letterSpacing: '0.05em',
+            }}
+            dir="rtl"
+            lang="ar"
+          >
+            بارك الله لكما وبارك عليكما وجمع بينكما في خير
+          </p>
+        </motion.div>
+
         {/* ── "Nauka" brand mark ──
             Very subtle — barely there, like a watermark.
             The last thing you see before it fades to black. */}
         <motion.div
-          className="mt-20 sm:mt-28 md:mt-36"
+          className="mt-16 sm:mt-20 md:mt-24"
           variants={brandFadeIn}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
@@ -327,6 +367,26 @@ export default function Closing() {
             Nauka
           </p>
         </motion.div>
+
+        {/* ── Warm embers (PRIORITY 8) ──
+            3-4 tiny warm dots at the bottom that very slowly float upward,
+            like the last warm embers of a candle */}
+        <div className="absolute bottom-0 left-0 right-0 pointer-events-none z-10" aria-hidden="true">
+          {[0, 1, 2, 3].map((i) => (
+            <div
+              key={`ember-${i}`}
+              className="absolute rounded-full"
+              style={{
+                left: `${35 + i * 10}%`,
+                bottom: '8%',
+                width: '1px',
+                height: '1px',
+                backgroundColor: 'rgba(198, 167, 105, 0.5)',
+                animation: `p1EmberFloat ${8 + i * 2}s ease-in-out ${i * 1.5}s infinite`,
+              }}
+            />
+          ))}
+        </div>
       </div>
 
       {/* ─── Bottom warm gradient ───

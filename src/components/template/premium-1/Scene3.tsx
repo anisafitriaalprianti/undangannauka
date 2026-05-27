@@ -31,29 +31,45 @@ import { useRef } from 'react';
 
 // ── Animation variants ──────────────────────────────────────────
 
+/**
+ * Sketch-to-cinematic image reveal — TRUE multi-stage reveal.
+ * PRIORITY 2: Four perceptual stages via Framer Motion keyframes.
+ *   Stage 1 (0→30%)  — thin sketch lines: heavy blur, mostly grayscale, very low opacity
+ *   Stage 2 (30→55%) — shading added: slightly more opacity, less blur, still mostly grayscale
+ *   Stage 3 (55→80%) — lighting added: color emerging, less blur
+ *   Stage 4 (80→100%) — cinematic alive: full color, sharp, warm
+ * Total duration: 3.4s
+ */
 const sketchToCinematic: Variants = {
   hidden: {
-    opacity: 0,
-    filter: 'blur(8px) grayscale(60%)',
+    opacity: 0.08,
+    filter: 'blur(10px) grayscale(70%)',
     scale: 1.04,
   },
   visible: {
-    opacity: 1,
-    filter: 'blur(0px) grayscale(0%)',
+    opacity: [0.08, 0.25, 0.6, 1],
+    filter: [
+      'blur(10px) grayscale(70%)',
+      'blur(6px) grayscale(50%)',
+      'blur(2.5px) grayscale(20%)',
+      'blur(0px) grayscale(0%)',
+    ],
     scale: 1,
     transition: {
-      duration: 2.4,
+      duration: 3.4,
       ease: [0.16, 1, 0.3, 1],
       opacity: {
-        duration: 1.6,
+        duration: 3.4,
+        times: [0, 0.3, 0.55, 0.8],
         ease: 'easeOut',
       },
       filter: {
-        duration: 2.2,
+        duration: 3.4,
+        times: [0, 0.3, 0.55, 0.8],
         ease: 'easeOut',
       },
       scale: {
-        duration: 2.6,
+        duration: 3.6,
         ease: [0.16, 1, 0.3, 1],
       },
     },
@@ -132,17 +148,18 @@ export default function Scene3() {
   return (
     <section
       ref={sectionRef}
-      className="template-p1 nauka-paper nauka-grain nauka-vignette relative w-full min-h-dvh overflow-hidden flex flex-col items-center justify-center"
+      className="template-p1 nauka-paper nauka-grain nauka-ink-wash nauka-vignette relative w-full min-h-dvh overflow-hidden flex flex-col items-center justify-center"
       style={{
         backgroundColor: '#F5F0E8',
       }}
     >
-      {/* ── Warm ambient glow — golden hour drifting light ── */}
+      {/* ── Warm ambient glow — PRIORITY 4: Golden hour light from top-right
+          Drifting warm light that creates the sunset terrace feeling */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
-            'radial-gradient(ellipse 50% 40% at 50% 40%, rgba(198,167,105,0.07) 0%, transparent 65%)',
+            'radial-gradient(ellipse 55% 45% at 65% 20%, rgba(198,167,105,0.10) 0%, transparent 55%)',
           animation: 'p1WarmDrift 14s ease-in-out infinite',
         }}
         aria-hidden="true"
@@ -186,7 +203,7 @@ export default function Scene3() {
           animate={isInView ? 'visible' : 'hidden'}
         >
           <div
-            className="relative overflow-hidden rounded-lg md:rounded-xl"
+            className="nauka-edge-soft relative overflow-hidden rounded-lg md:rounded-xl"
             style={{
               aspectRatio: '614 / 378',
               boxShadow:
@@ -202,12 +219,13 @@ export default function Scene3() {
               priority={false}
             />
 
-            {/* Subtle warm overlay — golden hour warmth */}
+            {/* PRIORITY 4: Golden hour warm overlay — directional light from top-right
+                Creates the sunset terrace feeling */}
             <div
               className="pointer-events-none absolute inset-0"
               style={{
                 background:
-                  'linear-gradient(180deg, rgba(198,167,105,0.03) 0%, transparent 40%), linear-gradient(0deg, rgba(198,167,105,0.04) 0%, transparent 35%)',
+                  'linear-gradient(225deg, rgba(198,167,105,0.07) 0%, transparent 50%), linear-gradient(0deg, rgba(198,167,105,0.05) 0%, transparent 30%)',
               }}
               aria-hidden="true"
             />

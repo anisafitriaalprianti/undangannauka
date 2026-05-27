@@ -60,7 +60,7 @@ export default function Opening({ onComplete }: OpeningProps) {
 
   return (
     <motion.div
-      className="template-p1 relative min-h-screen w-full overflow-hidden"
+      className="template-p1 template-p1-dark relative min-h-screen w-full overflow-hidden"
       style={{ backgroundColor: '#2A2420' }}
       initial={{ opacity: 0 }}
       animate={{ opacity: fadeout ? 0 : 1 }}
@@ -159,7 +159,7 @@ export default function Opening({ onComplete }: OpeningProps) {
                 style={{
                   color: 'rgba(212, 186, 130, 0.9)',
                   fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
-                  animation: 'p1HandwriteReveal 2s ease-out forwards',
+                  animation: 'p1HandwriteReveal 3.5s ease-out forwards',
                   textShadow: '0 0 30px rgba(198, 167, 105, 0.15)',
                 }}
                 dir="rtl"
@@ -202,7 +202,7 @@ export default function Opening({ onComplete }: OpeningProps) {
                   color: 'rgba(212, 186, 130, 0.65)',
                   fontSize: 'clamp(0.8rem, 2.5vw, 1rem)',
                   letterSpacing: '0.12em',
-                  animation: 'p1HandwriteReveal 1.8s ease-out forwards',
+                  animation: 'p1HandwriteRevealBrand 2.5s ease-out forwards',
                   textShadow: '0 0 20px rgba(198, 167, 105, 0.1)',
                 }}
               >

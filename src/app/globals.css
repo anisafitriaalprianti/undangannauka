@@ -782,20 +782,51 @@ body {
   --p1-dark-surface: #1E1A17;
 }
 
-/* Opening — handwriting reveal animation */
+/* Opening — handwriting reveal animation
+   PRIORITY 6: Extended duration, X drift, skew settle, deeper blur */
 @keyframes p1HandwriteReveal {
   0% {
     opacity: 0;
-    transform: translateY(8px);
-    filter: blur(4px);
+    transform: translateY(8px) translateX(-6px) skewX(-2deg);
+    filter: blur(6px);
   }
-  60% {
+  35% {
+    opacity: 0.4;
+    filter: blur(3px);
+    transform: translateY(5px) translateX(-3px) skewX(-1.5deg);
+  }
+  65% {
     opacity: 0.8;
     filter: blur(1px);
+    transform: translateY(2px) translateX(-1px) skewX(-0.5deg);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) translateX(0) skewX(0deg);
+    filter: blur(0px);
+  }
+}
+
+/* Brand text handwriting — slower, lighter drift */
+@keyframes p1HandwriteRevealBrand {
+  0% {
+    opacity: 0;
+    transform: translateY(5px) translateX(-4px) skewX(-1.5deg);
+    filter: blur(5px);
+  }
+  40% {
+    opacity: 0.4;
+    filter: blur(2.5px);
+    transform: translateY(3px) translateX(-2px) skewX(-1deg);
+  }
+  70% {
+    opacity: 0.75;
+    filter: blur(1px);
+    transform: translateY(1px) translateX(-0.5px) skewX(-0.3deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) translateX(0) skewX(0deg);
     filter: blur(0px);
   }
 }
@@ -933,5 +964,73 @@ body {
   }
   50% {
     box-shadow: 0 0 0 6px rgba(198, 167, 105, 0.08);
+  }
+}
+
+/* ============================================================
+   PRIORITY 7: HANDCRAFTED TOUCH — FINAL CINEMATIC POLISH
+   ============================================================ */
+
+/* Dark background grain override — slightly more visible on dark surfaces
+   PRIORITY 7: 0.035 instead of 0.028 for Opening/Closing dark scenes */
+.template-p1-dark .nauka-grain::after {
+  opacity: 0.035;
+}
+
+/* Organic ink wash — very subtle darkness variation across the page
+   Large SVG noise tile with very low frequency creates organic variation
+   Like a faint wash of ink on handmade paper — felt, not seen
+   PRIORITY 7: multiply blend at opacity 0.012 */
+.nauka-ink-wash {
+  position: relative;
+}
+.nauka-ink-wash::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.012;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='inkwash'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23inkwash)'/%3E%3C/svg%3E");
+  background-size: 400px 400px;
+  mix-blend-mode: multiply;
+  z-index: 1;
+}
+
+/* Soft inner edge — makes image edges feel less digital, more printed
+   Very thin (2px) soft inner shadow that adds a subtle physical quality
+   PRIORITY 7: applied to all image containers in scenes */
+.nauka-edge-soft {
+  box-shadow: inset 0 0 2px rgba(42, 36, 32, 0.03);
+}
+
+/* Breathing scene — warm glow that breathes
+   For the Breath.tsx component between Scene4 and EventInfo */
+@keyframes p1BreathGlow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1.05);
+  }
+}
+
+/* Closing ember float — tiny warm dots floating upward
+   Like the last warm embers of a candle */
+@keyframes p1EmberFloat {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.5;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-60px) translateX(8px);
+    opacity: 0;
   }
 }

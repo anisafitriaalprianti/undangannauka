@@ -78,7 +78,7 @@ const dateVariant = {
   },
 };
 
-// --- Dust Particles Data ---
+// --- Dust Particles Data — PRIMARY layer ---
 // Positions scattered across the cover, simulating dust floating in moonlight
 const dustParticles = [
   { left: '15%', top: '20%', size: 2, delay: 0, duration: 8 },
@@ -96,6 +96,21 @@ const dustParticles = [
   { left: '25%', top: '70%', size: 1.5, delay: 0.4, duration: 9.5 },
   { left: '65%', top: '65%', size: 2.2, delay: 1.7, duration: 11 },
   { left: '40%', top: '75%', size: 1.8, delay: 3.0, duration: 8 },
+];
+
+// --- Dust Particles Data — DISTANT layer (PRIORITY 3) ---
+// Even smaller (1px) and slower (15-20s) — like distant dust in moonlight
+const distantDustParticles = [
+  { left: '12%', top: '18%', delay: 0.5, duration: 16 },
+  { left: '28%', top: '32%', delay: 2.3, duration: 18 },
+  { left: '42%', top: '12%', delay: 1.1, duration: 15 },
+  { left: '58%', top: '28%', delay: 3.5, duration: 19 },
+  { left: '72%', top: '42%', delay: 0.8, duration: 17 },
+  { left: '88%', top: '35%', delay: 2.7, duration: 20 },
+  { left: '18%', top: '58%', delay: 1.6, duration: 18 },
+  { left: '48%', top: '48%', delay: 4.0, duration: 16 },
+  { left: '78%', top: '55%', delay: 0.3, duration: 19 },
+  { left: '35%', top: '68%', delay: 2.0, duration: 17 },
 ];
 
 // --- Component ---
@@ -153,13 +168,14 @@ export default function Cover() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
       >
-        {/* Moon glow — soft pulsing light behind moon image */}
+        {/* Moon glow — soft pulsing light behind moon image
+            PRIORITY 3: Added subtle p1WarmDrift alongside p1MoonPulse */}
         <div
           className="absolute inset-[-30%] rounded-full pointer-events-none"
           style={{
             background:
               'radial-gradient(circle at center, rgba(198, 167, 105, 0.15) 0%, rgba(198, 167, 105, 0.05) 40%, transparent 70%)',
-            animation: 'p1MoonPulse 6s ease-in-out infinite',
+            animation: 'p1MoonPulse 6s ease-in-out infinite, p1WarmDrift 12s ease-in-out infinite',
           }}
         />
         {/* Moon image */}
@@ -227,7 +243,7 @@ export default function Cover() {
         />
       </motion.div>
 
-      {/* === FLOATING DUST PARTICLES === */}
+      {/* === FLOATING DUST PARTICLES — PRIMARY LAYER === */}
       <div className="absolute inset-0 pointer-events-none z-[4]" aria-hidden="true">
         {dustParticles.map((particle, i) => (
           <div
@@ -244,6 +260,50 @@ export default function Cover() {
           />
         ))}
       </div>
+
+      {/* === FLOATING DUST PARTICLES — DISTANT LAYER (PRIORITY 3) ===
+          Even smaller (1px) and slower (15-20s) — like distant dust in moonlight */}
+      <div className="absolute inset-0 pointer-events-none z-[4]" aria-hidden="true">
+        {distantDustParticles.map((particle, i) => (
+          <div
+            key={`dust-distant-${i}`}
+            className="absolute rounded-full"
+            style={{
+              left: particle.left,
+              top: particle.top,
+              width: '1px',
+              height: '1px',
+              backgroundColor: 'rgba(198, 167, 105, 0.25)',
+              animation: `p1DustFloat ${particle.duration}s ease-in-out ${particle.delay}s infinite`,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* === MOONLIGHT BEAM (PRIORITY 3) ===
+          A very faint diagonal gradient line that slowly shifts position
+          Like a thin shaft of moonlight cutting across the scene */}
+      <div
+        className="absolute inset-0 pointer-events-none z-[3]"
+        style={{
+          background:
+            'linear-gradient(135deg, transparent 45%, rgba(198, 167, 105, 0.02) 48%, rgba(198, 167, 105, 0.04) 50%, rgba(198, 167, 105, 0.02) 52%, transparent 55%)',
+          animation: 'p1WarmDrift 16s ease-in-out infinite',
+        }}
+        aria-hidden="true"
+      />
+
+      {/* === SOFT REFLECTION AT BOTTOM (PRIORITY 3) ===
+          Very subtle horizontal gradient suggesting moonlight reflecting off a surface */}
+      <div
+        className="absolute bottom-0 left-0 right-0 pointer-events-none z-[3]"
+        style={{
+          height: '15%',
+          background:
+            'linear-gradient(180deg, transparent 0%, rgba(198, 167, 105, 0.015) 40%, rgba(198, 167, 105, 0.03) 100%)',
+        }}
+        aria-hidden="true"
+      />
 
       {/* === CENTER CONTENT === */}
       <div className="relative z-[5] flex flex-col items-center justify-center text-center px-6 sm:px-8 w-full">
@@ -322,6 +382,8 @@ export default function Cover() {
       {/* === TEXTURE OVERLAYS — applied last for proper layering === */}
       {/* Paper texture */}
       <div className="nauka-paper absolute inset-0 pointer-events-none z-[6]" />
+      {/* Ink wash — PRIORITY 7: organic depth */}
+      <div className="nauka-ink-wash absolute inset-0 pointer-events-none z-[6]" />
       {/* Film grain */}
       <div className="nauka-grain absolute inset-0 pointer-events-none z-[7]" />
       {/* Vignette */}

@@ -8,6 +8,7 @@ import Scene1 from '@/components/template/premium-1/Scene1';
 import Scene2 from '@/components/template/premium-1/Scene2';
 import Scene3 from '@/components/template/premium-1/Scene3';
 import Scene4 from '@/components/template/premium-1/Scene4';
+import Breath from '@/components/template/premium-1/Breath';
 import EventInfo from '@/components/template/premium-1/EventInfo';
 import Gallery from '@/components/template/premium-1/Gallery';
 import RSVP from '@/components/template/premium-1/RSVP';
@@ -79,14 +80,76 @@ export default function Premium1Page() {
             {/* Scene I: "Menjaga Dalam Diam" */}
             <Scene1 />
 
+            {/* PRIORITY 1: Breathing spacer — LONG
+                Emotional distance between "menjaga" and "sujud"
+                Warm ivory background with subtle centered gold dot */}
+            <div
+              className="relative flex items-center justify-center"
+              style={{
+                backgroundColor: '#F5F0E8',
+                height: '20vh',
+              }}
+            >
+              <div
+                style={{
+                  width: '3px',
+                  height: '3px',
+                  borderRadius: '50%',
+                  backgroundColor: 'rgba(198, 167, 105, 0.2)',
+                }}
+              />
+            </div>
+
             {/* Scene II: "Menitipkan Dalam Sujud" */}
             <Scene2 />
+
+            {/* PRIORITY 1: Breathing spacer — MEDIUM
+                Between sujud and breathing space
+                Warm ivory background with subtle centered gold dot */}
+            <div
+              className="relative flex items-center justify-center"
+              style={{
+                backgroundColor: '#F5F0E8',
+                height: '14vh',
+              }}
+            >
+              <div
+                style={{
+                  width: '2px',
+                  height: '2px',
+                  borderRadius: '50%',
+                  backgroundColor: 'rgba(198, 167, 105, 0.18)',
+                }}
+              />
+            </div>
 
             {/* Scene III: Breathing space — emotional pause */}
             <Scene3 />
 
+            {/* PRIORITY 1: Breathing spacer — SHORT
+                Building toward payoff
+                Warm ivory background with subtle thin gold line */}
+            <div
+              className="relative flex items-center justify-center"
+              style={{
+                backgroundColor: '#F5F0E8',
+                height: '8vh',
+              }}
+            >
+              <div
+                style={{
+                  width: '30px',
+                  height: '1px',
+                  background: 'linear-gradient(to right, transparent, rgba(198, 167, 105, 0.15), transparent)',
+                }}
+              />
+            </div>
+
             {/* Scene IV: "Hari Yang Dijanjikan" — emotional payoff */}
             <Scene4 />
+
+            {/* PRIORITY 5: Breath — sacred breathing space before event info */}
+            <Breath />
 
             {/* Event Information — clear, elegant, warm */}
             <EventInfo />

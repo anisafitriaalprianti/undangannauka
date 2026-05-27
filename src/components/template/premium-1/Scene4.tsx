@@ -35,39 +35,42 @@ import { useRef } from 'react';
 // ── Animation variants ──────────────────────────────────────────
 
 /**
- * Warm sunrise image reveal.
- * Unlike other scenes that go grayscale→color (like a sketch coming alive),
+ * Warm sunrise image reveal — PRIORITY 4: Slower, with clearer center-radiating light.
  * Scene4 starts from a warm golden blur — like dawn breaking.
- * The reveal feels like sunrise: warm light spreading outward,
+ * The reveal feels like sunrise: warm light spreading outward from center,
  * gradually sharpening into a beautiful, vivid cinematic image.
- *
- *   Stage 1 (0→35%)  — warm golden haze: blur + warm sepia, low opacity
- *   Stage 2 (35→65%) — dawn light spreads: opacity ↑, blur ↓, color emerges
- *   Stage 3 (65→100%) — full sacred light: vivid color, sharp, warm glow
+ * Total duration: 3.0s (up from 2.4s)
  */
 const sunriseReveal: Variants = {
   hidden: {
-    opacity: 0,
+    opacity: 0.08,
     filter: 'blur(8px) sepia(60%) saturate(0.4) brightness(1.15)',
     scale: 1.05,
   },
   visible: {
-    opacity: 1,
-    filter: 'blur(0px) sepia(0%) saturate(1) brightness(1)',
+    opacity: [0.08, 0.3, 0.65, 1],
+    filter: [
+      'blur(8px) sepia(60%) saturate(0.4) brightness(1.15)',
+      'blur(5px) sepia(35%) saturate(0.6) brightness(1.10)',
+      'blur(2px) sepia(12%) saturate(0.85) brightness(1.03)',
+      'blur(0px) sepia(0%) saturate(1) brightness(1)',
+    ],
     scale: 1,
     transition: {
-      duration: 2.4,
+      duration: 3.0,
       ease: [0.16, 1, 0.3, 1],
       opacity: {
-        duration: 1.6,
+        duration: 3.0,
+        times: [0, 0.3, 0.6, 0.85],
         ease: 'easeOut',
       },
       filter: {
-        duration: 2.4,
+        duration: 3.0,
+        times: [0, 0.3, 0.6, 0.85],
         ease: 'easeOut',
       },
       scale: {
-        duration: 2.6,
+        duration: 3.2,
         ease: [0.16, 1, 0.3, 1],
       },
     },
@@ -164,7 +167,7 @@ export default function Scene4() {
   return (
     <section
       ref={sectionRef}
-      className="template-p1 nauka-paper nauka-grain nauka-vignette relative w-full min-h-dvh overflow-hidden flex flex-col items-center justify-center"
+      className="template-p1 nauka-paper nauka-grain nauka-ink-wash nauka-vignette relative w-full min-h-dvh overflow-hidden flex flex-col items-center justify-center"
       style={{
         // Warmer background than other scenes — slightly more golden tint
         // Other scenes use #F5F0E8; this leans warmer, like dawn light on parchment
@@ -218,7 +221,7 @@ export default function Scene4() {
           animate={isInView ? 'visible' : 'hidden'}
         >
           <div
-            className="relative overflow-hidden rounded-lg md:rounded-xl"
+            className="nauka-edge-soft relative overflow-hidden rounded-lg md:rounded-xl"
             style={{
               aspectRatio: '606 / 396',
               boxShadow:
@@ -234,8 +237,8 @@ export default function Scene4() {
               priority={false}
             />
 
-            {/* Warm cinematic overlay — sacred warm light on the image
-                More prominent than other scenes to convey warmth */}
+            {/* PRIORITY 4: Warm cinematic overlay — sacred warm light radiating FROM center
+                More prominent to convey warmth, clearer direction from center outward */}
             <div
               className="pointer-events-none absolute inset-0"
               style={{
@@ -249,13 +252,13 @@ export default function Scene4() {
               aria-hidden="true"
             />
 
-            {/* Extra sacred warm glow — concentrated warm light
-                radiating from center, like a blessing on the scene */}
+            {/* PRIORITY 4: Extra sacred warm glow — clearer warm gradient FROM center outward
+                like a blessing radiating from the scene's heart */}
             <div
               className="pointer-events-none absolute inset-0"
               style={{
                 background:
-                  'radial-gradient(ellipse 70% 50% at 50% 60%, rgba(198,167,105,0.05) 0%, transparent 65%)',
+                  'radial-gradient(ellipse 80% 60% at 50% 55%, rgba(198,167,105,0.07) 0%, transparent 60%)',
               }}
               aria-hidden="true"
             />

@@ -33,35 +33,44 @@ import { useRef } from 'react';
 // ── Animation variants ──────────────────────────────────────────
 
 /**
- * Sketch-to-cinematic image reveal.
- * Three perceptual stages via Framer Motion orchestration:
- *   Stage 1 (0→40%)  — thin sketch lines: blur + grayscale, low opacity
- *   Stage 2 (40→70%) — shading appears: opacity ↑, blur ↓, some color
- *   Stage 3 (70→100%) — lighting kicks in: full color, sharp, warm
+ * Sketch-to-cinematic image reveal — TRUE multi-stage reveal.
+ * PRIORITY 2: Four perceptual stages via Framer Motion keyframes.
+ *   Stage 1 (0→30%)  — thin sketch lines: heavy blur, full grayscale, very low opacity
+ *   Stage 2 (30→55%) — shading added: slightly more opacity, less blur, still mostly grayscale
+ *   Stage 3 (55→80%) — lighting added: color emerging, less blur
+ *   Stage 4 (80→100%) — cinematic alive: full color, sharp, warm
+ * Total duration: 3.2s (slower than previous 2.2s)
  */
 const sketchToCinematic: Variants = {
   hidden: {
-    opacity: 0,
-    filter: 'blur(8px) grayscale(100%)',
+    opacity: 0.08,
+    filter: 'blur(10px) grayscale(100%)',
     scale: 1.04,
   },
   visible: {
-    opacity: 1,
-    filter: 'blur(0px) grayscale(0%)',
+    opacity: [0.08, 0.25, 0.6, 1],
+    filter: [
+      'blur(10px) grayscale(100%)',
+      'blur(6px) grayscale(85%)',
+      'blur(2.5px) grayscale(35%)',
+      'blur(0px) grayscale(0%)',
+    ],
     scale: 1,
     transition: {
-      duration: 2.2,
+      duration: 3.2,
       ease: [0.16, 1, 0.3, 1],
       opacity: {
-        duration: 1.4,
+        duration: 3.2,
+        times: [0, 0.3, 0.55, 0.8],
         ease: 'easeOut',
       },
       filter: {
-        duration: 2.2,
+        duration: 3.2,
+        times: [0, 0.3, 0.55, 0.8],
         ease: 'easeOut',
       },
       scale: {
-        duration: 2.4,
+        duration: 3.4,
         ease: [0.16, 1, 0.3, 1],
       },
     },
@@ -158,26 +167,26 @@ export default function Scene1() {
   return (
     <section
       ref={sectionRef}
-      className="template-p1 nauka-paper nauka-grain nauka-vignette relative w-full min-h-dvh overflow-hidden flex flex-col items-center justify-center"
+      className="template-p1 nauka-paper nauka-grain nauka-ink-wash nauka-vignette relative w-full min-h-dvh overflow-hidden flex flex-col items-center justify-center"
       style={{
         backgroundColor: '#F5F0E8',
       }}
     >
       {/* ── Warm ambient light layers ──
-          Top: moonlight blue-grey (outside the window)
-          Bottom: warm interior glow (inside the room)
-          Together they create the emotional distance —
-          cold outside, warm inside */}
+          PRIORITY 4: Stronger directional lighting
+          Top-center: STRONGER moonlight (cool blue-grey) — outside cold
+          Bottom-left: STRONGER warm lamp (warm gold) — inside warm
+          The contrast creates "outside cold / inside warm" emotional distance */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background: [
-            // Moonlight from above — cool blue-grey
-            'radial-gradient(ellipse 60% 35% at 50% 5%, rgba(138,155,174,0.05) 0%, transparent 55%)',
-            // Warm room light — from below/center
-            'radial-gradient(ellipse 70% 50% at 50% 85%, rgba(198,167,105,0.06) 0%, transparent 55%)',
+            // STRONGER Moonlight from top-center — cool, outside
+            'radial-gradient(ellipse 70% 40% at 50% 3%, rgba(138,155,174,0.09) 0%, transparent 50%)',
+            // STRONGER Warm lamp from bottom-left — warm, inside
+            'radial-gradient(ellipse 65% 55% at 35% 80%, rgba(198,167,105,0.10) 0%, transparent 50%)',
             // Secondary warm glow — subtle ambient
-            'radial-gradient(ellipse 50% 40% at 30% 60%, rgba(198,167,105,0.03) 0%, transparent 50%)',
+            'radial-gradient(ellipse 50% 40% at 30% 60%, rgba(198,167,105,0.04) 0%, transparent 50%)',
           ].join(', '),
         }}
         aria-hidden="true"
@@ -208,7 +217,7 @@ export default function Scene1() {
           animate={isInView ? 'visible' : 'hidden'}
         >
           <div
-            className="relative overflow-hidden rounded-lg md:rounded-xl"
+            className="nauka-edge-soft relative overflow-hidden rounded-lg md:rounded-xl"
             style={{
               aspectRatio: '574 / 388',
               boxShadow:
@@ -224,26 +233,27 @@ export default function Scene1() {
               priority={false}
             />
 
-            {/* Cinematic warm overlay — warm interior light on the image */}
+            {/* PRIORITY 4: Cinematic warm overlay — stronger directional lighting
+                Cool moonlight from top-center, warm lamp from bottom-left */}
             <div
               className="pointer-events-none absolute inset-0"
               style={{
                 background: [
-                  // Moonlight cast from top — cool, outside
-                  'linear-gradient(180deg, rgba(138,155,174,0.06) 0%, transparent 35%)',
-                  // Warm room glow from bottom — inside
-                  'linear-gradient(0deg, rgba(198,167,105,0.05) 0%, transparent 40%)',
+                  // STRONGER Moonlight cast from top — cool, outside
+                  'linear-gradient(180deg, rgba(138,155,174,0.10) 0%, transparent 40%)',
+                  // STRONGER Warm room glow from bottom-left — inside
+                  'linear-gradient(315deg, rgba(198,167,105,0.09) 0%, transparent 45%)',
                 ].join(', '),
               }}
               aria-hidden="true"
             />
 
-            {/* Subtle directional warm light — top-left, like a lamp in the room */}
+            {/* PRIORITY 4: Stronger directional warm light — bottom-left, like a lamp in the room */}
             <div
               className="pointer-events-none absolute inset-0"
               style={{
                 background:
-                  'radial-gradient(ellipse 60% 40% at 25% 70%, rgba(198,167,105,0.04) 0%, transparent 60%)',
+                  'radial-gradient(ellipse 60% 45% at 25% 70%, rgba(198,167,105,0.07) 0%, transparent 55%)',
               }}
               aria-hidden="true"
             />
@@ -257,7 +267,7 @@ export default function Scene1() {
           variants={labelFadeIn}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          transition={{ delay: 1.2 }}
+          transition={{ delay: 1.8 }}
         >
           <span
             className="font-serif text-[10px] tracking-[0.3em] uppercase sm:text-xs"
@@ -274,7 +284,7 @@ export default function Scene1() {
           variants={titleFadeIn}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          transition={{ delay: 1.6 }}
+          transition={{ delay: 2.2 }}
         >
           <h2
             className="font-serif text-lg font-medium tracking-wide sm:text-xl md:text-2xl"
@@ -295,7 +305,7 @@ export default function Scene1() {
             variants={dividerDraw}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
-            transition={{ delay: 2.0 }}
+            transition={{ delay: 2.6 }}
           />
         </motion.div>
 
@@ -307,7 +317,7 @@ export default function Scene1() {
           variants={quoteFadeIn}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          transition={{ delay: 2.4 }}
+          transition={{ delay: 3.0 }}
         >
           {/* Decorative opening quotation mark */}
           <span

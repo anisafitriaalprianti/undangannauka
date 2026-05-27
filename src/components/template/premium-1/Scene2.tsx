@@ -26,29 +26,45 @@ import { useRef } from 'react';
 
 // ── Animation variants ──────────────────────────────────────────
 
+/**
+ * Sketch-to-cinematic image reveal — TRUE multi-stage reveal.
+ * PRIORITY 2: Four perceptual stages via Framer Motion keyframes.
+ *   Stage 1 (0→30%)  — thin sketch lines: heavy blur, full grayscale, very low opacity
+ *   Stage 2 (30→55%) — shading added: slightly more opacity, less blur, still mostly grayscale
+ *   Stage 3 (55→80%) — lighting added: color emerging, less blur
+ *   Stage 4 (80→100%) — cinematic alive: full color, sharp, warm
+ * Total duration: 3.0s
+ */
 const sketchToCinematic: Variants = {
   hidden: {
-    opacity: 0,
-    filter: 'blur(8px) grayscale(100%)',
+    opacity: 0.08,
+    filter: 'blur(10px) grayscale(100%)',
     scale: 1.04,
   },
   visible: {
-    opacity: 1,
-    filter: 'blur(0px) grayscale(0%)',
+    opacity: [0.08, 0.25, 0.6, 1],
+    filter: [
+      'blur(10px) grayscale(100%)',
+      'blur(6px) grayscale(85%)',
+      'blur(2.5px) grayscale(35%)',
+      'blur(0px) grayscale(0%)',
+    ],
     scale: 1,
     transition: {
-      duration: 2.0,
+      duration: 3.0,
       ease: [0.16, 1, 0.3, 1],
       opacity: {
-        duration: 1.4,
+        duration: 3.0,
+        times: [0, 0.3, 0.55, 0.8],
         ease: 'easeOut',
       },
       filter: {
-        duration: 2.0,
+        duration: 3.0,
+        times: [0, 0.3, 0.55, 0.8],
         ease: 'easeOut',
       },
       scale: {
-        duration: 2.2,
+        duration: 3.2,
         ease: [0.16, 1, 0.3, 1],
       },
     },
@@ -141,18 +157,19 @@ export default function Scene2() {
   return (
     <section
       ref={sectionRef}
-      className="template-p1 nauka-paper nauka-grain nauka-vignette relative w-full min-h-dvh overflow-hidden flex flex-col items-center justify-center"
+      className="template-p1 nauka-paper nauka-grain nauka-ink-wash nauka-vignette relative w-full min-h-dvh overflow-hidden flex flex-col items-center justify-center"
       style={{
         background:
           'linear-gradient(160deg, #F5F0E8 0%, #F2EDE4 30%, #F5F0E8 60%, #F0EBE1 100%)',
       }}
     >
-      {/* ── Warm ambient light — top-left source (subuh window light) ── */}
+      {/* ── Warm ambient light — PRIORITY 4: Stronger directional sunlight from top-left (subuh window light)
+          Casting subtle shadow on the right side */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
-            'radial-gradient(ellipse 70% 50% at 25% 15%, rgba(198, 167, 105, 0.06) 0%, transparent 60%), radial-gradient(ellipse 50% 40% at 75% 80%, rgba(198, 167, 105, 0.03) 0%, transparent 50%)',
+            'radial-gradient(ellipse 80% 55% at 20% 10%, rgba(198, 167, 105, 0.10) 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 75% 80%, rgba(198, 167, 105, 0.03) 0%, transparent 50%)',
         }}
         aria-hidden="true"
       />
@@ -216,7 +233,7 @@ export default function Scene2() {
           transition={{ delay: 0.3 }}
         >
           <div
-            className="relative overflow-hidden rounded-lg md:rounded-xl"
+            className="nauka-edge-soft relative overflow-hidden rounded-lg md:rounded-xl"
             style={{
               aspectRatio: '1024 / 380',
               boxShadow:
@@ -232,12 +249,22 @@ export default function Scene2() {
               priority={false}
             />
 
-            {/* Subtle warm overlay — cinematic warmth */}
+            {/* PRIORITY 4: Directional sunlight from top-left + subtle shadow on right
+                Sunlight casts from top-left, with a very thin shadow on the right edge */}
             <div
               className="pointer-events-none absolute inset-0"
               style={{
                 background:
-                  'linear-gradient(135deg, rgba(198,167,105,0.04) 0%, transparent 60%)',
+                  'linear-gradient(135deg, rgba(198,167,105,0.07) 0%, transparent 55%)',
+              }}
+              aria-hidden="true"
+            />
+            {/* PRIORITY 4: Right-side subtle shadow — sunlight from left casts shadow on right */}
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  'linear-gradient(270deg, rgba(42,36,32,0.04) 0%, transparent 15%)',
               }}
               aria-hidden="true"
             />
