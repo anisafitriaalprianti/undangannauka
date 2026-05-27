@@ -148,7 +148,7 @@ export default function Scene1() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, {
     once: true,
-    margin: '-10% 0px -10% 0px',
+    margin: '-50% 0px -50% 0px',
   });
 
   return (
