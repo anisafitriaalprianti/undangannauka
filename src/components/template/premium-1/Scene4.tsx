@@ -2,7 +2,7 @@
 
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import HandwritingText from './HandwritingText';
+import HandwritingText, { getLineGap } from './HandwritingText';
 import PencilBuildUpImage from './PencilBuildUpImage';
 
 /* ──────────────────────────────────────────────────────────────
@@ -31,8 +31,8 @@ const sceneLines = [
   'Semata-mata karena-Nya.',
 ];
 
-const BASE_DELAY = 5.5;
-const LINE_GAP = 2.0; // FASTER — payoff moment
+const BASE_DELAY = 4.5;
+const BASE_GAP = 1.5; // FASTER — payoff moment
 
 export default function Scene4() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -154,16 +154,22 @@ export default function Scene4() {
 
           {/* Line-by-line text with T1 Handwriting — FASTER stagger */}
           <div className="max-w-sm">
-            {sceneLines.map((line, i) => (
-              <HandwritingText
-                key={i}
-                text={line}
-                className="font-serif italic text-sm leading-[2] tracking-wide sm:text-[15px] sm:leading-[2.1] md:text-base md:leading-[2.2]"
-                style={{ color: 'var(--p1-warm-brown)' }}
-                charDelay={0.05} // Faster per char — payoff!
-                startDelay={BASE_DELAY + i * LINE_GAP}
-              />
-            ))}
+            {sceneLines.map((line, i) => {
+              const lineStartDelay = sceneLines.slice(0, i).reduce(
+                (acc, prevLine) => acc + getLineGap(prevLine, BASE_GAP),
+                BASE_DELAY
+              );
+              return (
+                <HandwritingText
+                  key={i}
+                  text={line}
+                  className="font-serif italic text-sm leading-[2] tracking-wide sm:text-[15px] sm:leading-[2.1] md:text-base md:leading-[2.2]"
+                  style={{ color: 'var(--p1-warm-brown)' }}
+                  charDelay={0.04}
+                  startDelay={lineStartDelay}
+                />
+              );
+            })}
           </div>
         </div>
       </div>

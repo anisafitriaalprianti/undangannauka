@@ -2,7 +2,7 @@
 
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import HandwritingText from './HandwritingText';
+import HandwritingText, { getLineGap } from './HandwritingText';
 import PencilBuildUpImage from './PencilBuildUpImage';
 
 /* ──────────────────────────────────────────────────────────────
@@ -29,8 +29,8 @@ const sceneLines = [
   'menahan diri adalah bentuk cinta tertinggi kepada Allah.',
 ];
 
-const BASE_DELAY = 6.0;
-const LINE_GAP = 3.5; // SLOWEST — heaviest moment
+const BASE_DELAY = 5.0;
+const BASE_GAP = 2.8; // SLOWEST — heaviest moment
 
 export default function Scene3() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -85,16 +85,22 @@ export default function Scene3() {
           className="mt-8 sm:mt-10 flex flex-col items-center text-center"
           style={{ animation: 'p1TextBreathe 10s ease-in-out infinite' }}
         >
-          {sceneLines.map((line, i) => (
-            <HandwritingText
-              key={i}
-              text={line}
-              className="font-serif italic text-base leading-[2.4] tracking-wide sm:text-lg sm:leading-[2.5] md:text-xl md:leading-[2.6]"
-              style={{ color: 'var(--p1-warm-brown)' }}
-              charDelay={0.08} // Slowest per char
-              startDelay={BASE_DELAY + i * LINE_GAP}
-            />
-          ))}
+          {sceneLines.map((line, i) => {
+            const lineStartDelay = sceneLines.slice(0, i).reduce(
+              (acc, prevLine) => acc + getLineGap(prevLine, BASE_GAP),
+              BASE_DELAY
+            );
+            return (
+              <HandwritingText
+                key={i}
+                text={line}
+                className="font-serif italic text-base leading-[2.4] tracking-wide sm:text-lg sm:leading-[2.5] md:text-xl md:leading-[2.6]"
+                style={{ color: 'var(--p1-warm-brown)' }}
+                charDelay={0.06}
+                startDelay={lineStartDelay}
+              />
+            );
+          })}
         </div>
 
         {/* ── Bottom gold line ── */}
@@ -107,7 +113,7 @@ export default function Scene3() {
           initial={{ scaleX: 0, opacity: 0 }}
           animate={isInView ? { scaleX: 1, opacity: 0.5 } : { scaleX: 0, opacity: 0 }}
           transition={{
-            delay: BASE_DELAY + sceneLines.length * LINE_GAP + 0.5,
+            delay: sceneLines.reduce((acc, line) => acc + getLineGap(line, BASE_GAP), BASE_DELAY) + 0.5,
             duration: 2.0,
             ease: EASE,
           }}

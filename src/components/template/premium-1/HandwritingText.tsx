@@ -4,66 +4,68 @@ import { motion, useInView } from 'framer-motion';
 import { useRef, useMemo } from 'react';
 
 /* ──────────────────────────────────────────────────────────────
-   T1: HandwritingText — Mask Reveal (ditarik dari samping)
+   T5: HandwritingText — Mask Reveal (Irwan-Anira style)
    Premium-1 Islamic Faceless Cinematic Wedding Invitation
 
-   Adapted from undangan-nira clip-path:inset() horizontal wipe.
-   Instead of stagger-per-letter, the ENTIRE LINE is revealed
-   via a sliding mask — like a curtain being pulled aside,
-   or like a pen dragging across paper revealing ink.
+   Adapted from undangan-nira story section handwriting technique.
 
-   Technique: clip-path: inset(0 X% 0 0) where X goes from 100→0
-   This wipes the text in from LEFT to RIGHT.
+   Core technique: clip-path: inset() horizontal mask wipe.
+   The entire line is revealed from left to right — like watching
+   someone write in real-time. No per-letter stagger.
 
-   Enhancements over the Irwan-Anira original:
-   1. Each line reveals sequentially (story pacing)
-   2. Word-boundary micro-pauses built into timing
-   3. Subtle blur dissolve at the reveal edge (ink settling)
-   4. Gold pen-line underline draws in sync with the mask
+   Key principles from Irwan-Anira:
+   - clip-path: inset(0 100% 0 0) → inset(0 0% 0 0)
+   - Soft pacing: reveal speed proportional to text length
+   - Easing: cubic-bezier(0.25, 0.46, 0.45, 0.94) — natural deceleration
+   - Word-boundary pauses: longer gaps between lines that end with
+     punctuation (periods = biggest pause, commas = medium)
 
-   Props:
-   - text: string to animate
-   - className: styling for the text container
-   - style: inline styles
-   - charDelay: not used per-char, but controls LINE reveal duration
-   - startDelay: delay before this line starts revealing
-   - as: HTML element tag (default 'p')
-   - showPenLine: whether to show the gold underline
+   NO gold lines, NO progress indicators, NO UI decorations.
+   Just clean mask reveal — like natural handwriting.
    ────────────────────────────────────────────────────────────── */
 
-const EASE_CINEMA = [0.25, 0.46, 0.45, 0.94] as const;
+const EASE_NATURAL = [0.25, 0.46, 0.45, 0.94] as const;
+
+// Word-boundary pause multipliers (adapted from Irwan-Anira)
+// These affect the GAP between sequential line reveals,
+// not per-character timing (since we use mask reveal, not per-char)
+const PAUSE_AFTER_PERIOD = 2.5;    // biggest pause — sentence end
+const PAUSE_AFTER_COMMA = 1.5;     // medium pause — clause end
+const PAUSE_NORMAL = 1.0;          // standard gap between lines
 
 interface HandwritingTextProps {
   text: string;
   className?: string;
   style?: React.CSSProperties;
-  charDelay?: number; // repurposed: affects reveal speed (lower = faster)
+  charDelay?: number;   // repurposed: base timing unit for reveal speed
   startDelay?: number;
   as?: 'p' | 'span' | 'h1' | 'h2' | 'h3' | 'div';
   onComplete?: () => void;
-  showPenLine?: boolean;
+  showPenLine?: boolean; // deprecated — kept for API compat, ignored
 }
 
 export default function HandwritingText({
   text,
   className = '',
   style = {},
-  charDelay = 0.07,
+  charDelay = 0.05,
   startDelay = 0,
   as: Tag = 'p',
   onComplete,
-  showPenLine = true,
+  showPenLine, // intentionally ignored
 }: HandwritingTextProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-10% 0px -10% 0px' });
 
-  // Calculate reveal duration based on text length
-  // Longer lines = longer reveal, proportional to charDelay
+  // Calculate reveal duration proportional to text length
+  // Irwan-Anira story: stagger 0.05, charDuration 0.16 for descriptions
+  // A 25-char line ≈ 25 × 0.05 + 0.16 ≈ 1.4s at char-level
+  // For mask reveal, we compress slightly (mask is smoother than per-char)
   const textLength = text.length;
-  const revealDuration = Math.max(1.2, textLength * charDelay * 1.5);
+  const revealDuration = Math.max(0.8, textLength * charDelay * 1.2);
 
-  // Calculate total duration for onComplete
-  const totalDuration = startDelay + revealDuration + 0.5;
+  // Total duration for onComplete
+  const totalDuration = startDelay + revealDuration + 0.4;
 
   if (isInView && onComplete) {
     setTimeout(onComplete, totalDuration * 1000);
@@ -75,10 +77,10 @@ export default function HandwritingText({
       className={className}
       style={{ ...style, position: 'relative', display: 'inline' }}
     >
-      {/* ── Text with clip-path mask reveal ──
-          clip-path: inset(0 100% 0 0) = fully hidden (100% clipped from right)
-          clip-path: inset(0 0% 0 0) = fully visible (no clip)
-          The mask slides from left to right — text is "pulled from the side" */}
+      {/* ── Clip-path mask reveal ──
+          inset(0 100% 0 0) = fully clipped from right → hidden
+          inset(0 0% 0 0) = no clip → visible
+          Smooth left-to-right wipe = text "ditarik dari samping" */}
       <motion.span
         style={{
           display: 'inline',
@@ -92,64 +94,39 @@ export default function HandwritingText({
         transition={{
           delay: startDelay,
           duration: revealDuration,
-          ease: EASE_CINEMA,
+          ease: EASE_NATURAL,
         }}
       >
         {text}
       </motion.span>
-
-      {/* ── Soft blur edge at the reveal boundary ──
-          A thin gradient that creates an "ink settling" effect
-          at the rightmost edge of the revealed text.
-          Fades in then out as the reveal progresses. */}
-      <motion.span
-        className="pointer-events-none"
-        style={{
-          position: 'absolute',
-          right: 0,
-          top: 0,
-          bottom: 0,
-          width: '40px',
-          background: 'linear-gradient(to right, transparent, var(--p1-ivory, #F5F0E8))',
-          display: 'inline',
-        }}
-        initial={{ opacity: 0.7, x: '-40px' }}
-        animate={isInView ? {
-          opacity: [0, 0.6, 0.4, 0.2, 0],
-          x: ['0%', '60%', '80%', '95%', '100%'],
-        } : {
-          opacity: 0,
-        }}
-        transition={{
-          delay: startDelay,
-          duration: revealDuration,
-          ease: EASE_CINEMA,
-        }}
-        aria-hidden="true"
-      />
-
-      {/* ── Gold pen-line underline ──
-          Draws from left to right in sync with the mask reveal.
-          Like the trail of a pen moving across paper. */}
-      {showPenLine && (
-        <motion.div
-          className="absolute left-0 pointer-events-none"
-          style={{
-            bottom: '-2px',
-            height: '1px',
-            background: 'linear-gradient(to right, transparent, var(--p1-gold, #C6A769), transparent)',
-            maxWidth: '100%',
-          }}
-          initial={{ width: '0%' }}
-          animate={isInView ? { width: '100%' } : { width: '0%' }}
-          transition={{
-            delay: startDelay,
-            duration: revealDuration + 0.3,
-            ease: EASE_CINEMA,
-          }}
-          aria-hidden="true"
-        />
-      )}
     </div>
   );
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Utility: Calculate line gap with word-boundary pauses
+
+   Used by parent components to determine the delay gap
+   between sequential HandwritingText lines.
+
+   Adapted from Irwan-Anira word-boundary logic:
+   - Normal line: PAUSE_NORMAL × baseGap
+   - Line ending with comma: PAUSE_AFTER_COMMA × baseGap
+   - Line ending with period: PAUSE_AFTER_PERIOD × baseGap
+   ────────────────────────────────────────────────────────────── */
+
+export function getLineGap(text: string, baseGap: number): number {
+  const trimmed = text.trimEnd();
+  const lastChar = trimmed[trimmed.length - 1];
+
+  if (lastChar === '.' || lastChar === '!' || lastChar === '?') {
+    return baseGap * PAUSE_AFTER_PERIOD;
+  }
+  if (lastChar === ',' || lastChar === ';' || lastChar === ':') {
+    return baseGap * PAUSE_AFTER_COMMA;
+  }
+  if (lastChar === '—' || lastChar === '–') {
+    return baseGap * PAUSE_AFTER_COMMA;
+  }
+  return baseGap * PAUSE_NORMAL;
 }

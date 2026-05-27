@@ -2,7 +2,7 @@
 
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import HandwritingText from './HandwritingText';
+import HandwritingText, { getLineGap } from './HandwritingText';
 import PencilBuildUpImage from './PencilBuildUpImage';
 
 /* ──────────────────────────────────────────────────────────────
@@ -30,8 +30,8 @@ const sceneLines = [
   'kepada Dzat yang mendengar bisikan yang tidak terucap.',
 ];
 
-const BASE_DELAY = 5.5;
-const LINE_GAP = 2.5;
+const BASE_DELAY = 4.5;
+const BASE_GAP = 1.8;
 
 export default function Scene2() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -121,16 +121,22 @@ export default function Scene2() {
 
           {/* Line-by-line text with T1 Handwriting */}
           <div className="max-w-sm">
-            {sceneLines.map((line, i) => (
-              <HandwritingText
-                key={i}
-                text={line}
-                className="font-serif italic text-sm leading-[2.2] tracking-wide sm:text-[15px] sm:leading-[2.3] md:text-base md:leading-[2.4]"
-                style={{ color: 'var(--p1-warm-brown)' }}
-                charDelay={0.06}
-                startDelay={BASE_DELAY + i * LINE_GAP}
-              />
-            ))}
+            {sceneLines.map((line, i) => {
+              const lineStartDelay = sceneLines.slice(0, i).reduce(
+                (acc, prevLine) => acc + getLineGap(prevLine, BASE_GAP),
+                BASE_DELAY
+              );
+              return (
+                <HandwritingText
+                  key={i}
+                  text={line}
+                  className="font-serif italic text-sm leading-[2.2] tracking-wide sm:text-[15px] sm:leading-[2.3] md:text-base md:leading-[2.4]"
+                  style={{ color: 'var(--p1-warm-brown)' }}
+                  charDelay={0.05}
+                  startDelay={lineStartDelay}
+                />
+              );
+            })}
           </div>
         </div>
       </div>
