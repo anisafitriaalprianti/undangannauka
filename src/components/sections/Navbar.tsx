@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 const cinematicEase = [0.25, 0.46, 0.45, 0.94];
@@ -65,14 +64,12 @@ export default function Navbar() {
               naukaLogoShimmer adds occasional gold light pass */}
           <a href="#" className="flex items-center group absolute left-1/2 -translate-x-1/2 px-8">
             <div className="relative">
-              <Image
-                src="/logo-nauka.png"
+              {/* SVG logo — crisp at any size, lightweight */}
+              <img
+                src="/logo-nauka.svg"
                 alt="Nauka"
-                width={220}
-                height={66}
                 className="h-28 sm:h-32 w-auto group-hover:opacity-85 transition-opacity duration-500"
                 style={{ animation: 'naukaLogoBreath 8s ease-in-out infinite' }}
-                priority
               />
               {/* Logo shimmer — very subtle gold light that passes across occasionally
                   Like sunlight catching the edge of a nameplate */}

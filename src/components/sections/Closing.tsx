@@ -1,7 +1,6 @@
 'use client';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
-import Image from 'next/image';
 import { useRef } from 'react';
 
 const slowEase = [0.16, 1, 0.3, 1];
@@ -180,11 +179,10 @@ export default function Closing() {
       {/* Footer — minimal, warm, personal */}
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 mt-28 md:mt-32 pt-8 border-t border-black/[0.04]">
         <div className="flex flex-col items-center gap-6">
-          <Image
-            src="/logo-nauka.png"
+          {/* SVG logo — crisp at any size, lightweight */}
+          <img
+            src="/logo-nauka.svg"
             alt="Nauka"
-            width={180}
-            height={54}
             className="h-32 sm:h-36 w-auto"
           />
           <p className="text-[13px] text-[#999] leading-[1.7] text-center max-w-xs">

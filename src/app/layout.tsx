@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Nauka Studio" }],
   icons: {
-    icon: "/nauka-logo.png",
+    icon: "/logo-nauka.svg",
   },
   openGraph: {
     title: "Nauka — Curated Cinematic Invitation Studio",

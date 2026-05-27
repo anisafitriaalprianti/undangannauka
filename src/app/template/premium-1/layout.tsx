@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     'Undangan pernikahan Arka & Dyana. Kenangan yang perlahan hidup.',
   keywords: ['undangan', 'pernikahan', 'wedding', 'invitation', 'nauka'],
   icons: {
-    icon: '/nauka-logo.png',
+    icon: '/logo-nauka.svg',
   },
   openGraph: {
     title: 'Arka & Dyana — Wedding Invitation',
