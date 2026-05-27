@@ -68,7 +68,7 @@ export default function Navbar() {
               <img
                 src="/logo-nauka.svg"
                 alt="Nauka"
-                className="h-28 sm:h-32 w-auto group-hover:opacity-85 transition-opacity duration-500"
+                className="h-36 sm:h-44 w-auto group-hover:opacity-85 transition-opacity duration-500"
                 style={{ animation: 'naukaLogoBreath 8s ease-in-out infinite' }}
               />
               {/* Logo shimmer — very subtle gold light that passes across occasionally

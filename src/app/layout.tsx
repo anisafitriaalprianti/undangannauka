@@ -34,7 +34,13 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Nauka Studio" }],
   icons: {
-    icon: "/favicon.svg",
+    icon: [
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/favicon-180.png", sizes: "180x180", type: "image/png" },
+    ],
   },
   openGraph: {
     title: "Nauka — Curated Cinematic Invitation Studio",
