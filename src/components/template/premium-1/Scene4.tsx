@@ -31,8 +31,8 @@ const sceneLines = [
   'Semata-mata karena-Nya.',
 ];
 
-const BASE_DELAY = 3.0;
-const LINE_GAP = 1.5; // FASTER — payoff moment
+const BASE_DELAY = 5.5;
+const LINE_GAP = 2.0; // FASTER — payoff moment
 
 export default function Scene4() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -160,7 +160,7 @@ export default function Scene4() {
                 text={line}
                 className="font-serif italic text-sm leading-[2] tracking-wide sm:text-[15px] sm:leading-[2.1] md:text-base md:leading-[2.2]"
                 style={{ color: 'var(--p1-warm-brown)' }}
-                charDelay={0.035} // Faster per char — payoff!
+                charDelay={0.05} // Faster per char — payoff!
                 startDelay={BASE_DELAY + i * LINE_GAP}
               />
             ))}

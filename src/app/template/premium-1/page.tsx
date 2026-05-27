@@ -23,12 +23,14 @@ import useAutoScroll from '@/hooks/useAutoScroll';
  * FLOW:
  * 1. Opening — Dark, "Undangan by Nauka" T1 Handwriting (3.5s)
  * 2. Cover — Names, guest, "Buka Undangan" button
- * 3. [User clicks "Buka Undangan"] → Content reveals + Auto scroll starts
+ * 3. [User clicks "Buka Undangan"] → scroll to Bismillah + Auto scroll starts
  * 4. Bismillah — Arabic + Ar-Rum 22 T1 Handwriting
  * 5-8. Story Scenes — T2 PencilBuildUp + T1 Handwriting
  * 9. Breath — Sacred pause
  * 10. Event Info, Gallery, RSVP, Closing
  */
+
+const EASE = [0.25, 0.46, 0.45, 0.94] as const;
 
 export default function Premium1Page() {
   const [openingComplete, setOpeningComplete] = useState(false);
@@ -41,20 +43,20 @@ export default function Premium1Page() {
 
   const handleOpenInvitation = useCallback(() => {
     setInvitationOpened(true);
-    // Small delay before scrolling starts so content can render
+    // Scroll directly to Bismillah section after content renders
     setTimeout(() => {
       const bismillahSection = document.getElementById('bismillah-section');
       if (bismillahSection) {
         bismillahSection.scrollIntoView({ behavior: 'smooth' });
       }
-    }, 300);
+    }, 400);
   }, []);
 
   // Auto scroll starts after invitation is opened
   const { isAutoScrolling } = useAutoScroll({
     enabled: invitationOpened,
-    speed: 0.35,
-    idleResumeDelay: 3000,
+    speed: 0.7,
+    idleResumeDelay: 2000,
   });
 
   return (
@@ -66,7 +68,7 @@ export default function Premium1Page() {
             key="opening"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.0, ease: [0.25, 0.46, 0.45, 0.94] }}
+            transition={{ duration: 1.0, ease: EASE }}
           >
             <Opening onComplete={handleOpeningComplete} />
           </motion.div>
@@ -80,31 +82,29 @@ export default function Premium1Page() {
             key="cover"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+            transition={{ duration: 1.6, ease: EASE }}
           >
             <Cover onOpenInvitation={handleOpenInvitation} />
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* ── Phase 3: Full content — after "Buka Undangan" ── */}
+      {/* ── Phase 3: Full content — after "Buka Undangan" ──
+          Cover is NOT repeated here. User scrolls from Bismillah onward. */}
       <AnimatePresence>
         {invitationOpened && (
           <motion.div
             key="content"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+            transition={{ duration: 1.6, ease: EASE }}
           >
-            {/* Cover stays visible at top for context */}
-            <Cover onOpenInvitation={handleOpenInvitation} />
-
-            {/* Bismillah Section */}
+            {/* Bismillah Section — first thing user sees after Buka Undangan */}
             <div id="bismillah-section">
               <Bismillah />
             </div>
 
-            {/* Story Mode — Slow cinematic scenes
+            {/* Story Mode — Cinematic scenes
                 "Kenangan yang perlahan hidup"
                 Each scene breathes, has whitespace, emotional pacing. */}
 

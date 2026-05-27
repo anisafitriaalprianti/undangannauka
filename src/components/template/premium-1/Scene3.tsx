@@ -29,8 +29,8 @@ const sceneLines = [
   'menahan diri adalah bentuk cinta tertinggi kepada Allah.',
 ];
 
-const BASE_DELAY = 3.5;
-const LINE_GAP = 2.5; // SLOWEST — heaviest moment
+const BASE_DELAY = 6.0;
+const LINE_GAP = 3.5; // SLOWEST — heaviest moment
 
 export default function Scene3() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -91,7 +91,7 @@ export default function Scene3() {
               text={line}
               className="font-serif italic text-base leading-[2.4] tracking-wide sm:text-lg sm:leading-[2.5] md:text-xl md:leading-[2.6]"
               style={{ color: 'var(--p1-warm-brown)' }}
-              charDelay={0.05} // Slower per char
+              charDelay={0.08} // Slowest per char
               startDelay={BASE_DELAY + i * LINE_GAP}
             />
           ))}

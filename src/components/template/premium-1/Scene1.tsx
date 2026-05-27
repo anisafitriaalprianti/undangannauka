@@ -31,8 +31,8 @@ const sceneLines = [
   'karena menunggu juga bentuk ibadah.',
 ];
 
-const BASE_DELAY = 3.5;
-const LINE_GAP = 2.0;
+const BASE_DELAY = 6.0;
+const LINE_GAP = 3.0;
 
 export default function Scene1() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -128,7 +128,7 @@ export default function Scene1() {
                   text={line}
                   className="font-serif italic text-sm leading-[2.2] tracking-wide sm:text-[15px] sm:leading-[2.3] md:text-base md:leading-[2.4]"
                   style={{ color: 'var(--p1-warm-brown)' }}
-                  charDelay={0.04}
+                  charDelay={0.06}
                   startDelay={BASE_DELAY + i * LINE_GAP}
                 />
               ))}

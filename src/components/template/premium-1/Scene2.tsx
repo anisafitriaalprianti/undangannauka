@@ -30,8 +30,8 @@ const sceneLines = [
   'kepada Dzat yang mendengar bisikan yang tidak terucap.',
 ];
 
-const BASE_DELAY = 3.0;
-const LINE_GAP = 2.0;
+const BASE_DELAY = 5.5;
+const LINE_GAP = 2.5;
 
 export default function Scene2() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -127,7 +127,7 @@ export default function Scene2() {
                 text={line}
                 className="font-serif italic text-sm leading-[2.2] tracking-wide sm:text-[15px] sm:leading-[2.3] md:text-base md:leading-[2.4]"
                 style={{ color: 'var(--p1-warm-brown)' }}
-                charDelay={0.04}
+                charDelay={0.06}
                 startDelay={BASE_DELAY + i * LINE_GAP}
               />
             ))}

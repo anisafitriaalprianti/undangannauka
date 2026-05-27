@@ -35,7 +35,7 @@ export default function HandwritingText({
   text,
   className = '',
   style = {},
-  charDelay = 0.04,
+  charDelay = 0.07,
   startDelay = 0,
   as: Tag = 'p',
   onComplete,
@@ -64,11 +64,11 @@ export default function HandwritingText({
             whiteSpace: char === ' ' ? 'pre' : undefined,
             willChange: 'opacity, transform',
           }}
-          initial={{ opacity: 0, y: 6 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
           transition={{
             delay: startDelay + i * charDelay,
-            duration: 0.6,
+            duration: 1.0,
             ease: EASE_CINEMATIC,
           }}
           aria-hidden={i < chars.length - 1 ? true : undefined}

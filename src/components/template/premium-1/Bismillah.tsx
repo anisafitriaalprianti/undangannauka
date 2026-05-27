@@ -105,8 +105,8 @@ export default function Bismillah() {
               text={line}
               className="font-serif italic text-sm sm:text-base md:text-lg leading-[2.4] sm:leading-[2.5] md:leading-[2.6] tracking-wide"
               style={{ color: 'var(--p1-warm-brown)' }}
-              charDelay={0.045}
-              startDelay={2.5 + i * 2.2}
+              charDelay={0.06}
+              startDelay={3.0 + i * 2.5}
             />
           ))}
         </div>
