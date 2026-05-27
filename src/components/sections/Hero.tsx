@@ -221,98 +221,82 @@ export default function Hero() {
                   style={{ backgroundColor: '#1C1C1C' }}
                 />
 
-                {/* Screen — uses scaling container so content always fits proportionally */}
+                {/* Screen */}
                 <div
                   className="relative w-full h-full rounded-[2rem] overflow-hidden"
                   style={{ backgroundColor: '#F6F2EE' }}
                 >
-                  <div className="absolute inset-0">
+                  {/* Mini invitation content — scrolling */}
+                  <div
+                    className="animate-[phoneScroll_8s_ease-in-out_infinite]"
+                    style={{ animationDuration: '10s' }}
+                  >
+                    {/* Hero photo area — emotional */}
                     <div
-                      className="w-[256px] origin-top-left animate-[phoneScroll_8s_ease-in-out_infinite]"
-                      style={{ animationDuration: '10s', transform: 'scale(var(--phone-scale, 1))' }}
-                      ref={(el) => {
-                        if (!el) return;
-                        const parent = el.parentElement;
-                        if (!parent) return;
-                        const updateScale = () => {
-                          const pw = parent.clientWidth;
-                          el.style.setProperty('--phone-scale', `${pw / 256}`);
-                        };
-                        updateScale();
-                        const ro = new ResizeObserver(updateScale);
-                        ro.observe(parent);
-                        return () => ro.disconnect();
-                      }}
+                      className="w-full relative overflow-hidden"
+                      style={{ height: '35%', background: 'linear-gradient(135deg, #C6A769 0%, #8A7444 40%, #D4BA82 70%, #E8D5A8 100%)' }}
                     >
-                      {/* Hero photo area — emotional */}
+                      {/* Warm light leak from top */}
                       <div
-                        className="w-full relative overflow-hidden"
-                        style={{ height: '140px', background: 'linear-gradient(135deg, #C6A769 0%, #8A7444 40%, #D4BA82 70%, #E8D5A8 100%)' }}
-                      >
-                        {/* Warm light leak from top */}
-                        <div
-                          className="absolute inset-0"
-                          style={{
-                            background: 'linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 40%)',
-                            animation: 'naukaBreathLight 5s ease-in-out infinite',
-                          }}
-                        />
-                        {/* Bismillah / opening */}
-                        <div className="absolute inset-0 flex flex-col items-center justify-center">
-                          <span style={{ fontSize: '5px', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' as const }}>
-                            بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
-                          </span>
-                        </div>
-                        <div className="absolute inset-0 bg-gradient-to-b from-white/8 to-transparent" />
+                        className="absolute inset-0"
+                        style={{
+                          background: 'linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 40%)',
+                          animation: 'naukaBreathLight 5s ease-in-out infinite',
+                        }}
+                      />
+                      {/* Bismillah / opening */}
+                      <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <span className="text-white/50" style={{ fontSize: 'clamp(3px, 1.8vw, 5px)', letterSpacing: '0.3em' }}>
+                          بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
+                        </span>
                       </div>
-
-                      {/* Greeting */}
-                      <div className="px-5 pt-5 text-center">
-                        <p style={{ fontSize: '5px', letterSpacing: '0.2em', color: '#C6A769', textTransform: 'uppercase' as const }}>
-                          The Wedding Of
-                        </p>
-                        <div className="mt-2 mb-1 mx-auto" style={{ width: '20px', height: '0.5px', background: 'linear-gradient(to right, transparent, #C6A769, transparent)' }} />
-                        <p style={{ fontSize: '17px', fontFamily: 'var(--font-playfair)', color: '#1C1C1C', fontStyle: 'italic', lineHeight: '1.2' }}>
-                          Arka & Dyana
-                        </p>
-                        <div className="mt-1 mb-2 mx-auto" style={{ width: '20px', height: '0.5px', background: 'linear-gradient(to right, transparent, #C6A769, transparent)' }} />
-                        <p style={{ fontSize: '5px', color: '#6B6B6B', letterSpacing: '0.12em' }}>
-                          28 Desember 2025
-                        </p>
-                      </div>
-
-                      {/* Couple avatars */}
-                      <div className="flex items-center justify-center gap-4 py-3">
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center text-white ring-2 ring-white/30" style={{ fontSize: '7px', fontFamily: 'var(--font-playfair)', fontStyle: 'italic', backgroundColor: '#C6A769' }}>A</div>
-                        <div className="flex flex-col items-center">
-                          <span style={{ fontSize: '6px', color: '#C6A769' }}>&amp;</span>
-                        </div>
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center text-white ring-2 ring-white/30" style={{ fontSize: '7px', fontFamily: 'var(--font-playfair)', fontStyle: 'italic', backgroundColor: '#8A7444' }}>D</div>
-                      </div>
-
-                      {/* Event card */}
-                      <div className="mx-4 p-3 rounded-lg" style={{ backgroundColor: 'white', boxShadow: '0 1px 4px rgba(28,28,28,0.04)' }}>
-                        <p style={{ fontSize: '5px', color: '#C6A769', letterSpacing: '0.15em', textTransform: 'uppercase' as const, marginBottom: '3px' }}>Resepsi</p>
-                        <p style={{ fontSize: '7px', color: '#1C1C1C', fontWeight: 600, marginBottom: '1px' }}>Minggu, 28 Des 2025</p>
-                        <p style={{ fontSize: '6px', color: '#6B6B6B' }}>10:00 - 14:00 WIB</p>
-                        <div style={{ width: '16px', height: '0.5px', background: '#C6A769', margin: '4px auto 0' }} />
-                        <p style={{ fontSize: '6px', color: '#6B6B6B', marginTop: '3px', fontStyle: 'italic' }}>Graha Sabha, Jakarta Selatan</p>
-                      </div>
-
-                      {/* RSVP button */}
-                      <div className="px-4 pt-3 pb-4 text-center">
-                        <div className="inline-block px-6 py-1.5 rounded-full text-white" style={{ fontSize: '6px', letterSpacing: '0.15em', backgroundColor: '#C6A769' }}>Konfirmasi Kehadiran</div>
-                      </div>
-
-                      {/* Warm closing line */}
-                      <div className="px-4 pb-6 text-center">
-                        <div className="mx-auto mb-1" style={{ width: '24px', height: '0.5px', background: 'linear-gradient(to right, transparent, #C6A769, transparent)' }} />
-                        <p style={{ fontSize: '4px', color: '#999', letterSpacing: '0.15em', fontStyle: 'italic' }}>Merupakan suatu kehormatan bagi kami</p>
-                      </div>
-
-                      {/* Extra space for scroll */}
-                      <div style={{ height: '60px' }} />
+                      <div className="absolute inset-0 bg-gradient-to-b from-white/8 to-transparent" />
                     </div>
+
+                    {/* Greeting */}
+                    <div className="px-[8%] pt-[6%] text-center">
+                      <p className="text-[#C6A769]" style={{ fontSize: 'clamp(3px, 1.8vw, 5px)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
+                        The Wedding Of
+                      </p>
+                      <div className="my-[2%] mx-auto" style={{ width: '12%', height: '1px', background: 'linear-gradient(to right, transparent, #C6A769, transparent)' }} />
+                      <p style={{ fontSize: 'clamp(10px, 6vw, 17px)', fontFamily: 'var(--font-playfair)', color: '#1C1C1C', fontStyle: 'italic', lineHeight: '1.2' }}>
+                        Arka & Dyana
+                      </p>
+                      <div className="my-[2%] mx-auto" style={{ width: '12%', height: '1px', background: 'linear-gradient(to right, transparent, #C6A769, transparent)' }} />
+                      <p className="text-[#6B6B6B]" style={{ fontSize: 'clamp(3px, 1.8vw, 5px)', letterSpacing: '0.12em' }}>
+                        28 Desember 2025
+                      </p>
+                    </div>
+
+                    {/* Couple avatars */}
+                    <div className="flex items-center justify-center gap-[8%] py-[4%]">
+                      <div className="rounded-full flex items-center justify-center text-white ring-2 ring-white/30" style={{ width: 'clamp(16px, 10vw, 22px)', height: 'clamp(16px, 10vw, 22px)', fontSize: 'clamp(4px, 2.5vw, 7px)', fontFamily: 'var(--font-playfair)', fontStyle: 'italic', backgroundColor: '#C6A769' }}>A</div>
+                      <span className="text-[#C6A769]" style={{ fontSize: 'clamp(4px, 2vw, 6px)' }}>&amp;</span>
+                      <div className="rounded-full flex items-center justify-center text-white ring-2 ring-white/30" style={{ width: 'clamp(16px, 10vw, 22px)', height: 'clamp(16px, 10vw, 22px)', fontSize: 'clamp(4px, 2.5vw, 7px)', fontFamily: 'var(--font-playfair)', fontStyle: 'italic', backgroundColor: '#8A7444' }}>D</div>
+                    </div>
+
+                    {/* Event card */}
+                    <div className="mx-[6%] p-[4%] rounded-lg" style={{ backgroundColor: 'white', boxShadow: '0 1px 4px rgba(28,28,28,0.04)' }}>
+                      <p className="text-[#C6A769]" style={{ fontSize: 'clamp(3px, 1.6vw, 5px)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '2%' }}>Resepsi</p>
+                      <p style={{ fontSize: 'clamp(4px, 2.5vw, 7px)', color: '#1C1C1C', fontWeight: 600, marginBottom: '1%' }}>Minggu, 28 Des 2025</p>
+                      <p className="text-[#6B6B6B]" style={{ fontSize: 'clamp(3px, 2vw, 6px)' }}>10:00 - 14:00 WIB</p>
+                      <div className="mx-auto mt-[3%]" style={{ width: '20%', height: '1px', background: '#C6A769' }} />
+                      <p className="text-[#6B6B6B]" style={{ fontSize: 'clamp(3px, 2vw, 6px)', marginTop: '2%', fontStyle: 'italic' }}>Graha Sabha, Jakarta Selatan</p>
+                    </div>
+
+                    {/* RSVP button */}
+                    <div className="px-[6%] pt-[4%] pb-[5%] text-center">
+                      <div className="inline-block px-[15%] py-[3%] rounded-full text-white" style={{ fontSize: 'clamp(3px, 2vw, 6px)', letterSpacing: '0.15em', backgroundColor: '#C6A769' }}>Konfirmasi Kehadiran</div>
+                    </div>
+
+                    {/* Warm closing line */}
+                    <div className="px-[6%] pb-[8%] text-center">
+                      <div className="mx-auto mb-[2%]" style={{ width: '15%', height: '1px', background: 'linear-gradient(to right, transparent, #C6A769, transparent)' }} />
+                      <p className="text-[#999]" style={{ fontSize: 'clamp(2px, 1.4vw, 4px)', letterSpacing: '0.15em', fontStyle: 'italic' }}>Merupakan suatu kehormatan bagi kami</p>
+                    </div>
+
+                    {/* Extra space for scroll */}
+                    <div style={{ height: '30%' }} />
                   </div>
                 </div>
               </div>

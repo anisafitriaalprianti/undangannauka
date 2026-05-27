@@ -130,35 +130,16 @@ export default function HotTemplate() {
                 {/* Notch */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 rounded-b-2xl z-20" style={{ backgroundColor: '#1C1C1C' }} />
 
-                {/* Screen — responsive scaling */}
+                {/* Screen */}
                 <div className="relative w-full h-full rounded-[2rem] overflow-hidden bg-[#F6F2EE]">
                   <div className="absolute inset-0 bg-[#F0EBE5] animate-pulse" />
-                  <div className="absolute inset-0">
-                    <div
-                      className="w-[256px] origin-top-left"
-                      ref={(el) => {
-                        if (!el) return;
-                        const parent = el.parentElement;
-                        if (!parent) return;
-                        const updateScale = () => {
-                          const pw = parent.clientWidth;
-                          el.style.transform = `scale(${pw / 256})`;
-                        };
-                        updateScale();
-                        const ro = new ResizeObserver(updateScale);
-                        ro.observe(parent);
-                        return () => ro.disconnect();
-                      }}
-                    >
-                      <Image
-                        src={featured.image}
-                        alt={featured.name}
-                        width={256}
-                        height={512}
-                        className="w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-                      />
-                    </div>
-                  </div>
+                  <Image
+                    src={featured.image}
+                    alt={featured.name}
+                    fill
+                    className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                    sizes="(max-width: 640px) 240px, (max-width: 1024px) 280px, 300px"
+                  />
                   {/* Lighting on hover */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10">
                     <div
@@ -220,35 +201,16 @@ export default function HotTemplate() {
                   {/* Notch */}
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-5 rounded-b-xl z-20" style={{ backgroundColor: '#1C1C1C' }} />
 
-                  {/* Screen — responsive scaling */}
+                  {/* Screen */}
                   <div className="relative w-full h-full rounded-[1.5rem] overflow-hidden bg-[#F6F2EE]">
                     <div className="absolute inset-0 bg-[#F0EBE5] animate-pulse" />
-                    <div className="absolute inset-0">
-                      <div
-                        className="w-[160px] origin-top-left"
-                        ref={(el) => {
-                          if (!el) return;
-                          const parent = el.parentElement;
-                          if (!parent) return;
-                          const updateScale = () => {
-                            const pw = parent.clientWidth;
-                            el.style.transform = `scale(${pw / 160})`;
-                          };
-                          updateScale();
-                          const ro = new ResizeObserver(updateScale);
-                          ro.observe(parent);
-                          return () => ro.disconnect();
-                        }}
-                      >
-                        <Image
-                          src={template.image}
-                          alt={template.name}
-                          width={160}
-                          height={320}
-                          className="w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
-                        />
-                      </div>
-                    </div>
+                    <Image
+                      src={template.image}
+                      alt={template.name}
+                      fill
+                      className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+                      sizes="(max-width: 640px) 160px, 180px"
+                    />
                     {/* Hover lighting */}
                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10">
                       <div
