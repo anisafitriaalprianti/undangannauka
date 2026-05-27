@@ -1,8 +1,9 @@
 'use client';
 
-import Image from 'next/image';
-import { motion, useInView, type Variants } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import HandwritingText from './HandwritingText';
+import PencilBuildUpImage from './PencilBuildUpImage';
 
 /* ──────────────────────────────────────────────────────────────
    Scene2 — "Menitipkan Dalam Sujud" (Entrusting in Prostration)
@@ -10,114 +11,15 @@ import { useRef } from 'react';
 
    Emotion: Spiritual devotion, surrender, warm dawn light
 
-   Composition: WIDE EDITORIAL — Full-width image in the upper
-   portion, large breathing space below with LEFT-ALIGNED text.
-   Like a film still with credits below.
+   Composition: WIDE EDITORIAL — Full-width image upper,
+   left-aligned text below with generous margin.
 
-   Text treatment:
-   • Label + Title LEFT-ALIGNED, generous left margin
-   • Text appears LINE BY LINE with staggered delays (handwriting feel)
-   • Each line fades in with opacity + slight Y drift, like ink settling
-   • Left-aligned, no quotation marks, minimal decoration
+   Animations:
+   - T2 PencilBuildUp for image (sketch → shading → foto)
+   - T1 HandwritingText for story lines (letter-by-letter)
    ────────────────────────────────────────────────────────────── */
 
-// ── Animation variants ──────────────────────────────────────────
-
-/** Image reveal — opacity rise + subtle upward drift, NO blur */
-const imageDriftIn: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 20,
-    scale: 1.01,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 2.8,
-      ease: [0.16, 1, 0.3, 1],
-      opacity: {
-        duration: 2.6,
-        ease: 'easeOut',
-      },
-      y: {
-        duration: 2.8,
-        ease: [0.16, 1, 0.3, 1],
-      },
-    },
-  },
-};
-
-/** Scene label — subtle left-aligned */
-const labelFadeIn: Variants = {
-  hidden: {
-    opacity: 0,
-    x: -10,
-  },
-  visible: {
-    opacity: 0.5,
-    x: 0,
-    transition: {
-      duration: 1.0,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
-};
-
-/** Title — left-aligned, appears after image */
-const titleFadeIn: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 12,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 1.2,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
-};
-
-/** Thin line below image — fades in */
-const lineFadeIn: Variants = {
-  hidden: {
-    scaleX: 0,
-    opacity: 0,
-  },
-  visible: {
-    scaleX: 1,
-    opacity: 0.4,
-    transition: {
-      duration: 1.6,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
-};
-
-/** Line-by-line text reveal — handwriting feel, opacity + Y drift only */
-const lineReveal: Variants = {
-  hidden: {
-    opacity: 0,
-    y: 8,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 1.2,
-      ease: [0.16, 1, 0.3, 1],
-      opacity: {
-        duration: 1.4,
-        ease: 'easeOut',
-      },
-    },
-  },
-};
-
-// ── Scene text lines ────────────────────────────────────────────
+const EASE = [0.16, 1, 0.3, 1] as const;
 
 const sceneLines = [
   'Malam-malam yang panjang,',
@@ -128,16 +30,14 @@ const sceneLines = [
   'kepada Dzat yang mendengar bisikan yang tidak terucap.',
 ];
 
-const BASE_DELAY = 2.0;
-const STAGGER_GAP = 0.8;
-
-// ── Component ───────────────────────────────────────────────────
+const BASE_DELAY = 3.0;
+const LINE_GAP = 2.0;
 
 export default function Scene2() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, {
     once: true,
-    margin: '-50% 0px -50% 0px',
+    margin: '-20% 0px -20% 0px',
   });
 
   return (
@@ -154,7 +54,7 @@ export default function Scene2() {
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
-            'radial-gradient(ellipse 80% 55% at 20% 10%, rgba(198, 167, 105, 0.09) 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 75% 80%, rgba(198, 167, 105, 0.03) 0%, transparent 50%)',
+            'radial-gradient(ellipse 80% 55% at 20% 10%, rgba(198, 167, 105, 0.09) 0%, transparent 55%)',
         }}
         aria-hidden="true"
       />
@@ -162,51 +62,15 @@ export default function Scene2() {
       {/* ── Content wrapper — editorial layout ── */}
       <div className="relative z-10 mx-auto w-full max-w-4xl px-6 py-16 sm:px-8 sm:py-20 md:px-12 md:py-24 min-h-dvh flex flex-col justify-center">
 
-        {/* ── Wide image — upper portion, ~85% of container width ── */}
-        <motion.div
-          className="w-full mx-auto"
-          style={{ maxWidth: '85%' }}
-          variants={imageDriftIn}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-        >
-          <div
-            className="nauka-edge-soft relative overflow-hidden rounded-lg md:rounded-xl"
-            style={{
-              aspectRatio: '1024 / 380',
-              boxShadow:
-                '0 2px 8px rgba(28,28,28,0.04), 0 8px 24px rgba(28,28,28,0.06), 0 20px 48px rgba(28,28,28,0.04)',
-            }}
-          >
-            <Image
-              src="/template/premium-1/scene-2.webp"
-              alt="Two figures in sujud, entrusting their feelings in long prostrations at dawn"
-              fill
-              sizes="85vw"
-              className="object-cover"
-              priority={false}
-            />
-
-            {/* Warm dawn light overlay from top-left */}
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  'linear-gradient(135deg, rgba(198,167,105,0.06) 0%, transparent 55%)',
-              }}
-              aria-hidden="true"
-            />
-            {/* Subtle right-side shadow — light from left */}
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  'linear-gradient(270deg, rgba(42,36,32,0.03) 0%, transparent 12%)',
-              }}
-              aria-hidden="true"
-            />
-          </div>
-        </motion.div>
+        {/* ── Wide image — T2 PencilBuildUp ── */}
+        <PencilBuildUpImage
+          src="/template/premium-1/scene-2.webp"
+          alt="Two figures in sujud, entrusting their feelings in long prostrations at dawn"
+          aspectRatio="1024 / 380"
+          sizes="85vw"
+          maxWidth="85%"
+          className="mx-auto"
+        />
 
         {/* ── Thin horizontal line below image ── */}
         <motion.div
@@ -215,22 +79,20 @@ export default function Scene2() {
             height: '1px',
             background: 'linear-gradient(to right, transparent, var(--p1-gold), transparent)',
           }}
-          variants={lineFadeIn}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          transition={{ delay: 2.0 }}
+          initial={{ scaleX: 0, opacity: 0 }}
+          animate={isInView ? { scaleX: 1, opacity: 0.4 } : { scaleX: 0, opacity: 0 }}
+          transition={{ delay: 2.0, duration: 1.6, ease: EASE }}
         />
 
-        {/* ── Text zone — LEFT-ALIGNED, generous left margin ── */}
+        {/* ── Text zone — LEFT-ALIGNED ── */}
         <div className="mt-8 sm:mt-10 md:mt-12 w-full pl-4 sm:pl-8 md:pl-16 lg:pl-24">
 
           {/* Scene label */}
           <motion.div
             className="mb-3"
-            variants={labelFadeIn}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            transition={{ delay: 2.2 }}
+            initial={{ opacity: 0, x: -10 }}
+            animate={isInView ? { opacity: 0.5, x: 0 } : { opacity: 0, x: -10 }}
+            transition={{ delay: 2.2, duration: 1.0, ease: EASE }}
           >
             <span
               className="font-serif text-[10px] tracking-[0.3em] uppercase sm:text-xs"
@@ -243,10 +105,9 @@ export default function Scene2() {
           {/* Title */}
           <motion.div
             className="mb-6 md:mb-8"
-            variants={titleFadeIn}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            transition={{ delay: 2.4 }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+            transition={{ delay: 2.4, duration: 1.2, ease: EASE }}
           >
             <h2
               className="font-serif text-lg font-medium tracking-wide sm:text-xl md:text-2xl"
@@ -258,23 +119,17 @@ export default function Scene2() {
             </h2>
           </motion.div>
 
-          {/* Line-by-line text reveal — left-aligned, no quotation marks */}
-          <div
-            className="max-w-sm"
-            style={{ animation: 'p1TextBreathe 8s ease-in-out infinite' }}
-          >
+          {/* Line-by-line text with T1 Handwriting */}
+          <div className="max-w-sm">
             {sceneLines.map((line, i) => (
-              <motion.p
+              <HandwritingText
                 key={i}
+                text={line}
                 className="font-serif italic text-sm leading-[2.2] tracking-wide sm:text-[15px] sm:leading-[2.3] md:text-base md:leading-[2.4]"
                 style={{ color: 'var(--p1-warm-brown)' }}
-                variants={lineReveal}
-                initial="hidden"
-                animate={isInView ? 'visible' : 'hidden'}
-                transition={{ delay: BASE_DELAY + i * STAGGER_GAP }}
-              >
-                {line}
-              </motion.p>
+                charDelay={0.04}
+                startDelay={BASE_DELAY + i * LINE_GAP}
+              />
             ))}
           </div>
         </div>

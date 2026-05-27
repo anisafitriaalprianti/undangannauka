@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Opening from '@/components/template/premium-1/Opening';
 import Cover from '@/components/template/premium-1/Cover';
+import Bismillah from '@/components/template/premium-1/Bismillah';
 import Scene1 from '@/components/template/premium-1/Scene1';
 import Scene2 from '@/components/template/premium-1/Scene2';
 import Scene3 from '@/components/template/premium-1/Scene3';
@@ -13,40 +14,52 @@ import EventInfo from '@/components/template/premium-1/EventInfo';
 import Gallery from '@/components/template/premium-1/Gallery';
 import RSVP from '@/components/template/premium-1/RSVP';
 import Closing from '@/components/template/premium-1/Closing';
+import useAutoScroll from '@/hooks/useAutoScroll';
 
 /**
  * Premium-1 Template Page — Islamic Faceless Cinematic
  * Theme: "Kenangan yang perlahan hidup"
  *
- * Flow:
- * 1. Opening (3-5s cinematic intro, then auto-transition)
- * 2. Cover (main invitation with names, moon, curtains)
- * 3-6. Story Scenes (slow cinematic storytelling)
- * 7. Event Info (minimalist, warm)
- * 8. Gallery (simple cinematic gallery)
- * 9. RSVP (elegant form)
- * 10. Closing (warm emotional ending)
+ * FLOW:
+ * 1. Opening — Dark, "Undangan by Nauka" T1 Handwriting (3.5s)
+ * 2. Cover — Names, guest, "Buka Undangan" button
+ * 3. [User clicks "Buka Undangan"] → Content reveals + Auto scroll starts
+ * 4. Bismillah — Arabic + Ar-Rum 22 T1 Handwriting
+ * 5-8. Story Scenes — T2 PencilBuildUp + T1 Handwriting
+ * 9. Breath — Sacred pause
+ * 10. Event Info, Gallery, RSVP, Closing
  */
-
-const sceneTransition = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
-  transition: { duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] },
-};
 
 export default function Premium1Page() {
   const [openingComplete, setOpeningComplete] = useState(false);
+  const [invitationOpened, setInvitationOpened] = useState(false);
 
   const handleOpeningComplete = useCallback(() => {
     setOpeningComplete(true);
-    // Scroll to top of content smoothly
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  const handleOpenInvitation = useCallback(() => {
+    setInvitationOpened(true);
+    // Small delay before scrolling starts so content can render
+    setTimeout(() => {
+      const bismillahSection = document.getElementById('bismillah-section');
+      if (bismillahSection) {
+        bismillahSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 300);
+  }, []);
+
+  // Auto scroll starts after invitation is opened
+  const { isAutoScrolling } = useAutoScroll({
+    enabled: invitationOpened,
+    speed: 0.35,
+    idleResumeDelay: 3000,
+  });
+
   return (
     <main className="template-p1 bg-[#2A2420] min-h-screen">
-      {/* Opening — cinematic intro that auto-transitions */}
+      {/* ── Phase 1: Opening — cinematic intro ── */}
       <AnimatePresence mode="wait">
         {!openingComplete && (
           <motion.div
@@ -60,29 +73,45 @@ export default function Premium1Page() {
         )}
       </AnimatePresence>
 
-      {/* Main content — appears after opening completes */}
+      {/* ── Phase 2: Cover — shown after opening ── */}
       <AnimatePresence>
-        {openingComplete && (
+        {openingComplete && !invitationOpened && (
+          <motion.div
+            key="cover"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            <Cover onOpenInvitation={handleOpenInvitation} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Phase 3: Full content — after "Buka Undangan" ── */}
+      <AnimatePresence>
+        {invitationOpened && (
           <motion.div
             key="content"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.6, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            {/* Cover — The invitation face */}
-            <Cover />
+            {/* Cover stays visible at top for context */}
+            <Cover onOpenInvitation={handleOpenInvitation} />
+
+            {/* Bismillah Section */}
+            <div id="bismillah-section">
+              <Bismillah />
+            </div>
 
             {/* Story Mode — Slow cinematic scenes
                 "Kenangan yang perlahan hidup"
-                Each scene breathes, has whitespace, emotional pacing.
-                Transitions feel like sketch → cinematic scene. */}
+                Each scene breathes, has whitespace, emotional pacing. */}
 
             {/* Scene I: "Menjaga Dalam Diam" */}
             <Scene1 />
 
-            {/* Breathing spacer — Scene 1 → Scene 2
-                Tall warm ivory space with a thin horizontal gold line
-                that draws slowly from center. Emotional distance. */}
+            {/* Breathing spacer — Scene 1 → Scene 2 */}
             <div
               className="template-p1 relative flex items-center justify-center"
               style={{ backgroundColor: 'var(--p1-ivory)', height: '25vh' }}
@@ -100,9 +129,7 @@ export default function Premium1Page() {
             {/* Scene II: "Menitipkan Dalam Sujud" */}
             <Scene2 />
 
-            {/* Breathing spacer — Scene 2 → Scene 3
-                Medium pure breathing whitespace. Nothing else.
-                Just the warm ivory background. */}
+            {/* Breathing spacer — Scene 2 → Scene 3 */}
             <div
               className="template-p1"
               style={{ backgroundColor: 'var(--p1-ivory)', height: '18vh' }}
@@ -111,9 +138,7 @@ export default function Premium1Page() {
             {/* Scene III: Breathing space — emotional pause */}
             <Scene3 />
 
-            {/* Breathing spacer — Scene 3 → Scene 4
-                Short space with a very thin vertical gold line.
-                Building tension toward the payoff. */}
+            {/* Breathing spacer — Scene 3 → Scene 4 */}
             <div
               className="template-p1 relative flex items-center justify-center"
               style={{ backgroundColor: 'var(--p1-ivory)', height: '12vh' }}
@@ -132,20 +157,19 @@ export default function Premium1Page() {
             {/* Scene IV: "Hari Yang Dijanjikan" — emotional payoff */}
             <Scene4 />
 
-            {/* PRIORITY 5: Breath — sacred breathing space before event info */}
+            {/* Sacred breathing space before event info */}
             <Breath />
 
-            {/* Event Information — clear, elegant, warm */}
+            {/* Event Information */}
             <EventInfo />
 
-            {/* Gallery — simple cinematic gallery */}
+            {/* Gallery */}
             <Gallery />
 
-            {/* RSVP — elegant confirmation */}
+            {/* RSVP */}
             <RSVP />
 
-            {/* Closing — warm emotional ending
-                Returns to the opening's darkness, completing the circle */}
+            {/* Closing */}
             <Closing />
           </motion.div>
         )}
