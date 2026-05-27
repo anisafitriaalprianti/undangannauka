@@ -14,17 +14,11 @@ import { useRef } from 'react';
    portion, large breathing space below with LEFT-ALIGNED text.
    Like a film still with credits below.
 
-   Image treatment:
-   • Image spans wider (~85% of container), sitting in upper portion
-   • Reveals with slow opacity rise + subtle upward drift (translateY), NO blur
-   • Warm dawn light overlay from top-left
-   • After image is visible, a very thin horizontal line fades in below it
-
    Text treatment:
    • Label + Title LEFT-ALIGNED, generous left margin
-   • Quote text left-aligned, italic serif, generous line-height
-   • Asymmetry of left-aligned text vs centered image = editorial tension
-   • No quotation marks, minimal decoration
+   • Text appears LINE BY LINE with staggered delays (handwriting feel)
+   • Each line fades in with opacity + slight Y drift, like ink settling
+   • Left-aligned, no quotation marks, minimal decoration
    ────────────────────────────────────────────────────────────── */
 
 // ── Animation variants ──────────────────────────────────────────
@@ -103,25 +97,39 @@ const lineFadeIn: Variants = {
   },
 };
 
-/** Quote text — left-aligned, slow fade */
-const quoteFadeIn: Variants = {
+/** Line-by-line text reveal — handwriting feel, opacity + Y drift only */
+const lineReveal: Variants = {
   hidden: {
     opacity: 0,
-    y: 14,
+    y: 8,
   },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 1.8,
+      duration: 1.2,
       ease: [0.16, 1, 0.3, 1],
       opacity: {
-        duration: 2.0,
+        duration: 1.4,
         ease: 'easeOut',
       },
     },
   },
 };
+
+// ── Scene text lines ────────────────────────────────────────────
+
+const sceneLines = [
+  'Malam-malam yang panjang,',
+  'kami tidak pernah bertemu dalam dunia—',
+  'tapi mungkin, dalam sujud,',
+  'hati kami pernah bersentuhan.',
+  'Kami menitipkan segala rindu',
+  'kepada Dzat yang mendengar bisikan yang tidak terucap.',
+];
+
+const BASE_DELAY = 2.0;
+const STAGGER_GAP = 0.8;
 
 // ── Component ───────────────────────────────────────────────────
 
@@ -234,7 +242,7 @@ export default function Scene2() {
 
           {/* Title */}
           <motion.div
-            className="mb-4"
+            className="mb-6 md:mb-8"
             variants={titleFadeIn}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
@@ -250,28 +258,25 @@ export default function Scene2() {
             </h2>
           </motion.div>
 
-          {/* Quote — left-aligned, no quotation marks */}
-          <motion.div
+          {/* Line-by-line text reveal — left-aligned, no quotation marks */}
+          <div
             className="max-w-sm"
-            variants={quoteFadeIn}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            transition={{ delay: 3.0 }}
+            style={{ animation: 'p1TextBreathe 8s ease-in-out infinite' }}
           >
-            <blockquote>
-              <p
+            {sceneLines.map((line, i) => (
+              <motion.p
+                key={i}
                 className="font-serif italic text-sm leading-[2.2] tracking-wide sm:text-[15px] sm:leading-[2.3] md:text-base md:leading-[2.4]"
-                style={{
-                  color: 'var(--p1-warm-brown)',
-                  animation: 'p1TextBreathe 8s ease-in-out infinite',
-                }}
+                style={{ color: 'var(--p1-warm-brown)' }}
+                variants={lineReveal}
+                initial="hidden"
+                animate={isInView ? 'visible' : 'hidden'}
+                transition={{ delay: BASE_DELAY + i * STAGGER_GAP }}
               >
-                Mereka memilih jalan yang sunyi:
-                <br />
-                menitipkan rasa itu dalam sujud-sujud panjang.
-              </p>
-            </blockquote>
-          </motion.div>
+                {line}
+              </motion.p>
+            ))}
+          </div>
         </div>
       </div>
 

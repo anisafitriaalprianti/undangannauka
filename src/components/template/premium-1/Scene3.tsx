@@ -5,29 +5,23 @@ import { motion, useInView, type Variants } from 'framer-motion';
 import { useRef } from 'react';
 
 /* ──────────────────────────────────────────────────────────────
-   Scene3 — Breathing Space (Golden Hour Terrace)
+   Scene3 — Breathing Space (Rindu)
    Premium-1 Islamic Faceless Cinematic Wedding Invitation
 
-   Emotion: Serenity, pause, the space between longing and fulfillment
+   Emotion: The heaviest moment — longing, restraint, the
+   sacred pause between yearning and fulfillment.
 
    Composition: MAXIMUM WHITESPACE — Image is SMALLER than other
-   scenes, positioned with more space around it. Quote text is
-   given prominence. Almost like a pause in a poetry book.
-
-   Image treatment:
-   • Image is smaller (max-w ~380px), floating in generous whitespace
-   • Reveals with warm sepia overlay that slowly fades to full color
-     — like a memory being recalled
-   • Very slow pacing — this scene should feel like time has stopped
-   • Golden hour warm overlay
+   scenes, positioned with more space around it. The TEXT is
+   the hero — slightly larger than other scenes. Almost like
+   a pause in a poetry book.
 
    Text treatment:
-   • Quote text is the HERO — larger than other scenes, more line-height
-   • Text appears very slowly, line by line, with generous delays (1.5s between)
    • NO label, NO scene number — this is a breathing space
-   • Single thin gold line above and below the quote
-   • "Seringkali rindu itu menyiksa." appears first, then a pause,
-     then "Namun mereka memilih menitipkannya dalam doa."
+   • Text appears LINE BY LINE with SLOWEST stagger (1.2s)
+   • Each line fades in slowly, like words being carefully chosen
+   • The text is slightly larger than other scenes
+   • No quotation marks — the words are the decoration
    ────────────────────────────────────────────────────────────── */
 
 // ── Animation variants ──────────────────────────────────────────
@@ -74,20 +68,20 @@ const lineDrawSlow: Variants = {
   },
 };
 
-/** Quote line — very slow reveal, one line at a time */
-const quoteLineReveal: Variants = {
+/** Line-by-line text reveal — slowest stagger, careful words */
+const lineReveal: Variants = {
   hidden: {
     opacity: 0,
-    y: 10,
+    y: 8,
   },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 2.0,
+      duration: 1.2,
       ease: [0.16, 1, 0.3, 1],
       opacity: {
-        duration: 2.4,
+        duration: 1.4,
         ease: 'easeOut',
       },
     },
@@ -109,6 +103,18 @@ const lineDrawSlowBelow: Variants = {
     },
   },
 };
+
+// ── Scene text lines ────────────────────────────────────────────
+
+const sceneLines = [
+  'Seringkali, rindu itu menyiksa.',
+  'Namun setiap godaan untuk sekadar menyapa muncul,',
+  'kami mengingat—',
+  'menahan diri adalah bentuk cinta tertinggi kepada Allah.',
+];
+
+const BASE_DELAY = 2.5;
+const STAGGER_GAP = 1.2;
 
 // ── Component ───────────────────────────────────────────────────
 
@@ -199,36 +205,26 @@ export default function Scene3() {
           transition={{ delay: 2.5 }}
         />
 
-        {/* ── Quote — THE HERO of this scene ──
-            Larger text, generous line-height, very slow reveal */}
-        <div className="mt-8 sm:mt-10 flex flex-col items-center text-center gap-2">
-          {/* Line 1 — appears first */}
-          <motion.p
-            className="font-serif italic text-base leading-[2.4] tracking-wide sm:text-lg sm:leading-[2.5] md:text-xl md:leading-[2.6]"
-            style={{ color: 'var(--p1-warm-brown)' }}
-            variants={quoteLineReveal}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            transition={{ delay: 3.5 }}
-          >
-            Seringkali rindu itu menyiksa.
-          </motion.p>
-
-          {/* Line 2 — appears after a pause (1.5s delay between lines) */}
-          <motion.p
-            className="font-serif italic text-base leading-[2.4] tracking-wide sm:text-lg sm:leading-[2.5] md:text-xl md:leading-[2.6]"
-            style={{
-              color: 'var(--p1-warm-brown)',
-              animation: 'p1TextBreathe 10s ease-in-out infinite',
-              animationDelay: '5s',
-            }}
-            variants={quoteLineReveal}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            transition={{ delay: 5.0 }}
-          >
-            Namun mereka memilih menitipkannya dalam doa.
-          </motion.p>
+        {/* ── Text — THE HERO of this scene ──
+            Larger text, generous line-height, very slow reveal
+            NO label, NO scene number */}
+        <div
+          className="mt-8 sm:mt-10 flex flex-col items-center text-center"
+          style={{ animation: 'p1TextBreathe 10s ease-in-out infinite' }}
+        >
+          {sceneLines.map((line, i) => (
+            <motion.p
+              key={i}
+              className="font-serif italic text-base leading-[2.4] tracking-wide sm:text-lg sm:leading-[2.5] md:text-xl md:leading-[2.6]"
+              style={{ color: 'var(--p1-warm-brown)' }}
+              variants={lineReveal}
+              initial="hidden"
+              animate={isInView ? 'visible' : 'hidden'}
+              transition={{ delay: BASE_DELAY + i * STAGGER_GAP }}
+            >
+              {line}
+            </motion.p>
+          ))}
         </div>
 
         {/* ── Bottom gold line — draws slowly ── */}
@@ -241,7 +237,7 @@ export default function Scene3() {
           variants={lineDrawSlowBelow}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          transition={{ delay: 6.0 }}
+          transition={{ delay: BASE_DELAY + sceneLines.length * STAGGER_GAP + 0.5 }}
         />
       </div>
 

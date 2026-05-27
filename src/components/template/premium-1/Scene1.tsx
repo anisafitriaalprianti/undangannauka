@@ -14,18 +14,13 @@ import { useRef } from 'react';
    text zone on the RIGHT with generous whitespace.
    Visual tension matching the emotional distance.
 
-   Image treatment:
-   • Thin gold outline frame appears FIRST (like a sketch)
-   • Image slowly materializes behind it with opacity only (NO blur)
-   • The outline frame fades away as image becomes fully present
-   • Directional lighting overlay: cool moonlight from top, warm lamp from bottom-left
-
    Text treatment:
    • Scene label "Scene I" is subtle, far to the right, small
-   • Title appears after image is ~70% revealed, right of image area
-   • Quote text appears last, in the right whitespace zone
+   • Title appears after image is ~70% revealed
+   • Text appears LINE BY LINE with staggered delays (handwriting feel)
+   • Each line fades in with opacity + slight Y drift, like ink settling
    • No quotation marks — just the words themselves
-   • Single thin gold line between title and quote
+   • No decorative dividers between title and text — generous whitespace
    ────────────────────────────────────────────────────────────── */
 
 // ── Animation variants ──────────────────────────────────────────
@@ -112,41 +107,40 @@ const titleFadeIn: Variants = {
   },
 };
 
-/** Gold line — draws from center outward */
-const lineDraw: Variants = {
-  hidden: {
-    scaleX: 0,
-    opacity: 0,
-  },
-  visible: {
-    scaleX: 1,
-    opacity: 1,
-    transition: {
-      duration: 1.2,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
-};
-
-/** Quote text — fades in slowly */
-const quoteFadeIn: Variants = {
+/** Line-by-line text reveal — handwriting feel, opacity + Y drift only */
+const lineReveal: Variants = {
   hidden: {
     opacity: 0,
-    y: 16,
+    y: 8,
   },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 1.8,
+      duration: 1.2,
       ease: [0.16, 1, 0.3, 1],
       opacity: {
-        duration: 2.0,
+        duration: 1.4,
         ease: 'easeOut',
       },
     },
   },
 };
+
+// ── Scene text lines ────────────────────────────────────────────
+
+const sceneLines = [
+  'Di bawah naungan langit yang sama,',
+  'kami dipisahkan oleh dinding ketaatan.',
+  'Hati terpaut, namun rasa bukan tiket untuk melanggar batas.',
+  'Tidak ada pesan singkat yang tak perlu.',
+  'Tidak ada pertemuan di tempat sepi.',
+  'Kami memilih menjaga—',
+  'karena menunggu juga bentuk ibadah.',
+];
+
+const BASE_DELAY = 2.4;
+const STAGGER_GAP = 0.8;
 
 // ── Component ───────────────────────────────────────────────────
 
@@ -219,8 +213,7 @@ export default function Scene1() {
                   priority={false}
                 />
 
-                {/* Directional lighting on image
-                    Cool moonlight from top, warm lamp from bottom-left */}
+                {/* Directional lighting on image */}
                 <div
                   className="pointer-events-none absolute inset-0"
                   style={{
@@ -276,7 +269,7 @@ export default function Scene1() {
 
             {/* Title */}
             <motion.div
-              className="mb-4 md:mb-5"
+              className="mb-8 md:mb-10"
               variants={titleFadeIn}
               initial="hidden"
               animate={isInView ? 'visible' : 'hidden'}
@@ -292,41 +285,25 @@ export default function Scene1() {
               </h2>
             </motion.div>
 
-            {/* Single thin gold line */}
-            <motion.div
-              className="mb-5 md:mb-6 w-[50px] origin-center md:origin-left"
-              style={{
-                height: '1px',
-                background: 'linear-gradient(to right, var(--p1-gold), transparent)',
-              }}
-              variants={lineDraw}
-              initial="hidden"
-              animate={isInView ? 'visible' : 'hidden'}
-              transition={{ delay: 2.6 }}
-            />
-
-            {/* Quote text — no quotation marks */}
-            <motion.div
+            {/* Line-by-line text reveal — no quotation marks, no decorative dividers */}
+            <div
               className="max-w-xs"
-              variants={quoteFadeIn}
-              initial="hidden"
-              animate={isInView ? 'visible' : 'hidden'}
-              transition={{ delay: 3.0 }}
+              style={{ animation: 'p1TextBreathe 8s ease-in-out infinite' }}
             >
-              <blockquote>
-                <p
-                  className="font-serif italic text-sm leading-[2] tracking-wide sm:text-[15px] sm:leading-[2.1] md:text-base"
-                  style={{
-                    color: 'var(--p1-warm-brown)',
-                    animation: 'p1TextBreathe 8s ease-in-out infinite',
-                  }}
+              {sceneLines.map((line, i) => (
+                <motion.p
+                  key={i}
+                  className="font-serif italic text-sm leading-[2.2] tracking-wide sm:text-[15px] sm:leading-[2.3] md:text-base md:leading-[2.4]"
+                  style={{ color: 'var(--p1-warm-brown)' }}
+                  variants={lineReveal}
+                  initial="hidden"
+                  animate={isInView ? 'visible' : 'hidden'}
+                  transition={{ delay: BASE_DELAY + i * STAGGER_GAP }}
                 >
-                  Kami saling mengenal sejak lama.
-                  <br />
-                  Namun memilih menjaga hati sebelum waktunya tiba.
-                </p>
-              </blockquote>
-            </motion.div>
+                  {line}
+                </motion.p>
+              ))}
+            </div>
           </div>
         </div>
       </div>

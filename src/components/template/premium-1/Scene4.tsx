@@ -15,20 +15,12 @@ import { useRef } from 'react';
    than other scenes, more immersive. Text feels connected to
    the image, not separated. The warmest composition.
 
-   Image treatment:
-   • Image is wider/larger, taking up more visual space
-   • RADIAL REVEAL: A soft warm glow appears first at center,
-     then the image materializes from center outward — using
-     a CSS clip-path circle that expands
-   • Extra warm sacred glow around the image
-   • Warm golden overlay from center
-
    Text treatment:
-   • Text positioned closer to the image — less gap
    • Title in warmer gold tone (not the standard brown)
-   • Quote appears with warm dissolve, slightly faster than
-     other scenes (this is the payoff)
-   • Single thin gold line, warmer than other scenes
+   • Text appears LINE BY LINE with slightly faster stagger (0.7s)
+   • This is the payoff — words arrive with more urgency
+   • Each line fades in with opacity + slight Y drift
+   • No quotation marks — the words are the declaration
    ────────────────────────────────────────────────────────────── */
 
 // ── Animation variants ──────────────────────────────────────────
@@ -121,25 +113,39 @@ const lineDraw: Variants = {
   },
 };
 
-/** Quote — warm dissolve, slightly faster (payoff) */
-const quoteFadeIn: Variants = {
+/** Line-by-line text reveal — slightly faster, payoff moment */
+const lineReveal: Variants = {
   hidden: {
     opacity: 0,
-    y: 14,
+    y: 8,
   },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 1.4,
+      duration: 1.2,
       ease: [0.16, 1, 0.3, 1],
       opacity: {
-        duration: 1.6,
+        duration: 1.4,
         ease: 'easeOut',
       },
     },
   },
 };
+
+// ── Scene text lines ────────────────────────────────────────────
+
+const sceneLines = [
+  'Lalu hari itu datang.',
+  'Bukan karena kami yang memilih—',
+  'tapi karena Ia yang mempertemukan.',
+  'Ketika ijab kabul terucap,',
+  'semua penantian terjawab.',
+  'Semata-mata karena-Nya.',
+];
+
+const BASE_DELAY = 1.8;
+const STAGGER_GAP = 0.7;
 
 // ── Component ───────────────────────────────────────────────────
 
@@ -272,7 +278,7 @@ export default function Scene4() {
 
           {/* Title — warmer gold tone */}
           <motion.div
-            className="mb-3"
+            className="mb-6 md:mb-8"
             variants={titleFadeIn}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
@@ -290,7 +296,7 @@ export default function Scene4() {
 
           {/* Single thin warm gold line */}
           <motion.div
-            className="mb-4 w-[50px] origin-center"
+            className="mb-6 w-[50px] origin-center"
             style={{
               height: '1px',
               background: 'linear-gradient(to right, transparent, var(--p1-gold-light), transparent)',
@@ -301,28 +307,25 @@ export default function Scene4() {
             transition={{ delay: 2.6 }}
           />
 
-          {/* Quote — warm dissolve, slightly faster (payoff) */}
-          <motion.div
+          {/* Line-by-line text reveal — payoff moment, slightly faster */}
+          <div
             className="max-w-sm"
-            variants={quoteFadeIn}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            transition={{ delay: 2.9 }}
+            style={{ animation: 'p1TextBreathe 9s ease-in-out infinite' }}
           >
-            <blockquote>
-              <p
-                className="font-serif italic text-sm leading-[2] tracking-wide sm:text-[15px] sm:leading-[2.1] md:text-base"
-                style={{
-                  color: 'var(--p1-warm-brown)',
-                  animation: 'p1TextBreathe 9s ease-in-out infinite',
-                }}
+            {sceneLines.map((line, i) => (
+              <motion.p
+                key={i}
+                className="font-serif italic text-sm leading-[2] tracking-wide sm:text-[15px] sm:leading-[2.1] md:text-base md:leading-[2.2]"
+                style={{ color: 'var(--p1-warm-brown)' }}
+                variants={lineReveal}
+                initial="hidden"
+                animate={isInView ? 'visible' : 'hidden'}
+                transition={{ delay: BASE_DELAY + i * STAGGER_GAP }}
               >
-                Ketika ijab kabul terucap,
-                <br />
-                segalanya berubah.
-              </p>
-            </blockquote>
-          </motion.div>
+                {line}
+              </motion.p>
+            ))}
+          </div>
         </div>
       </div>
 

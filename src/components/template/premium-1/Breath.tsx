@@ -4,17 +4,18 @@ import { motion, useInView, type Variants } from 'framer-motion';
 import { useRef } from 'react';
 
 /* ──────────────────────────────────────────────────────────────
-   Breath — Breathing Scene
+   Breath — Hikmah / Closing Wisdom
    Premium-1 Islamic Faceless Cinematic Wedding Invitation
 
-   PRIORITY 5: A short (40-50vh) breathing space between
-   Scene4 and EventInfo. No image. Just a sacred quote
-   that breathes, with thin gold dividers and warm glow.
+   A short (40-50vh) breathing space between Scene4 and EventInfo.
+   No image. Just the hikmah — the closing wisdom that ties
+   the entire story together.
 
-   Text: "Dan di antara tanda-tanda kekuasaan-Nya,
-         Dia menciptakan pasangan-pasangan untukmu."
+   Text: "Menahan diri karena Allah tidak akan pernah
+          membuat seseorang merugi."
 
    Atmosphere: warm ivory, sacred, breathing, minimal
+   Animation: opacity + translateY only, NO blur
    ────────────────────────────────────────────────────────────── */
 
 // ── Animation variants ──────────────────────────────────────────
@@ -23,21 +24,15 @@ const quoteReveal: Variants = {
   hidden: {
     opacity: 0,
     y: 10,
-    filter: 'blur(6px)',
   },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: {
       duration: 2.5,
       ease: [0.16, 1, 0.3, 1],
       opacity: {
         duration: 2.8,
-        ease: 'easeOut',
-      },
-      filter: {
-        duration: 2.0,
         ease: 'easeOut',
       },
     },
@@ -119,10 +114,10 @@ export default function Breath() {
           />
         </motion.div>
 
-        {/* ── Sacred quote ──
-            Italic serif, very slow blur dissolve, breathing effect */}
+        {/* ── Hikmah — closing wisdom ──
+            Single line, slow reveal, breathing effect */}
         <motion.div
-          className="flex flex-col items-center gap-2"
+          className="flex flex-col items-center"
           variants={quoteReveal}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
@@ -134,9 +129,7 @@ export default function Breath() {
               animation: 'p1TextBreathe 9s ease-in-out infinite',
             }}
           >
-            Dan di antara tanda-tanda kekuasaan-Nya,
-            <br />
-            Dia menciptakan pasangan-pasangan untukmu.
+            Menahan diri karena Allah tidak akan pernah membuat seseorang merugi.
           </p>
         </motion.div>
 
