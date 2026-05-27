@@ -6,10 +6,14 @@ import { useRef } from 'react';
 const slowEase = [0.16, 1, 0.3, 1];
 const cinematicEase = [0.25, 0.46, 0.45, 0.94];
 
+/* PRD: Why Nauka is a "section rasa", not "section penjelasan".
+   3 principles, 1 short line each, more whitespace.
+   Visual speaks. Words are whispers, not lectures. */
+
 const principles = [
-  { mark: '~', word: 'Susunan yang Tepat' },
-  { mark: '~', word: 'Gerakan yang Berniat' },
-  { mark: '~', word: 'Suasana yang Terasa' },
+  { word: 'Tepat', hint: 'Setiap detail punya alasan' },
+  { word: 'Berniat', hint: 'Setiap gerak punya tujuan' },
+  { word: 'Terasa', hint: 'Setiap suasana meninggalkan jejak' },
 ];
 
 export default function WhyNauka() {
@@ -22,7 +26,7 @@ export default function WhyNauka() {
   const statementY = useTransform(scrollYProgress, [0.5, 1], [30, -20]);
 
   return (
-    <section ref={sectionRef} id="why-nauka" className="nauka-grain nauka-ink relative py-28 sm:py-40 bg-[#F6F2EE] overflow-hidden">
+    <section ref={sectionRef} id="why-nauka" className="nauka-grain nauka-ink relative py-32 sm:py-44 bg-[#F6F2EE] overflow-hidden">
       {/* Top blend — smooth transition from white section above */}
       <div
         className="absolute top-0 left-0 right-0 h-24 pointer-events-none z-[2]"
@@ -40,7 +44,7 @@ export default function WhyNauka() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 1.2, ease: slowEase }}
-          className="text-center mb-24 sm:mb-36"
+          className="text-center mb-28 sm:mb-40"
         >
           {/* Warm spotlight on the quote */}
           <div
@@ -68,8 +72,8 @@ export default function WhyNauka() {
           />
         </motion.div>
 
-        {/* Three principles — minimal, spacious, let visual speak */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-12 sm:gap-20">
+        {/* Three principles — single word + one short line. More whitespace. Less noise. */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-16 sm:gap-24">
           {principles.map((principle, index) => (
             <motion.div
               key={index}
@@ -79,13 +83,13 @@ export default function WhyNauka() {
               transition={{ duration: 0.8, delay: index * 0.15, ease: slowEase }}
               className="group text-center"
             >
-              {/* Tiny tilde mark — like a handwritten accent */}
-              <span className="block text-[#C6A769]/20 text-sm mb-4 group-hover:text-[#C6A769]/40 transition-colors duration-700">
-                {principle.mark}
-              </span>
-              {/* The word — just the word, nothing else */}
-              <p className="font-serif text-lg sm:text-xl text-[#1C1C1C]/40 italic group-hover:text-[#1C1C1C]/70 transition-colors duration-700">
+              {/* The word — just the word, bigger now, bolder in its simplicity */}
+              <p className="font-serif text-2xl sm:text-3xl text-[#1C1C1C]/30 italic group-hover:text-[#1C1C1C]/70 transition-colors duration-700 mb-4">
                 {principle.word}
+              </p>
+              {/* One short line — poetic, not explanatory */}
+              <p className="text-[13px] text-[#6B6B6B]/40 group-hover:text-[#6B6B6B]/70 transition-colors duration-700 leading-[1.6] max-w-[180px]">
+                {principle.hint}
               </p>
             </motion.div>
           ))}

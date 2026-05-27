@@ -6,6 +6,10 @@ import { useState, useEffect } from 'react';
 
 const cinematicEase = [0.25, 0.46, 0.45, 0.94];
 
+/* PRD: Navbar polish — logo slightly alive, more breathing space,
+   elegant menu spacing, still minimal.
+   The navbar should feel like a quiet companion, not a loud host. */
+
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -41,14 +45,14 @@ export default function Navbar() {
             : 'bg-transparent border-b border-transparent'
         }`}
       >
-        <div className="max-w-6xl mx-auto px-6 sm:px-8 h-24 sm:h-28 flex items-center justify-between">
-          {/* Nav Links — desktop (left) — more breathing space */}
-          <div className="hidden md:flex items-center gap-10 flex-1">
+        <div className="max-w-6xl mx-auto px-8 sm:px-10 h-24 sm:h-28 flex items-center justify-between">
+          {/* Nav Links — desktop (left) — elegant spacing, breathing room */}
+          <div className="hidden md:flex items-center gap-12 flex-1">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="relative text-[11px] tracking-[0.25em] uppercase text-[#6B6B6B]/70 hover:text-[#1C1C1C] transition-colors duration-300 group"
+                className="relative text-[11px] tracking-[0.25em] uppercase text-[#6B6B6B]/60 hover:text-[#1C1C1C] transition-colors duration-300 group"
               >
                 {link.label}
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-[#C6A769]/50 group-hover:w-full transition-all duration-400" />
@@ -56,24 +60,41 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Logo — centered with breathing space, subtle life */}
-          <a href="#" className="flex items-center group absolute left-1/2 -translate-x-1/2 px-6">
-            <Image
-              src="/logo-nauka.png"
-              alt="Nauka"
-              width={220}
-              height={66}
-              className="h-28 sm:h-32 w-auto group-hover:opacity-80 transition-opacity duration-500"
-              style={{ animation: 'naukaLogoBreath 8s ease-in-out infinite' }}
-              priority
-            />
+          {/* Logo — centered with breathing space, subtle life
+              naukaLogoBreath gives gentle scale pulse
+              naukaLogoShimmer adds occasional gold light pass */}
+          <a href="#" className="flex items-center group absolute left-1/2 -translate-x-1/2 px-8">
+            <div className="relative">
+              <Image
+                src="/logo-nauka.png"
+                alt="Nauka"
+                width={220}
+                height={66}
+                className="h-28 sm:h-32 w-auto group-hover:opacity-85 transition-opacity duration-500"
+                style={{ animation: 'naukaLogoBreath 8s ease-in-out infinite' }}
+                priority
+              />
+              {/* Logo shimmer — very subtle gold light that passes across occasionally
+                  Like sunlight catching the edge of a nameplate */}
+              <div
+                className="absolute inset-0 pointer-events-none overflow-hidden rounded-lg"
+                style={{ animation: 'naukaLogoShimmer 8s ease-in-out infinite' }}
+              >
+                <div
+                  className="absolute -inset-y-full w-[30%] -skew-x-12"
+                  style={{
+                    background: 'linear-gradient(90deg, transparent, rgba(198,167,105,0.06), transparent)',
+                  }}
+                />
+              </div>
+            </div>
           </a>
 
-          {/* Right side — desktop */}
-          <div className="hidden md:flex items-center gap-10 flex-1 justify-end">
+          {/* Right side — desktop, breathing space */}
+          <div className="hidden md:flex items-center gap-12 flex-1 justify-end">
             <a
               href="#ai-finder"
-              className="text-[11px] tracking-[0.25em] uppercase px-6 py-2.5 rounded-full border border-[#C6A769]/15 text-[#C6A769]/80 hover:border-[#C6A769]/35 hover:bg-[#C6A769]/5 hover:text-[#C6A769] transition-all duration-500"
+              className="text-[11px] tracking-[0.25em] uppercase px-7 py-2.5 rounded-full border border-[#C6A769]/15 text-[#C6A769]/80 hover:border-[#C6A769]/35 hover:bg-[#C6A769]/5 hover:text-[#C6A769] transition-all duration-500"
             >
               Bantuan Pilih
             </a>

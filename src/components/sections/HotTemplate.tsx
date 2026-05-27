@@ -48,7 +48,7 @@ export default function HotTemplate() {
   const secondary = templates.slice(1);
 
   return (
-    <section ref={sectionRef} id="templates" className="nauka-atmosphere nauka-grain nauka-paper nauka-linen relative py-16 sm:py-20 bg-white overflow-hidden">
+    <section ref={sectionRef} id="templates" className="nauka-atmosphere nauka-grain nauka-paper relative py-16 sm:py-20 bg-white overflow-hidden">
       {/* Top blend — smooth transition from cream section above */}
       <div
         className="absolute top-0 left-0 right-0 h-24 pointer-events-none z-[2]"
@@ -87,15 +87,17 @@ export default function HotTemplate() {
           />
         </div>
 
-        {/* Editorial layout — featured dominant left, secondary cascade right, asymmetric */}
+        {/* Editorial layout — 1 dominant featured, secondary subtle cascade
+            Curated gallery feel, not catalog listing.
+            Asymmetric composition: featured big + offset, secondary small + faded */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 1, ease: slowEase }}
-          className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 lg:gap-10 mb-12"
+          className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 lg:gap-14 mb-12"
         >
-          {/* Featured — big, dominant, like a magazine cover shot */}
+          {/* Featured — BIG, dominant, like a magazine cover shot */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -104,26 +106,26 @@ export default function HotTemplate() {
             className="group cursor-pointer flex-shrink-0"
           >
             <div className="relative">
-              {/* Warm glow behind featured */}
-              <div className="absolute -inset-12 pointer-events-none">
+              {/* Warm glow behind featured — larger, more dramatic */}
+              <div className="absolute -inset-16 pointer-events-none">
                 <div
                   className="absolute top-0 left-0 w-full h-[70%]"
                   style={{
-                    background: 'radial-gradient(ellipse at 30% 20%, rgba(198,167,105,0.1) 0%, transparent 60%)',
+                    background: 'radial-gradient(ellipse at 30% 20%, rgba(198,167,105,0.12) 0%, transparent 60%)',
                     animation: 'naukaBreathLight 7s ease-in-out infinite',
                   }}
                 />
               </div>
 
-              {/* Phone mockup — BIGGER, dominant */}
+              {/* Phone mockup — BIGGER, more dominant, editorial presence */}
               <div
-                className="relative w-[300px] sm:w-[340px] lg:w-[380px] rounded-[2.5rem] p-2 nauka-shadow-premium ring-1 ring-white/40 transition-shadow duration-700 group-hover:shadow-[0_16px_48px_rgba(28,28,28,0.14)]"
+                className="relative w-[300px] sm:w-[360px] lg:w-[420px] rounded-[2.5rem] p-2.5 nauka-shadow-premium ring-1 ring-white/40 transition-shadow duration-700 group-hover:shadow-[0_20px_60px_rgba(28,28,28,0.16)]"
                 style={{ backgroundColor: '#1C1C1C', aspectRatio: '9/18' }}
               >
                 {/* Top edge highlight */}
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent z-30 rounded-t-[2.5rem]" />
 
-                {/* Light reflection shift */}
+                {/* Light reflection shift — editorial glass */}
                 <div
                   className="absolute inset-0 rounded-[2.5rem] z-20 pointer-events-none overflow-hidden"
                   style={{ animation: 'naukaReflectionShift 9s ease-in-out infinite' }}
@@ -147,7 +149,7 @@ export default function HotTemplate() {
                     alt={featured.name}
                     fill
                     className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-                    sizes="(max-width: 640px) 300px, (max-width: 1024px) 340px, 380px"
+                    sizes="(max-width: 640px) 300px, (max-width: 1024px) 360px, 420px"
                   />
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10">
                     <div
@@ -155,8 +157,9 @@ export default function HotTemplate() {
                       style={{ background: 'radial-gradient(ellipse at 30% 20%, rgba(198,167,105,0.08) 0%, transparent 60%)' }}
                     />
                   </div>
+                  {/* Editorial vibe label — only on featured, elegant */}
                   <div className="absolute top-[8%] left-[5%] z-10">
-                    <span className="px-2 py-0.5 rounded-full text-[7px] tracking-[0.15em] uppercase text-[#C6A769] bg-[#C6A769]/15 backdrop-blur-sm">
+                    <span className="px-2.5 py-1 rounded-full text-[7px] tracking-[0.2em] uppercase text-[#C6A769] bg-[#C6A769]/15 backdrop-blur-sm">
                       {featured.vibes}
                     </span>
                   </div>
@@ -165,7 +168,7 @@ export default function HotTemplate() {
 
               {/* Reflection — phone casts a subtle reflection below */}
               <div
-                className="relative w-[300px] sm:w-[340px] lg:w-[380px] mx-auto mt-1 overflow-hidden pointer-events-none"
+                className="relative w-[300px] sm:w-[360px] lg:w-[420px] mx-auto mt-1 overflow-hidden pointer-events-none"
                 style={{ height: '45px' }}
               >
                 <div
@@ -182,18 +185,18 @@ export default function HotTemplate() {
                 }}
               />
 
-              {/* Featured info — editorial caption */}
-              <div className="mt-3 lg:text-left">
+              {/* Featured info — editorial caption, no tier label */}
+              <div className="mt-4 lg:text-left">
                 <h3 className="font-serif text-xl text-[#1C1C1C] font-semibold group-hover:text-[#C6A769] transition-colors duration-300">
                   {featured.name}
                 </h3>
-                <span className="text-[10px] tracking-[0.1em] uppercase text-[#C6A769]/50">{featured.tier}</span>
               </div>
             </div>
           </motion.div>
 
-          {/* Secondary — smaller cascade, offset vertically for asymmetric composition */}
-          <div className="flex flex-col items-center lg:items-start gap-4 lg:pt-16 lg:gap-5">
+          {/* Secondary — smaller, subtler, more faded
+              Curated gallery feel — not equal weight, supporting cast */}
+          <div className="flex flex-col items-center lg:items-start gap-6 lg:pt-24 lg:gap-7">
             {secondary.slice(0, 2).map((template, index) => (
               <motion.div
                 key={template.id}
@@ -204,11 +207,15 @@ export default function HotTemplate() {
                 className="group cursor-pointer"
               >
                 <div
-                  className="relative w-[120px] sm:w-[140px] rounded-[2rem] p-1.5 transition-shadow duration-700 group-hover:shadow-[0_10px_32px_rgba(28,28,28,0.1)]"
-                  style={{ backgroundColor: '#1C1C1C', aspectRatio: '9/18' }}
+                  className="relative w-[105px] sm:w-[120px] rounded-[2rem] p-1.5 transition-all duration-700 group-hover:shadow-[0_10px_32px_rgba(28,28,28,0.1)]"
+                  style={{ backgroundColor: '#1C1C1C', aspectRatio: '9/18', opacity: 0.55 }}
                 >
-                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent z-30 rounded-t-[2rem]" />
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 rounded-b-xl z-20" style={{ backgroundColor: '#1C1C1C' }} />
+                  {/* Secondary phones are more faded — supporting, not competing */}
+                  <style>{`
+                    .secondary-card:hover { opacity: 0.85 !important; }
+                  `}</style>
+                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent z-30 rounded-t-[2rem]" />
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-14 h-3.5 rounded-b-xl z-20" style={{ backgroundColor: '#1C1C1C' }} />
                   <div className="relative w-full h-full rounded-[1.5rem] overflow-hidden bg-[#F6F2EE]">
                     <div className="absolute inset-0 bg-[#F0EBE5] animate-pulse" />
                     <Image
@@ -216,23 +223,13 @@ export default function HotTemplate() {
                       alt={template.name}
                       fill
                       className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
-                      sizes="140px"
+                      sizes="120px"
                     />
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10">
-                      <div
-                        className="absolute top-0 left-0 w-[60%] h-[50%]"
-                        style={{ background: 'radial-gradient(ellipse at 30% 20%, rgba(198,167,105,0.08) 0%, transparent 60%)' }}
-                      />
-                    </div>
-                    <div className="absolute top-[8%] left-[5%] z-10">
-                      <span className="px-1.5 py-0.5 rounded-full text-[5px] tracking-[0.1em] uppercase text-[#6B6B6B] bg-white/60 backdrop-blur-sm">
-                        {template.vibes}
-                      </span>
-                    </div>
                   </div>
                 </div>
+                {/* No vibe badge on secondary — curated, not catalog */}
                 <div className="mt-2">
-                  <h3 className="font-serif text-[12px] text-[#1C1C1C]/70 font-semibold group-hover:text-[#C6A769] transition-colors duration-300">
+                  <h3 className="font-serif text-[11px] text-[#1C1C1C]/40 group-hover:text-[#C6A769] transition-colors duration-300">
                     {template.name}
                   </h3>
                 </div>
@@ -275,11 +272,6 @@ export default function HotTemplate() {
                       className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
                       sizes="120px"
                     />
-                    <div className="absolute top-[8%] left-[5%] z-10">
-                      <span className="px-1.5 py-0.5 rounded-full text-[5px] tracking-[0.1em] uppercase text-[#6B6B6B] bg-white/60 backdrop-blur-sm">
-                        {template.vibes}
-                      </span>
-                    </div>
                   </div>
                 </div>
                 <div className="mt-2">

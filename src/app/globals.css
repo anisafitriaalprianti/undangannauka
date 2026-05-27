@@ -211,13 +211,20 @@
   }
 }
 
-/* PRD: Subtle cinematic movement — phone gentle float like held by hand */
+/* PRD: Subtle cinematic movement — phone organic float with gentle X drift
+   Like being held by someone who breathes — not mechanical, alive */
 @keyframes naukaGentleFloat {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-4px) translateX(1px);
   }
   50% {
-    transform: translateY(-6px);
+    transform: translateY(-6px) translateX(0px);
+  }
+  75% {
+    transform: translateY(-3px) translateX(-1px);
   }
 }
 
@@ -262,6 +269,17 @@
   }
   70% {
     transform: translate(-5%, 8%);
+  }
+}
+
+/* PRD: Depth of field — subtle edge blur that creates depth perception
+  Like a camera lens focused on the phone with soft bokeh edges */
+@keyframes naukaDepthBreath {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.7;
   }
 }
 
@@ -399,14 +417,17 @@ body {
 }
 
 /* ============================================================
-   NAUKA CINEMATIC TEXTURE SYSTEM
+   NAUKA CINEMATIC TEXTURE SYSTEM — FINAL POLISH
    PRD: Cinematic ≠ dark. Warm texture that adds depth without weight.
    Film grain — barely visible, adds analog warmth
    Vignette — subtle edge darkening for focus
    Paper — subtle handcrafted touch, not vintage
+   Ink — almost subliminal organic depth
+   ALL VALUES: VERY THIN. Almost subliminal. Not noisy. Not vintage excess.
    ============================================================ */
 
-/* Subtle film grain — warmer, like shooting on film. Handcrafted feel */
+/* Subtle film grain — warmer, like shooting on film. Handcrafted feel
+   FINAL POLISH: Reduced opacity for more refined, less noisy feel */
 .nauka-grain {
   position: relative;
 }
@@ -414,7 +435,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  opacity: 0.042;
+  opacity: 0.028;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   background-size: 128px 128px;
@@ -424,7 +445,7 @@ body {
 
 /* PRD: Handcrafted touch — paper texture
    Adds organic warmth, seperti kertas berkualitas tinggi
-   Increased slightly for more tactile feel */
+   FINAL POLISH: Softer, more refined, less visible pattern */
 .nauka-paper {
   position: relative;
 }
@@ -432,7 +453,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  opacity: 0.028;
+  opacity: 0.018;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)'/%3E%3C/svg%3E");
   background-size: 180px 180px;
@@ -441,7 +462,7 @@ body {
 }
 
 /* Warm linen texture — subtle crosshatch like fine fabric
-   Adds handcrafted warmth without being vintage */
+   FINAL POLISH: Very thin, barely perceptible warmth */
 .nauka-linen {
   position: relative;
 }
@@ -449,7 +470,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  opacity: 0.012;
+  opacity: 0.006;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='linen'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='6' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23linen)'/%3E%3C/svg%3E");
   background-size: 200px 200px;
@@ -458,7 +479,8 @@ body {
 }
 
 /* Subtle ink texture — like a faint wash of ink on paper
-   Adds depth and organic feel, like a letterpress print */
+   Adds depth and organic feel, like a letterpress print
+   FINAL POLISH: Almost subliminal — felt not seen */
 .nauka-ink {
   position: relative;
 }
@@ -466,7 +488,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  opacity: 0.014;
+  opacity: 0.008;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='ink'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.03' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23ink)'/%3E%3C/svg%3E");
   background-size: 300px 300px;
@@ -643,20 +665,22 @@ body {
 }
 
 /* ============================================================
-   NAUKA SECTION FLOW SYSTEM
+   NAUKA SECTION FLOW SYSTEM — FINAL POLISH
    Homepage as a journey — lighting continuity, ambience flow,
-   smooth emotional transitions between sections
+   smooth emotional transitions between sections.
+   Each section breathes into the next, not hard cuts.
    ============================================================ */
 
-/* Section flow fade — subtle gradient that bleeds into the next section */
+/* Section flow fade — subtle gradient that bleeds into the next section
+   FINAL POLISH: Taller blend for smoother emotional transition */
 .nauka-flow-cream::after {
   content: '';
   position: absolute;
   bottom: -1px;
   left: 0;
   right: 0;
-  height: 80px;
-  background: linear-gradient(180deg, transparent 0%, rgba(246, 242, 238, 0.6) 60%, rgba(246, 242, 238, 1) 100%);
+  height: 120px;
+  background: linear-gradient(180deg, transparent 0%, rgba(246, 242, 238, 0.4) 40%, rgba(246, 242, 238, 1) 100%);
   pointer-events: none;
   z-index: 2;
 }
@@ -667,13 +691,14 @@ body {
   bottom: -1px;
   left: 0;
   right: 0;
-  height: 80px;
-  background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.6) 60%, rgba(255, 255, 255, 1) 100%);
+  height: 120px;
+  background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.4) 40%, rgba(255, 255, 255, 1) 100%);
   pointer-events: none;
   z-index: 2;
 }
 
-/* Subtle warm wash — very thin warm overlay for handcrafted atmosphere */
+/* Subtle warm wash — very thin warm overlay for handcrafted atmosphere
+   FINAL POLISH: Even thinner, just enough to remove digital sterility */
 .nauka-warm-wash {
   position: relative;
 }
@@ -681,7 +706,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(198, 167, 105, 0.008);
+  background: rgba(198, 167, 105, 0.005);
   pointer-events: none;
   z-index: 0;
 }
@@ -692,6 +717,44 @@ body {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.01);
+    transform: scale(1.008);
+  }
+}
+
+/* Navbar logo shimmer — subtle gold light that passes across occasionally
+   Like sunlight catching the edge of a nameplate */
+@keyframes naukaLogoShimmer {
+  0%, 90%, 100% {
+    opacity: 0;
+  }
+  95% {
+    opacity: 1;
+  }
+}
+
+/* Closing section — gentle warm pulse that makes the ending feel alive
+   Like the last warm note of a film score */
+@keyframes naukaClosingPulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.02);
+  }
+}
+
+/* Section scroll reveal — smooth, not bouncy, like a film dissolve */
+@keyframes naukaSectionReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
   }
 }

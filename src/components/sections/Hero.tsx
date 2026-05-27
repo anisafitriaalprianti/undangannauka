@@ -45,8 +45,16 @@ export default function Hero() {
   }, []);
 
   // Subtle tilt values — very gentle, almost imperceptible
-  const tiltX = (mousePos.y - 0.5) * 4; // max 2deg
-  const tiltY = (mousePos.x - 0.5) * -4; // max 2deg
+  const tiltX = (mousePos.y - 0.5) * 3; // max 1.5deg — even more subtle
+  const tiltY = (mousePos.x - 0.5) * -3;
+
+  // Mouse-reactive reflection offset — glass reflection follows your gaze
+  const reflectionOffsetX = (mousePos.x - 0.5) * 15; // max 7.5px shift
+  const reflectionOpacity = 0.03 + Math.abs(mousePos.x - 0.5) * 0.04; // 0.03-0.05
+
+  // Ambient glow follows mouse gently — like light source moving with you
+  const glowOffsetX = (mousePos.x - 0.5) * 20;
+  const glowOffsetY = (mousePos.y - 0.5) * 10;
 
   return (
     <section
@@ -183,7 +191,7 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Phone Mockup — cinematic parallax + 3D tilt + gentle float */}
+          {/* Phone Mockup — cinematic parallax + 3D tilt + organic float */}
           <motion.div
             style={{ y: mockupY, scale: mockupScale }}
             initial={{ opacity: 0, y: 40, scale: 0.95 }}
@@ -191,18 +199,19 @@ export default function Hero() {
             transition={{ duration: 1.3, delay: 0.3, ease: slowEase }}
             className="flex-shrink-0 relative"
           >
-            {/* PRD: Lighting with direction — warm glow behind phone, from top-left */}
+            {/* PRD: Lighting with direction — warm glow behind phone, follows mouse subtly */}
             <div className="absolute -inset-10 pointer-events-none">
               <div
                 className="absolute -top-4 -left-4 w-[120%] h-[80%]"
                 style={{
-                  background: 'radial-gradient(ellipse at 30% 30%, rgba(198,167,105,0.15) 0%, transparent 60%)',
+                  background: `radial-gradient(ellipse at ${30 + glowOffsetX * 0.5}% ${30 + glowOffsetY * 0.5}%, rgba(198,167,105,0.15) 0%, transparent 60%)`,
                   animation: 'naukaBreathLight 6s ease-in-out infinite',
+                  transition: 'background 2s ease-out',
                 }}
               />
             </div>
 
-            {/* Gentle float animation wrapper */}
+            {/* Gentle float animation wrapper — organic, with X drift */}
             <div style={{ animation: 'naukaGentleFloat 6s ease-in-out infinite' }}>
               {/* 3D perspective wrapper — subtle tilt follows mouse */}
               <div
@@ -214,7 +223,7 @@ export default function Hero() {
                 <div
                   style={{
                     transform: `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`,
-                    transition: 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                    transition: 'transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                   }}
                 >
                   {/* Table surface — warm wood tone beneath the phone */}
@@ -227,7 +236,8 @@ export default function Hero() {
                       {/* PRD: Lighting on mockup — subtle top edge highlight */}
                       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent z-30 rounded-t-[2.5rem]" />
 
-                      {/* Glass reflection — primary slow sweep */}
+                      {/* Glass reflection — primary: mouse-reactive + slow sweep
+                          The reflection subtly follows where you look, making the glass feel real */}
                       <div
                         className="absolute inset-0 rounded-[2.5rem] z-20 pointer-events-none overflow-hidden"
                         style={{ animation: 'naukaReflectionShift 8s ease-in-out infinite' }}
@@ -235,7 +245,9 @@ export default function Hero() {
                         <div
                           className="absolute -inset-full"
                           style={{
-                            background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.03) 45%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 55%, transparent 60%)',
+                            background: `linear-gradient(105deg, transparent 40%, rgba(255,255,255,${reflectionOpacity}) 45%, rgba(255,255,255,${reflectionOpacity + 0.03}) 50%, rgba(255,255,255,${reflectionOpacity}) 55%, transparent 60%)`,
+                            transform: `translateX(${reflectionOffsetX}px)`,
+                            transition: 'transform 1.5s ease-out, background 2s ease-out',
                           }}
                         />
                       </div>
@@ -265,6 +277,16 @@ export default function Hero() {
                           }}
                         />
                       </div>
+
+                      {/* Depth of field — very subtle edge vignette on the phone screen
+                          Creates perception that the phone exists in 3D space, like a camera focused on it */}
+                      <div
+                        className="absolute inset-0 rounded-[2.5rem] z-20 pointer-events-none"
+                        style={{
+                          boxShadow: 'inset 0 0 40px rgba(0,0,0,0.02), inset 0 0 80px rgba(0,0,0,0.01)',
+                          animation: 'naukaDepthBreath 10s ease-in-out infinite',
+                        }}
+                      />
 
                       {/* Notch */}
                       <div
