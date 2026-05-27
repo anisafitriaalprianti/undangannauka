@@ -45,7 +45,7 @@ export default function Navbar() {
           {/* Logo */}
           <a href="#" className="flex items-center group">
             <Image
-              src="/nauka-logo.png"
+              src="/logo-nauka.png"
               alt="Nauka"
               width={120}
               height={36}
