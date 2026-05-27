@@ -234,6 +234,37 @@
   }
 }
 
+/* PRD: Ambient shimmer — secondary glass reflection, slower, softer
+  Like light from a window shifting as clouds pass */
+@keyframes naukaAmbientShimmer {
+  0% {
+    transform: translateX(-20%) rotate(0deg);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateX(20%) rotate(1deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-20%) rotate(0deg);
+    opacity: 0.6;
+  }
+}
+
+/* PRD: Ambient light shift — warm patch that drifts across mockup surface
+  Like sunlight moving through a room during the day */
+@keyframes naukaAmbientShift {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  30% {
+    transform: translate(8%, 5%);
+  }
+  70% {
+    transform: translate(-5%, 8%);
+  }
+}
+
 /* ============================================================
    SMOOTH SCROLLING
    ============================================================ */
@@ -375,7 +406,7 @@ body {
    Paper — subtle handcrafted touch, not vintage
    ============================================================ */
 
-/* Subtle film grain — warmer, like shooting on film. Increased for handcrafted feel */
+/* Subtle film grain — warmer, like shooting on film. Handcrafted feel */
 .nauka-grain {
   position: relative;
 }
@@ -383,7 +414,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  opacity: 0.035;
+  opacity: 0.042;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   background-size: 128px 128px;
@@ -401,7 +432,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  opacity: 0.022;
+  opacity: 0.028;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)'/%3E%3C/svg%3E");
   background-size: 180px 180px;
@@ -435,7 +466,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  opacity: 0.008;
+  opacity: 0.014;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='ink'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.03' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23ink)'/%3E%3C/svg%3E");
   background-size: 300px 300px;
@@ -452,7 +483,7 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse 75% 70% at 50% 45%, transparent 50%, rgba(28, 28, 28, 0.03) 100%);
+  background: radial-gradient(ellipse 75% 70% at 50% 45%, transparent 50%, rgba(28, 28, 28, 0.04) 100%);
   z-index: 1;
 }
 
@@ -609,4 +640,58 @@ body {
 .nauka-link-reveal:hover::after {
   left: 0;
   right: 0;
+}
+
+/* ============================================================
+   NAUKA SECTION FLOW SYSTEM
+   Homepage as a journey — lighting continuity, ambience flow,
+   smooth emotional transitions between sections
+   ============================================================ */
+
+/* Section flow fade — subtle gradient that bleeds into the next section */
+.nauka-flow-cream::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(180deg, transparent 0%, rgba(246, 242, 238, 0.6) 60%, rgba(246, 242, 238, 1) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.nauka-flow-white::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.6) 60%, rgba(255, 255, 255, 1) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Subtle warm wash — very thin warm overlay for handcrafted atmosphere */
+.nauka-warm-wash {
+  position: relative;
+}
+.nauka-warm-wash::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(198, 167, 105, 0.008);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Navbar logo breathing — very subtle scale pulse */
+@keyframes naukaLogoBreath {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
+  }
 }

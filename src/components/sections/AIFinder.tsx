@@ -65,7 +65,12 @@ export default function AIFinder() {
   const isLastStep = currentStep === steps.length - 1;
 
   return (
-    <section id="ai-finder" className="relative py-16 sm:py-20 bg-white">
+    <section id="ai-finder" className="nauka-grain relative py-16 sm:py-20 bg-white overflow-hidden">
+      {/* Top blend — smooth transition from white section above */}
+      <div
+        className="absolute top-0 left-0 right-0 h-24 pointer-events-none z-[2]"
+        style={{ background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)' }}
+      />
       <div className="relative max-w-xl mx-auto px-4 sm:px-6">
         <AnimatePresence mode="wait">
           {/* ===== IDLE — intro screen ===== */}

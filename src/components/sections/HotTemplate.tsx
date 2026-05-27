@@ -49,6 +49,12 @@ export default function HotTemplate() {
 
   return (
     <section ref={sectionRef} id="templates" className="nauka-atmosphere nauka-grain nauka-paper nauka-linen relative py-16 sm:py-20 bg-white overflow-hidden">
+      {/* Top blend — smooth transition from cream section above */}
+      <div
+        className="absolute top-0 left-0 right-0 h-24 pointer-events-none z-[2]"
+        style={{ background: 'linear-gradient(180deg, rgba(246,242,238,1) 0%, rgba(246,242,238,0) 100%)' }}
+      />
+
       <div className="nauka-frame-line hidden lg:block" />
       <div className="nauka-frame-line-right hidden lg:block" />
       <motion.div style={{ y: sectionY }} className="relative max-w-6xl mx-auto px-4 sm:px-6">
@@ -81,15 +87,15 @@ export default function HotTemplate() {
           />
         </div>
 
-        {/* Editorial layout — featured dominant left, secondary cascade right */}
+        {/* Editorial layout — featured dominant left, secondary cascade right, asymmetric */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 1, ease: slowEase }}
-          className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-8 lg:gap-12 mb-12"
+          className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 lg:gap-10 mb-12"
         >
-          {/* Featured — big, like a magazine cover shot */}
+          {/* Featured — big, dominant, like a magazine cover shot */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -99,7 +105,7 @@ export default function HotTemplate() {
           >
             <div className="relative">
               {/* Warm glow behind featured */}
-              <div className="absolute -inset-10 pointer-events-none">
+              <div className="absolute -inset-12 pointer-events-none">
                 <div
                   className="absolute top-0 left-0 w-full h-[70%]"
                   style={{
@@ -111,7 +117,7 @@ export default function HotTemplate() {
 
               {/* Phone mockup — BIGGER, dominant */}
               <div
-                className="relative w-[280px] sm:w-[320px] lg:w-[340px] rounded-[2.5rem] p-2 nauka-shadow-premium ring-1 ring-white/40 transition-shadow duration-700 group-hover:shadow-[0_16px_48px_rgba(28,28,28,0.14)]"
+                className="relative w-[300px] sm:w-[340px] lg:w-[380px] rounded-[2.5rem] p-2 nauka-shadow-premium ring-1 ring-white/40 transition-shadow duration-700 group-hover:shadow-[0_16px_48px_rgba(28,28,28,0.14)]"
                 style={{ backgroundColor: '#1C1C1C', aspectRatio: '9/18' }}
               >
                 {/* Top edge highlight */}
@@ -141,7 +147,7 @@ export default function HotTemplate() {
                     alt={featured.name}
                     fill
                     className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-                    sizes="(max-width: 640px) 280px, (max-width: 1024px) 320px, 340px"
+                    sizes="(max-width: 640px) 300px, (max-width: 1024px) 340px, 380px"
                   />
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10">
                     <div
@@ -157,29 +163,37 @@ export default function HotTemplate() {
                 </div>
               </div>
 
-              {/* Reflection — phone casts a subtle reflection below, like sitting on a surface */}
+              {/* Reflection — phone casts a subtle reflection below */}
               <div
-                className="relative w-[280px] sm:w-[320px] lg:w-[340px] mx-auto mt-1 overflow-hidden pointer-events-none"
-                style={{ height: '40px' }}
+                className="relative w-[300px] sm:w-[340px] lg:w-[380px] mx-auto mt-1 overflow-hidden pointer-events-none"
+                style={{ height: '45px' }}
               >
                 <div
-                  className="w-full rounded-[2rem] overflow-hidden opacity-[0.06] blur-[2px]"
+                  className="w-full rounded-[2rem] overflow-hidden opacity-[0.05] blur-[2px]"
                   style={{ backgroundColor: '#1C1C1C', aspectRatio: '9/18', transform: 'scaleY(-1)', maskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 80%)', WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 80%)' }}
                 />
               </div>
 
-              {/* Featured info — editorial caption, offset to the left */}
-              <div className="mt-2 lg:text-left">
+              {/* Warm surface glow */}
+              <div
+                className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[140%] h-8 pointer-events-none"
+                style={{
+                  background: 'radial-gradient(ellipse at center, rgba(198,167,105,0.04) 0%, transparent 60%)',
+                }}
+              />
+
+              {/* Featured info — editorial caption */}
+              <div className="mt-3 lg:text-left">
                 <h3 className="font-serif text-xl text-[#1C1C1C] font-semibold group-hover:text-[#C6A769] transition-colors duration-300">
                   {featured.name}
                 </h3>
-                <span className="text-[10px] tracking-[0.1em] uppercase text-[#C6A769]/60">{featured.tier}</span>
+                <span className="text-[10px] tracking-[0.1em] uppercase text-[#C6A769]/50">{featured.tier}</span>
               </div>
             </div>
           </motion.div>
 
-          {/* Secondary — smaller cascade, offset vertically */}
-          <div className="flex flex-col items-center lg:items-start gap-5 lg:pt-12">
+          {/* Secondary — smaller cascade, offset vertically for asymmetric composition */}
+          <div className="flex flex-col items-center lg:items-start gap-4 lg:pt-16 lg:gap-5">
             {secondary.slice(0, 2).map((template, index) => (
               <motion.div
                 key={template.id}
@@ -190,7 +204,7 @@ export default function HotTemplate() {
                 className="group cursor-pointer"
               >
                 <div
-                  className="relative w-[140px] sm:w-[160px] rounded-[2rem] p-1.5 transition-shadow duration-700 group-hover:shadow-[0_10px_32px_rgba(28,28,28,0.1)]"
+                  className="relative w-[120px] sm:w-[140px] rounded-[2rem] p-1.5 transition-shadow duration-700 group-hover:shadow-[0_10px_32px_rgba(28,28,28,0.1)]"
                   style={{ backgroundColor: '#1C1C1C', aspectRatio: '9/18' }}
                 >
                   <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent z-30 rounded-t-[2rem]" />
@@ -202,7 +216,7 @@ export default function HotTemplate() {
                       alt={template.name}
                       fill
                       className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
-                      sizes="160px"
+                      sizes="140px"
                     />
                     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10">
                       <div
@@ -218,7 +232,7 @@ export default function HotTemplate() {
                   </div>
                 </div>
                 <div className="mt-2">
-                  <h3 className="font-serif text-[13px] text-[#1C1C1C] font-semibold group-hover:text-[#C6A769] transition-colors duration-300">
+                  <h3 className="font-serif text-[12px] text-[#1C1C1C]/70 font-semibold group-hover:text-[#C6A769] transition-colors duration-300">
                     {template.name}
                   </h3>
                 </div>
@@ -227,7 +241,7 @@ export default function HotTemplate() {
           </div>
         </motion.div>
 
-        {/* Remaining secondary — horizontal slide for mobile, hidden on desktop (shown in cascade above) */}
+        {/* Remaining secondary — horizontal slide for mobile */}
         <div
           className="lg:hidden relative"
           onMouseEnter={() => setIsHovered(true)}
@@ -244,7 +258,7 @@ export default function HotTemplate() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-30px' }}
                 transition={{ duration: 0.7, delay: 0.15 + index * 0.08, ease: slowEase }}
-                className="flex-shrink-0 w-[130px] snap-start group cursor-pointer"
+                className="flex-shrink-0 w-[120px] snap-start group cursor-pointer"
               >
                 <div
                   className="relative rounded-[2rem] p-1.5 transition-shadow duration-700 group-hover:shadow-[0_10px_32px_rgba(28,28,28,0.1)]"
@@ -259,7 +273,7 @@ export default function HotTemplate() {
                       alt={template.name}
                       fill
                       className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
-                      sizes="130px"
+                      sizes="120px"
                     />
                     <div className="absolute top-[8%] left-[5%] z-10">
                       <span className="px-1.5 py-0.5 rounded-full text-[5px] tracking-[0.1em] uppercase text-[#6B6B6B] bg-white/60 backdrop-blur-sm">
@@ -269,7 +283,7 @@ export default function HotTemplate() {
                   </div>
                 </div>
                 <div className="mt-2">
-                  <h3 className="font-serif text-[12px] text-[#1C1C1C] font-semibold group-hover:text-[#C6A769] transition-colors duration-300 truncate">
+                  <h3 className="font-serif text-[11px] text-[#1C1C1C]/70 font-semibold group-hover:text-[#C6A769] transition-colors duration-300 truncate">
                     {template.name}
                   </h3>
                 </div>
@@ -304,7 +318,7 @@ export default function HotTemplate() {
             <svg className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path d="M5 12h14m-7-7 7 7-7 7" /></svg>
           </a>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }

@@ -26,6 +26,11 @@ export default function SignatureShowcase() {
 
   return (
     <section ref={sectionRef} id="signature" className="nauka-atmosphere nauka-grain nauka-paper nauka-ink relative py-16 sm:py-20 bg-[#F6F2EE] overflow-hidden">
+      {/* Top blend — smooth transition from cream section above */}
+      <div
+        className="absolute top-0 left-0 right-0 h-16 pointer-events-none z-[2]"
+        style={{ background: 'linear-gradient(180deg, rgba(246,242,238,1) 0%, rgba(246,242,238,0) 100%)' }}
+      />
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
           {/* Text Content */}
@@ -133,7 +138,6 @@ export default function SignatureShowcase() {
                   background: 'radial-gradient(ellipse at center, rgba(198,167,105,0.05) 0%, transparent 60%)',
                 }}
               />
-              </div>
 
               {/* Signature badge — subtle, premium */}
               <div className="absolute -top-2 -right-2 bg-[#1C1C1C] text-[#C6A769] text-[8px] font-semibold tracking-[0.2em] uppercase px-3 py-1.5 rounded-full shadow-[0_4px_12px_rgba(28,28,28,0.15)]">

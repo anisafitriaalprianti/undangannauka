@@ -10,6 +10,7 @@ export default function Hero() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [showContent, setShowContent] = useState(false);
   const [showWhisper, setShowWhisper] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
   const containerRef = useRef<HTMLDivElement>(null);
 
   // PRD: Cinematic parallax — scroll-driven transforms
@@ -31,6 +32,21 @@ export default function Hero() {
     const t3 = setTimeout(() => setShowWhisper(true), 2200);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, []);
+
+  // Mouse tracking for subtle 3D tilt — makes mockup feel alive, present in space
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
+      setMousePos({ x, y });
+    };
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Subtle tilt values — very gentle, almost imperceptible
+  const tiltX = (mousePos.y - 0.5) * 4; // max 2deg
+  const tiltY = (mousePos.x - 0.5) * -4; // max 2deg
 
   return (
     <section
@@ -167,7 +183,7 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Phone Mockup — cinematic parallax on scroll + gentle float */}
+          {/* Phone Mockup — cinematic parallax + 3D tilt + gentle float */}
           <motion.div
             style={{ y: mockupY, scale: mockupScale }}
             initial={{ opacity: 0, y: 40, scale: 0.95 }}
@@ -188,133 +204,174 @@ export default function Hero() {
 
             {/* Gentle float animation wrapper */}
             <div style={{ animation: 'naukaGentleFloat 6s ease-in-out infinite' }}>
-              {/* Table surface — warm wood tone beneath the phone, like it's sitting on a real surface */}
-              <div className="relative">
-                {/* Phone frame */}
+              {/* 3D perspective wrapper — subtle tilt follows mouse */}
+              <div
+                style={{
+                  perspective: '1200px',
+                  transformStyle: 'preserve-3d',
+                }}
+              >
                 <div
-                  className="relative w-[260px] sm:w-[280px] rounded-[2.5rem] p-2 nauka-shadow-premium ring-1 ring-white/40"
-                  style={{ backgroundColor: '#1C1C1C', aspectRatio: '9/18' }}
+                  style={{
+                    transform: `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`,
+                    transition: 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                  }}
                 >
-                  {/* PRD: Lighting on mockup — subtle top edge highlight */}
-                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent z-30 rounded-t-[2.5rem]" />
+                  {/* Table surface — warm wood tone beneath the phone */}
+                  <div className="relative">
+                    {/* Phone frame */}
+                    <div
+                      className="relative w-[260px] sm:w-[280px] rounded-[2.5rem] p-2 nauka-shadow-premium ring-1 ring-white/40"
+                      style={{ backgroundColor: '#1C1C1C', aspectRatio: '9/18' }}
+                    >
+                      {/* PRD: Lighting on mockup — subtle top edge highlight */}
+                      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent z-30 rounded-t-[2.5rem]" />
 
-                  {/* Light reflection that moves slowly across the phone surface */}
+                      {/* Glass reflection — primary slow sweep */}
+                      <div
+                        className="absolute inset-0 rounded-[2.5rem] z-20 pointer-events-none overflow-hidden"
+                        style={{ animation: 'naukaReflectionShift 8s ease-in-out infinite' }}
+                      >
+                        <div
+                          className="absolute -inset-full"
+                          style={{
+                            background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.03) 45%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 55%, transparent 60%)',
+                          }}
+                        />
+                      </div>
+
+                      {/* Glass reflection — secondary ambient shimmer, slower, softer */}
+                      <div
+                        className="absolute inset-0 rounded-[2.5rem] z-20 pointer-events-none overflow-hidden"
+                        style={{ animation: 'naukaAmbientShimmer 14s ease-in-out infinite' }}
+                      >
+                        <div
+                          className="absolute -inset-full"
+                          style={{
+                            background: 'linear-gradient(155deg, transparent 45%, rgba(255,255,255,0.02) 50%, transparent 55%)',
+                          }}
+                        />
+                      </div>
+
+                      {/* Ambient light shift — subtle warm patch that moves across surface */}
+                      <div
+                        className="absolute inset-0 rounded-[2.5rem] z-20 pointer-events-none overflow-hidden"
+                        style={{ animation: 'naukaAmbientShift 18s ease-in-out infinite' }}
+                      >
+                        <div
+                          className="absolute inset-0"
+                          style={{
+                            background: 'radial-gradient(ellipse at 30% 20%, rgba(198,167,105,0.04) 0%, transparent 50%)',
+                          }}
+                        />
+                      </div>
+
+                      {/* Notch */}
+                      <div
+                        className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 rounded-b-2xl z-20"
+                        style={{ backgroundColor: '#1C1C1C' }}
+                      />
+
+                    {/* Screen */}
+                    <div
+                      className="relative w-full h-full rounded-[2rem] overflow-hidden"
+                      style={{ backgroundColor: '#F6F2EE' }}
+                    >
+                      {/* Mini invitation content — scrolling */}
+                      <div
+                        className="animate-[phoneScroll_8s_ease-in-out_infinite]"
+                        style={{ animationDuration: '10s' }}
+                      >
+                        {/* Hero photo area — emotional */}
+                        <div
+                          className="w-full relative overflow-hidden"
+                          style={{ height: '35%', background: 'linear-gradient(135deg, #C6A769 0%, #8A7444 40%, #D4BA82 70%, #E8D5A8 100%)' }}
+                        >
+                          {/* Warm light leak from top */}
+                          <div
+                            className="absolute inset-0"
+                            style={{
+                              background: 'linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 40%)',
+                              animation: 'naukaBreathLight 5s ease-in-out infinite',
+                            }}
+                          />
+                          {/* Bismillah / opening */}
+                          <div className="absolute inset-0 flex flex-col items-center justify-center">
+                            <span className="text-white/50" style={{ fontSize: 'clamp(3px, 1.8vw, 5px)', letterSpacing: '0.3em' }}>
+                              بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
+                            </span>
+                          </div>
+                          <div className="absolute inset-0 bg-gradient-to-b from-white/8 to-transparent" />
+                        </div>
+
+                        {/* Greeting */}
+                        <div className="px-[8%] pt-[6%] text-center">
+                          <p className="text-[#C6A769]" style={{ fontSize: 'clamp(3px, 1.8vw, 5px)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
+                            The Wedding Of
+                          </p>
+                          <div className="my-[2%] mx-auto" style={{ width: '12%', height: '1px', background: 'linear-gradient(to right, transparent, #C6A769, transparent)' }} />
+                          <p style={{ fontSize: 'clamp(10px, 6vw, 17px)', fontFamily: 'var(--font-playfair)', color: '#1C1C1C', fontStyle: 'italic', lineHeight: '1.2' }}>
+                            Arka & Dyana
+                          </p>
+                          <div className="my-[2%] mx-auto" style={{ width: '12%', height: '1px', background: 'linear-gradient(to right, transparent, #C6A769, transparent)' }} />
+                          <p className="text-[#6B6B6B]" style={{ fontSize: 'clamp(3px, 1.8vw, 5px)', letterSpacing: '0.12em' }}>
+                            28 Desember 2025
+                          </p>
+                        </div>
+
+                        {/* Couple avatars */}
+                        <div className="flex items-center justify-center gap-[8%] py-[4%]">
+                          <div className="rounded-full flex items-center justify-center text-white ring-2 ring-white/30" style={{ width: 'clamp(16px, 10vw, 22px)', height: 'clamp(16px, 10vw, 22px)', fontSize: 'clamp(4px, 2.5vw, 7px)', fontFamily: 'var(--font-playfair)', fontStyle: 'italic', backgroundColor: '#C6A769' }}>A</div>
+                          <span className="text-[#C6A769]" style={{ fontSize: 'clamp(4px, 2vw, 6px)' }}>&amp;</span>
+                          <div className="rounded-full flex items-center justify-center text-white ring-2 ring-white/30" style={{ width: 'clamp(16px, 10vw, 22px)', height: 'clamp(16px, 10vw, 22px)', fontSize: 'clamp(4px, 2.5vw, 7px)', fontFamily: 'var(--font-playfair)', fontStyle: 'italic', backgroundColor: '#8A7444' }}>D</div>
+                        </div>
+
+                        {/* Event card */}
+                        <div className="mx-[6%] p-[4%] rounded-lg" style={{ backgroundColor: 'white', boxShadow: '0 1px 4px rgba(28,28,28,0.04)' }}>
+                          <p className="text-[#C6A769]" style={{ fontSize: 'clamp(3px, 1.6vw, 5px)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '2%' }}>Resepsi</p>
+                          <p style={{ fontSize: 'clamp(4px, 2.5vw, 7px)', color: '#1C1C1C', fontWeight: 600, marginBottom: '1%' }}>Minggu, 28 Des 2025</p>
+                          <p className="text-[#6B6B6B]" style={{ fontSize: 'clamp(3px, 2vw, 6px)' }}>10:00 - 14:00 WIB</p>
+                          <div className="mx-auto mt-[3%]" style={{ width: '20%', height: '1px', background: '#C6A769' }} />
+                          <p className="text-[#6B6B6B]" style={{ fontSize: 'clamp(3px, 2vw, 6px)', marginTop: '2%', fontStyle: 'italic' }}>Graha Sabha, Jakarta Selatan</p>
+                        </div>
+
+                        {/* RSVP button */}
+                        <div className="px-[6%] pt-[4%] pb-[5%] text-center">
+                          <div className="inline-block px-[15%] py-[3%] rounded-full text-white" style={{ fontSize: 'clamp(3px, 2vw, 6px)', letterSpacing: '0.15em', backgroundColor: '#C6A769' }}>Konfirmasi Kehadiran</div>
+                        </div>
+
+                        {/* Warm closing line */}
+                        <div className="px-[6%] pb-[8%] text-center">
+                          <div className="mx-auto mb-[2%]" style={{ width: '15%', height: '1px', background: 'linear-gradient(to right, transparent, #C6A769, transparent)' }} />
+                          <p className="text-[#999]" style={{ fontSize: 'clamp(2px, 1.4vw, 4px)', letterSpacing: '0.15em', fontStyle: 'italic' }}>Merupakan suatu kehormatan bagi kami</p>
+                        </div>
+
+                        {/* Extra space for scroll */}
+                        <div style={{ height: '30%' }} />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Reflection — phone casts a soft reflection below, like sitting on a polished surface */}
                   <div
-                    className="absolute inset-0 rounded-[2.5rem] z-20 pointer-events-none overflow-hidden"
-                    style={{ animation: 'naukaReflectionShift 8s ease-in-out infinite' }}
+                    className="relative w-[260px] sm:w-[280px] mx-auto mt-1 overflow-hidden pointer-events-none"
+                    style={{ height: '50px' }}
                   >
                     <div
-                      className="absolute -inset-full"
-                      style={{
-                        background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.03) 45%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 55%, transparent 60%)',
-                      }}
+                      className="w-full rounded-[2.5rem] overflow-hidden opacity-[0.04] blur-[3px]"
+                      style={{ backgroundColor: '#1C1C1C', aspectRatio: '9/18', transform: 'scaleY(-1)', maskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 70%)', WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 70%)' }}
                     />
                   </div>
 
-                  {/* Notch */}
+                  {/* Warm surface light — like light hitting a wooden table */}
                   <div
-                    className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 rounded-b-2xl z-20"
-                    style={{ backgroundColor: '#1C1C1C' }}
+                    className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[140%] h-8 pointer-events-none"
+                    style={{
+                      background: 'radial-gradient(ellipse at center, rgba(198,167,105,0.04) 0%, transparent 60%)',
+                    }}
                   />
-
-                {/* Screen */}
-                <div
-                  className="relative w-full h-full rounded-[2rem] overflow-hidden"
-                  style={{ backgroundColor: '#F6F2EE' }}
-                >
-                  {/* Mini invitation content — scrolling */}
-                  <div
-                    className="animate-[phoneScroll_8s_ease-in-out_infinite]"
-                    style={{ animationDuration: '10s' }}
-                  >
-                    {/* Hero photo area — emotional */}
-                    <div
-                      className="w-full relative overflow-hidden"
-                      style={{ height: '35%', background: 'linear-gradient(135deg, #C6A769 0%, #8A7444 40%, #D4BA82 70%, #E8D5A8 100%)' }}
-                    >
-                      {/* Warm light leak from top */}
-                      <div
-                        className="absolute inset-0"
-                        style={{
-                          background: 'linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 40%)',
-                          animation: 'naukaBreathLight 5s ease-in-out infinite',
-                        }}
-                      />
-                      {/* Bismillah / opening */}
-                      <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <span className="text-white/50" style={{ fontSize: 'clamp(3px, 1.8vw, 5px)', letterSpacing: '0.3em' }}>
-                          بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
-                        </span>
-                      </div>
-                      <div className="absolute inset-0 bg-gradient-to-b from-white/8 to-transparent" />
-                    </div>
-
-                    {/* Greeting */}
-                    <div className="px-[8%] pt-[6%] text-center">
-                      <p className="text-[#C6A769]" style={{ fontSize: 'clamp(3px, 1.8vw, 5px)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
-                        The Wedding Of
-                      </p>
-                      <div className="my-[2%] mx-auto" style={{ width: '12%', height: '1px', background: 'linear-gradient(to right, transparent, #C6A769, transparent)' }} />
-                      <p style={{ fontSize: 'clamp(10px, 6vw, 17px)', fontFamily: 'var(--font-playfair)', color: '#1C1C1C', fontStyle: 'italic', lineHeight: '1.2' }}>
-                        Arka & Dyana
-                      </p>
-                      <div className="my-[2%] mx-auto" style={{ width: '12%', height: '1px', background: 'linear-gradient(to right, transparent, #C6A769, transparent)' }} />
-                      <p className="text-[#6B6B6B]" style={{ fontSize: 'clamp(3px, 1.8vw, 5px)', letterSpacing: '0.12em' }}>
-                        28 Desember 2025
-                      </p>
-                    </div>
-
-                    {/* Couple avatars */}
-                    <div className="flex items-center justify-center gap-[8%] py-[4%]">
-                      <div className="rounded-full flex items-center justify-center text-white ring-2 ring-white/30" style={{ width: 'clamp(16px, 10vw, 22px)', height: 'clamp(16px, 10vw, 22px)', fontSize: 'clamp(4px, 2.5vw, 7px)', fontFamily: 'var(--font-playfair)', fontStyle: 'italic', backgroundColor: '#C6A769' }}>A</div>
-                      <span className="text-[#C6A769]" style={{ fontSize: 'clamp(4px, 2vw, 6px)' }}>&amp;</span>
-                      <div className="rounded-full flex items-center justify-center text-white ring-2 ring-white/30" style={{ width: 'clamp(16px, 10vw, 22px)', height: 'clamp(16px, 10vw, 22px)', fontSize: 'clamp(4px, 2.5vw, 7px)', fontFamily: 'var(--font-playfair)', fontStyle: 'italic', backgroundColor: '#8A7444' }}>D</div>
-                    </div>
-
-                    {/* Event card */}
-                    <div className="mx-[6%] p-[4%] rounded-lg" style={{ backgroundColor: 'white', boxShadow: '0 1px 4px rgba(28,28,28,0.04)' }}>
-                      <p className="text-[#C6A769]" style={{ fontSize: 'clamp(3px, 1.6vw, 5px)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '2%' }}>Resepsi</p>
-                      <p style={{ fontSize: 'clamp(4px, 2.5vw, 7px)', color: '#1C1C1C', fontWeight: 600, marginBottom: '1%' }}>Minggu, 28 Des 2025</p>
-                      <p className="text-[#6B6B6B]" style={{ fontSize: 'clamp(3px, 2vw, 6px)' }}>10:00 - 14:00 WIB</p>
-                      <div className="mx-auto mt-[3%]" style={{ width: '20%', height: '1px', background: '#C6A769' }} />
-                      <p className="text-[#6B6B6B]" style={{ fontSize: 'clamp(3px, 2vw, 6px)', marginTop: '2%', fontStyle: 'italic' }}>Graha Sabha, Jakarta Selatan</p>
-                    </div>
-
-                    {/* RSVP button */}
-                    <div className="px-[6%] pt-[4%] pb-[5%] text-center">
-                      <div className="inline-block px-[15%] py-[3%] rounded-full text-white" style={{ fontSize: 'clamp(3px, 2vw, 6px)', letterSpacing: '0.15em', backgroundColor: '#C6A769' }}>Konfirmasi Kehadiran</div>
-                    </div>
-
-                    {/* Warm closing line */}
-                    <div className="px-[6%] pb-[8%] text-center">
-                      <div className="mx-auto mb-[2%]" style={{ width: '15%', height: '1px', background: 'linear-gradient(to right, transparent, #C6A769, transparent)' }} />
-                      <p className="text-[#999]" style={{ fontSize: 'clamp(2px, 1.4vw, 4px)', letterSpacing: '0.15em', fontStyle: 'italic' }}>Merupakan suatu kehormatan bagi kami</p>
-                    </div>
-
-                    {/* Extra space for scroll */}
-                    <div style={{ height: '30%' }} />
                   </div>
                 </div>
-              </div>
-
-              {/* Reflection — phone casts a soft reflection below, like sitting on a polished surface */}
-              <div
-                className="relative w-[260px] sm:w-[280px] mx-auto mt-1 overflow-hidden pointer-events-none"
-                style={{ height: '50px' }}
-              >
-                <div
-                  className="w-full rounded-[2.5rem] overflow-hidden opacity-[0.04] blur-[3px]"
-                  style={{ backgroundColor: '#1C1C1C', aspectRatio: '9/18', transform: 'scaleY(-1)', maskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 70%)', WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 70%)' }}
-                />
-              </div>
-
-              {/* Warm surface light — like light hitting a wooden table */}
-              <div
-                className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[140%] h-8 pointer-events-none"
-                style={{
-                  background: 'radial-gradient(ellipse at center, rgba(198,167,105,0.04) 0%, transparent 60%)',
-                }}
-              />
               </div>
             </div>
 
