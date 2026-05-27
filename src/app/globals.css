@@ -53,7 +53,6 @@
   --color-nauka-gold-dim: #8A7444;
   --color-nauka-surface: #FFFFFF;
   --color-nauka-border: rgba(0, 0, 0, 0.06);
-  --color-nauka-glow: rgba(198, 167, 105, 0.06);
 }
 
 :root {
@@ -127,7 +126,8 @@
 
 /* ============================================================
    NAUKA KEYFRAME ANIMATIONS
-   Modern, clean motion — cinematic but not heavy
+   PRD: Motion harus smooth, tidak mengganggu membaca
+   Cinematic pacing — tidak terlalu cepat, tidak terlalu lambat
    ============================================================ */
 
 @keyframes fadeInUp {
@@ -175,14 +175,39 @@
   to { opacity: 1; }
 }
 
-@keyframes slideInRight {
-  from {
+/* PRD: Opening Nauka — cahaya lilin tipis muncul, lalu reveal */
+@keyframes naukaLightReveal {
+  0% {
     opacity: 0;
-    transform: translateX(20px);
+    filter: blur(8px);
   }
-  to {
+  30% {
     opacity: 1;
-    transform: translateX(0);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+/* PRD: Proper Pacing — gentle breathing pulse for light accents */
+@keyframes naukaBreathLight {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* PRD: Lighting must be felt — directional warm spotlight */
+@keyframes naukaSpotlightShift {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(5px, 3px);
   }
 }
 
@@ -233,8 +258,72 @@ body {
 }
 
 /* ============================================================
+   NAUKA CINEMATIC LIGHTING SYSTEM
+   PRD: Lighting harus terasa hadir, memiliki arah,
+   membantu mood dan focus, bukan glow random
+   ============================================================ */
+
+/* Directional warm light — top-left source, like window light */
+.nauka-light-warm {
+  position: relative;
+}
+.nauka-light-warm::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: -10%;
+  width: 70%;
+  height: 60%;
+  background: radial-gradient(ellipse at center, rgba(198, 167, 105, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  animation: naukaSpotlightShift 12s ease-in-out infinite;
+}
+
+/* Cinematic atmosphere — subtle ambient warmth that supports content */
+.nauka-atmosphere {
+  position: relative;
+}
+.nauka-atmosphere::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 20%, rgba(198, 167, 105, 0.03) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 70%, rgba(198, 167, 105, 0.02) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Premium depth shadow — PRD: shadow lebih proper, depth terasa */
+.nauka-shadow-premium {
+  box-shadow:
+    0 1px 2px rgba(28, 28, 28, 0.04),
+    0 4px 8px rgba(28, 28, 28, 0.04),
+    0 12px 24px rgba(28, 28, 28, 0.06),
+    0 24px 48px rgba(28, 28, 28, 0.04);
+}
+
+/* Signature depth — deeper, more dramatic for premium feel */
+.nauka-shadow-signature {
+  box-shadow:
+    0 2px 4px rgba(28, 28, 28, 0.06),
+    0 8px 16px rgba(28, 28, 28, 0.06),
+    0 20px 40px rgba(28, 28, 28, 0.08),
+    0 40px 80px rgba(28, 28, 28, 0.06);
+}
+
+/* PRD: Mockup supports the work — mockup glow should be subtle */
+.nauka-mockup-glow {
+  box-shadow:
+    0 0 80px rgba(198, 167, 105, 0.12),
+    0 0 160px rgba(198, 167, 105, 0.06);
+}
+
+/* ============================================================
    NAUKA GRADIENT DIVIDERS
-   Elegant section transitions — no heavy effects
+   PRD: Background must support content, bukan merebut fokus
    ============================================================ */
 
 .nauka-divider {

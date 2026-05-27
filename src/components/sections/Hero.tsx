@@ -1,34 +1,100 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
 
 const slowEase = [0.16, 1, 0.3, 1];
+const cinematicEase = [0.25, 0.46, 0.45, 0.94];
 
 export default function Hero() {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showContent, setShowContent] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  // PRD: Cinematic parallax — scroll-driven transforms
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end start'],
+  });
+
+  const mockupY = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  const mockupScale = useTransform(scrollYProgress, [0, 1], [1, 0.94]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, 30]);
+  const textOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
+  const spotlightIntensity = useTransform(scrollYProgress, [0, 0.3], [1, 0.4]);
+
+  // PRD: Opening Nauka — light reveal sequence
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 100);
-    return () => clearTimeout(timer);
+    const t1 = setTimeout(() => setIsLoaded(true), 200);
+    const t2 = setTimeout(() => setShowContent(true), 600);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center bg-[#F6F2EE] overflow-hidden pt-20 pb-16">
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 w-full">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+    <section
+      ref={containerRef}
+      className="nauka-light-warm relative min-h-screen flex items-center bg-[#F6F2EE] overflow-hidden pt-20 pb-16"
+    >
+      {/* PRD: Lighting must be felt — directional warm spotlight from top-left */}
+      <motion.div
+        style={{ opacity: spotlightIntensity }}
+        className="absolute top-0 left-0 w-[60%] h-[50%] pointer-events-none"
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(ellipse at 30% 30%, rgba(198,167,105,0.08) 0%, transparent 60%)',
+            animation: 'naukaSpotlightShift 12s ease-in-out infinite',
+          }}
+        />
+      </motion.div>
+
+      {/* PRD: Background must support content — subtle warm ambient */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute bottom-0 right-0 w-[40%] h-[40%]"
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(198,167,105,0.03) 0%, transparent 60%)',
+            animation: 'naukaBreathLight 8s ease-in-out infinite',
+          }}
+        />
+      </div>
+
+      {/* PRD: Opening Signature — light reveal first, then content */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, filter: 'blur(8px)' }}
+        animate={isLoaded ? { opacity: 1, scale: 1, filter: 'blur(0px)' } : {}}
+        transition={{ duration: 1.4, ease: slowEase }}
+        className="absolute inset-0 pointer-events-none"
+      >
+        {/* Center warm light — like a candle flicker that reveals the page */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] opacity-0"
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(198,167,105,0.1) 0%, transparent 60%)',
+            animation: isLoaded ? 'naukaLightReveal 1.8s ease-out forwards' : 'none',
+          }}
+        />
+      </motion.div>
+
+      {/* Content — revealed after light */}
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 w-full">
+        <motion.div
+          style={{ y: textY, opacity: textOpacity }}
+          className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16"
+        >
           {/* Text Content */}
           <motion.div
             initial={{ opacity: 0 }}
-            animate={isLoaded ? { opacity: 1 } : {}}
-            transition={{ duration: 0.6 }}
+            animate={showContent ? { opacity: 1 } : {}}
+            transition={{ duration: 0.8 }}
             className="flex-1 text-center lg:text-left max-w-xl lg:max-w-none"
           >
             {/* Pill badge */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
-              animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.2, ease: slowEase }}
+              animate={showContent ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.1, ease: slowEase }}
               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C6A769]/10 border border-[#C6A769]/20 mb-8"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[#C6A769]" />
@@ -37,12 +103,12 @@ export default function Hero() {
               </span>
             </motion.div>
 
-            {/* Hero Headline */}
+            {/* Hero Headline — staggered line reveal */}
             <div className="overflow-hidden mb-2">
               <motion.h1
                 initial={{ y: 50, opacity: 0 }}
-                animate={isLoaded ? { y: 0, opacity: 1 } : {}}
-                transition={{ duration: 0.9, delay: 0.4, ease: slowEase }}
+                animate={showContent ? { y: 0, opacity: 1 } : {}}
+                transition={{ duration: 1, delay: 0.2, ease: slowEase }}
                 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.08] text-[#1C1C1C]"
               >
                 Undangan Digital
@@ -51,8 +117,8 @@ export default function Hero() {
             <div className="overflow-hidden mb-2">
               <motion.h1
                 initial={{ y: 50, opacity: 0 }}
-                animate={isLoaded ? { y: 0, opacity: 1 } : {}}
-                transition={{ duration: 0.9, delay: 0.55, ease: slowEase }}
+                animate={showContent ? { y: 0, opacity: 1 } : {}}
+                transition={{ duration: 1, delay: 0.35, ease: slowEase }}
                 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.08] text-[#C6A769]"
               >
                 Dengan Rasa
@@ -61,8 +127,8 @@ export default function Hero() {
             <div className="overflow-hidden mb-8">
               <motion.h1
                 initial={{ y: 50, opacity: 0 }}
-                animate={isLoaded ? { y: 0, opacity: 1 } : {}}
-                transition={{ duration: 0.9, delay: 0.7, ease: slowEase }}
+                animate={showContent ? { y: 0, opacity: 1 } : {}}
+                transition={{ duration: 1, delay: 0.5, ease: slowEase }}
                 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.08] text-[#1C1C1C]"
               >
                 Yang Lebih Hidup
@@ -72,8 +138,8 @@ export default function Hero() {
             {/* Subtitle — short, no manifesto */}
             <motion.p
               initial={{ opacity: 0, y: 16 }}
-              animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, delay: 0.9, ease: slowEase }}
+              animate={showContent ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7, delay: 0.7, ease: cinematicEase }}
               className="text-[15px] sm:text-base text-[#6B6B6B] leading-[1.7] mb-10 max-w-md mx-auto lg:mx-0"
             >
               Setiap undangan dirancang dengan feel, taste, dan cinematic clarity. Bukan template biasa.
@@ -82,8 +148,8 @@ export default function Hero() {
             {/* CTA Buttons — pill shaped */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
-              animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, delay: 1.1, ease: slowEase }}
+              animate={showContent ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7, delay: 0.9, ease: cinematicEase }}
               className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start mb-10"
             >
               <a
@@ -93,10 +159,7 @@ export default function Hero() {
                 <span className="relative z-10">Lihat Template</span>
                 <svg
                   className="w-4 h-4 relative z-10 group-hover:translate-x-0.5 transition-transform duration-300"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"
                 >
                   <path d="M5 12h14m-7-7 7 7-7 7" />
                 </svg>
@@ -112,8 +175,8 @@ export default function Hero() {
             {/* Trust badges — social proof */}
             <motion.div
               initial={{ opacity: 0 }}
-              animate={isLoaded ? { opacity: 1 } : {}}
-              transition={{ duration: 0.7, delay: 1.4 }}
+              animate={showContent ? { opacity: 1 } : {}}
+              transition={{ duration: 0.7, delay: 1.2 }}
               className="flex items-center gap-6 justify-center lg:justify-start"
             >
               <div className="flex -space-x-1.5">
@@ -143,26 +206,33 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Phone Mockup — coded, not image */}
+          {/* Phone Mockup — cinematic parallax on scroll */}
           <motion.div
+            style={{ y: mockupY, scale: mockupScale }}
             initial={{ opacity: 0, y: 40, scale: 0.95 }}
-            animate={isLoaded ? { opacity: 1, y: 0, scale: 1 } : {}}
-            transition={{ duration: 1.2, delay: 0.6, ease: slowEase }}
+            animate={showContent ? { opacity: 1, y: 0, scale: 1 } : {}}
+            transition={{ duration: 1.3, delay: 0.3, ease: slowEase }}
             className="flex-shrink-0 relative"
           >
-            {/* Glow behind phone */}
-            <div
-              className="absolute -inset-8 blur-3xl opacity-40 pointer-events-none"
-              style={{
-                background: 'radial-gradient(ellipse at center, rgba(198,167,105,0.25) 0%, transparent 70%)',
-              }}
-            />
+            {/* PRD: Lighting with direction — warm glow behind phone, from top-left */}
+            <div className="absolute -inset-10 pointer-events-none">
+              <div
+                className="absolute -top-4 -left-4 w-[120%] h-[80%]"
+                style={{
+                  background: 'radial-gradient(ellipse at 30% 30%, rgba(198,167,105,0.15) 0%, transparent 60%)',
+                  animation: 'naukaBreathLight 6s ease-in-out infinite',
+                }}
+              />
+            </div>
 
             {/* Phone frame */}
             <div
-              className="relative w-[260px] sm:w-[280px] rounded-[2.5rem] p-2 shadow-[0_25px_50px_-12px_rgba(28,28,28,0.2)] ring-1 ring-white/40"
+              className="relative w-[260px] sm:w-[280px] rounded-[2.5rem] p-2 nauka-shadow-premium ring-1 ring-white/40"
               style={{ backgroundColor: '#1C1C1C', aspectRatio: '9/18' }}
             >
+              {/* PRD: Lighting on mockup — subtle top edge highlight */}
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent z-30 rounded-t-[2.5rem]" />
+
               {/* Notch */}
               <div
                 className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 rounded-b-2xl z-20"
@@ -189,6 +259,8 @@ export default function Hero() {
                     <div className="absolute inset-0 flex items-center justify-center">
                       <span className="text-white/20 text-4xl font-serif">N</span>
                     </div>
+                    {/* PRD: Lighting felt — subtle gradient from top like window light */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent" />
                   </div>
 
                   {/* Greeting */}
@@ -206,45 +278,22 @@ export default function Hero() {
 
                   {/* Couple avatars */}
                   <div className="flex items-center justify-center gap-3 py-3">
-                    <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center text-white"
-                      style={{ fontSize: '6px', backgroundColor: '#C6A769' }}
-                    >
-                      A
-                    </div>
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-white" style={{ fontSize: '6px', backgroundColor: '#C6A769' }}>A</div>
                     <span style={{ fontSize: '8px', color: '#C6A769' }}>&</span>
-                    <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center text-white"
-                      style={{ fontSize: '6px', backgroundColor: '#8A7444' }}
-                    >
-                      D
-                    </div>
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-white" style={{ fontSize: '6px', backgroundColor: '#8A7444' }}>D</div>
                   </div>
 
                   {/* Event card */}
                   <div className="mx-4 p-3 rounded-lg" style={{ backgroundColor: 'white' }}>
-                    <p style={{ fontSize: '5px', color: '#C6A769', letterSpacing: '0.15em', textTransform: 'uppercase' as const, marginBottom: '3px' }}>
-                      Resepsi
-                    </p>
-                    <p style={{ fontSize: '7px', color: '#1C1C1C', fontWeight: 600, marginBottom: '1px' }}>
-                      Minggu, 28 Des 2025
-                    </p>
-                    <p style={{ fontSize: '6px', color: '#6B6B6B' }}>
-                      10:00 - 14:00 WIB
-                    </p>
-                    <p style={{ fontSize: '6px', color: '#6B6B6B', marginTop: '2px' }}>
-                      Graha Sabha, Jakarta Selatan
-                    </p>
+                    <p style={{ fontSize: '5px', color: '#C6A769', letterSpacing: '0.15em', textTransform: 'uppercase' as const, marginBottom: '3px' }}>Resepsi</p>
+                    <p style={{ fontSize: '7px', color: '#1C1C1C', fontWeight: 600, marginBottom: '1px' }}>Minggu, 28 Des 2025</p>
+                    <p style={{ fontSize: '6px', color: '#6B6B6B' }}>10:00 - 14:00 WIB</p>
+                    <p style={{ fontSize: '6px', color: '#6B6B6B', marginTop: '2px' }}>Graha Sabha, Jakarta Selatan</p>
                   </div>
 
                   {/* RSVP button */}
                   <div className="px-4 pt-3 pb-6 text-center">
-                    <div
-                      className="inline-block px-6 py-1.5 rounded-full text-white"
-                      style={{ fontSize: '6px', letterSpacing: '0.15em', backgroundColor: '#C6A769' }}
-                    >
-                      RSVP
-                    </div>
+                    <div className="inline-block px-6 py-1.5 rounded-full text-white" style={{ fontSize: '6px', letterSpacing: '0.15em', backgroundColor: '#C6A769' }}>RSVP</div>
                   </div>
 
                   {/* Extra space for scroll */}
@@ -256,8 +305,8 @@ export default function Hero() {
             {/* Floating notification badge */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
-              animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 1.5, ease: slowEase }}
+              animate={showContent ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 1.3, ease: slowEase }}
               className="absolute -right-3 top-16 sm:-right-4 sm:top-20 bg-white rounded-2xl shadow-lg px-3 py-2 flex items-center gap-2 ring-1 ring-black/5"
             >
               <div className="w-6 h-6 rounded-full bg-[#C6A769]/10 flex items-center justify-center">
@@ -271,20 +320,20 @@ export default function Hero() {
               </div>
             </motion.div>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* PRD: Proper Pacing — scroll indicator with breathing rhythm */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={isLoaded ? { opacity: 1 } : {}}
-        transition={{ delay: 2.2, duration: 1 }}
+        animate={showContent ? { opacity: 1 } : {}}
+        transition={{ delay: 2, duration: 1.2 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
         <span className="text-[9px] tracking-[0.4em] uppercase text-[#999]">Scroll</span>
         <motion.div
           animate={{ y: [0, 6, 0], opacity: [0.4, 0.8, 0.4] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
           className="w-[1px] h-8 bg-gradient-to-b from-[#C6A769]/40 to-transparent"
         />
       </motion.div>

@@ -10,17 +10,13 @@ export default function Navbar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) setIsMobileOpen(false);
-    };
+    const handleResize = () => { if (window.innerWidth >= 768) setIsMobileOpen(false); };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -33,13 +29,14 @@ export default function Navbar() {
 
   return (
     <>
+      {/* PRD: Cinematic entrance — navbar fades in from top with blur reveal */}
       <motion.nav
-        initial={{ opacity: 0, y: -12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.1, ease: cinematicEase }}
+        initial={{ opacity: 0, y: -12, filter: 'blur(4px)' }}
+        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+        transition={{ duration: 0.8, delay: 0.3, ease: cinematicEase }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
-            ? 'bg-[#F6F2EE]/80 backdrop-blur-lg border-b border-black/[0.04]'
+            ? 'bg-[#F6F2EE]/80 backdrop-blur-lg border-b border-black/[0.04] shadow-[0_1px_8px_rgba(28,28,28,0.04)]'
             : 'bg-transparent border-b border-transparent'
         }`}
       >

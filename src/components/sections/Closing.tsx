@@ -1,15 +1,26 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 
 const slowEase = [0.16, 1, 0.3, 1];
 const cinematicEase = [0.25, 0.46, 0.45, 0.94];
 
 export default function Closing() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  // PRD: Emotional closing — subtle fade-in as you scroll to it
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end end'],
+  });
+  const closingOpacity = useTransform(scrollYProgress, [0, 0.5], [0.6, 1]);
+
   return (
-    <section className="relative py-16 sm:py-20 bg-white overflow-hidden">
+    <section ref={sectionRef} className="nauka-light-warm relative py-16 sm:py-20 bg-white overflow-hidden">
       <div className="relative max-w-2xl mx-auto px-4 sm:px-6 text-center">
         <motion.div
+          style={{ opacity: closingOpacity }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
@@ -24,9 +35,7 @@ export default function Closing() {
             className="flex items-center justify-center gap-3 mb-8"
           >
             <div className="h-px w-8 bg-gradient-to-r from-transparent to-[#C6A769]/25" />
-            <span className="text-[10px] tracking-[0.4em] uppercase text-[#C6A769] font-sans">
-              Nauka
-            </span>
+            <span className="text-[10px] tracking-[0.4em] uppercase text-[#C6A769] font-sans">Nauka</span>
             <div className="h-px w-8 bg-gradient-to-l from-transparent to-[#C6A769]/25" />
           </motion.div>
 
@@ -66,13 +75,7 @@ export default function Closing() {
               className="group relative inline-flex items-center gap-2 px-10 py-4 rounded-full bg-[#C6A769] text-white text-[12px] font-medium tracking-[0.15em] uppercase hover:bg-[#D4BA82] transition-all duration-400 overflow-hidden"
             >
               <span className="relative z-10">Mulai Sekarang</span>
-              <svg
-                className="w-4 h-4 relative z-10 group-hover:translate-x-0.5 transition-transform duration-300"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
+              <svg className="w-4 h-4 relative z-10 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path d="M5 12h14m-7-7 7 7-7 7" />
               </svg>
             </a>
@@ -93,9 +96,7 @@ export default function Closing() {
             <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#C6A769] to-[#8A7444] flex items-center justify-center">
               <span className="text-white font-serif font-bold text-[8px]">N</span>
             </div>
-            <span className="font-serif text-sm tracking-[0.15em] text-[#999]">
-              NAUKA
-            </span>
+            <span className="font-serif text-sm tracking-[0.15em] text-[#999]">NAUKA</span>
           </div>
           <p className="text-[11px] text-[#999] tracking-wider">
             &copy; 2026 Nauka Studio. Crafted with feel, taste, and soul.

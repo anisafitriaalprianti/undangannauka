@@ -49,9 +49,9 @@ const steps = [
 
 export default function Process() {
   return (
-    <section id="process" className="relative py-16 sm:py-20 bg-[#F6F2EE]">
+    <section id="process" className="nauka-atmosphere relative py-16 sm:py-20 bg-[#F6F2EE]">
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6">
-        {/* Section Header */}
+        {/* Section Header — PRD: Simple. Clear. Tidak overdesign. */}
         <div className="text-center mb-12 sm:mb-16">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
@@ -73,7 +73,7 @@ export default function Process() {
           </motion.h2>
         </div>
 
-        {/* Steps */}
+        {/* Steps — PRD: clarity above all */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {steps.map((step, index) => (
             <motion.div
@@ -93,14 +93,17 @@ export default function Process() {
               )}
 
               {/* Step number + icon */}
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white ring-1 ring-black/5 mb-5 group-hover:ring-[#C6A769]/20 group-hover:shadow-[0_4px_16px_rgba(198,167,105,0.08)] transition-all duration-500 relative">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white ring-1 ring-black/5 mb-5 group-hover:ring-[#C6A769]/20 group-hover:shadow-[0_4px_16px_rgba(198,167,105,0.08)] transition-all duration-500 relative overflow-hidden">
+                {/* PRD: subtle directional light on hover */}
+                <div className="absolute top-0 left-0 w-[50%] h-[40%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                  <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 30% 20%, rgba(198,167,105,0.06) 0%, transparent 60%)' }} />
+                </div>
+
                 <span className="font-mono text-[12px] text-[#C6A769]/40 tracking-[0.15em] group-hover:text-[#C6A769]/60 transition-colors duration-500">
                   {step.number}
                 </span>
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <div className="text-[#C6A769]/40">
-                    {step.icon}
-                  </div>
+                  <div className="text-[#C6A769]/40">{step.icon}</div>
                 </div>
               </div>
 
