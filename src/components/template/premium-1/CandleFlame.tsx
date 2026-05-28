@@ -55,35 +55,38 @@ export default function CinematicCandleLighting({
     const master = masterRef.current;
     const surface = surfaceRef.current;
 
-    // ═══ MASTER FALLOFF BREATH — single organic rhythm ═══
-    // One pulse for the whole scene. Like real candlelight —
-    // everything brightens and dims together, not separately.
-    // Very subtle scale shift: the warm zone breathes slightly,
-    // expanding and contracting like a living thing.
+    // ═══ MASTER FALLOFF BREATH — organic candle flicker ═══
+    // Candlelight flickers VISIBLE — not barely perceptible.
+    // The warm zone expands and contracts noticeably.
+    // Opacity swings wider so you FEEL the candle breathing.
+    // Random-ish keyframes mimic natural flame instability.
     const masterBreath = master?.animate(
       [
-        { opacity: 0.88, transform: 'scale(1)' },
-        { opacity: 1, transform: 'scale(1.008)' },
-        { opacity: 0.82, transform: 'scale(0.996)' },
-        { opacity: 0.95, transform: 'scale(1.004)' },
-        { opacity: 0.88, transform: 'scale(1)' },
+        { opacity: 0.75, transform: 'scale(1)' },
+        { opacity: 1, transform: 'scale(1.03)' },
+        { opacity: 0.65, transform: 'scale(0.97)' },
+        { opacity: 0.9, transform: 'scale(1.015)' },
+        { opacity: 0.7, transform: 'scale(0.985)' },
+        { opacity: 0.95, transform: 'scale(1.02)' },
+        { opacity: 0.75, transform: 'scale(1)' },
       ],
-      { duration: 4500, easing: 'ease-in-out', iterations: Infinity }
+      { duration: 3200, easing: 'ease-in-out', iterations: Infinity }
     );
 
-    // ═══ SURFACE WARMTH BREATH — subtle light on surfaces ═══
-    // The warm highlight that appears on the text area.
-    // Slightly offset rhythm from master — the light hits
-    // surfaces a fraction after the source pulses.
+    // ═══ SURFACE WARMTH BREATH — light hitting surfaces ═══
+    // Surfaces catch light with a slight delay from source.
+    // More visible swing — the warmth on text visibly pulses.
     const surfaceBreath = surface?.animate(
       [
-        { opacity: 0.7 },
-        { opacity: 0.9 },
         { opacity: 0.6 },
+        { opacity: 1 },
+        { opacity: 0.5 },
         { opacity: 0.85 },
-        { opacity: 0.7 },
+        { opacity: 0.55 },
+        { opacity: 0.95 },
+        { opacity: 0.6 },
       ],
-      { duration: 3800, easing: 'ease-in-out', iterations: Infinity }
+      { duration: 3400, easing: 'ease-in-out', iterations: Infinity }
     );
 
     return () => {
@@ -118,17 +121,16 @@ export default function CinematicCandleLighting({
         className="absolute inset-0 pointer-events-none"
         style={{
           background: `radial-gradient(
-            ellipse 60% 55% at 50% 38%,
-            rgba(212, 186, 130, 0.13) 0%,
-            rgba(207, 178, 120, 0.10) 10%,
-            rgba(198, 167, 105, 0.07) 20%,
-            rgba(175, 145, 85, 0.05) 30%,
-            rgba(130, 105, 65, 0.04) 40%,
-            rgba(70, 55, 38, 0.10) 50%,
-            rgba(42, 36, 32, 0.30) 60%,
-            rgba(32, 26, 22, 0.48) 70%,
-            rgba(24, 20, 16, 0.65) 80%,
-            rgba(18, 15, 12, 0.80) 90%,
+            ellipse 38% 40% at 50% 40%,
+            rgba(222, 196, 140, 0.18) 0%,
+            rgba(212, 186, 130, 0.13) 8%,
+            rgba(198, 167, 105, 0.08) 16%,
+            rgba(170, 140, 80, 0.04) 24%,
+            rgba(110, 88, 55, 0.06) 32%,
+            rgba(55, 44, 30, 0.18) 42%,
+            rgba(38, 32, 26, 0.40) 55%,
+            rgba(28, 23, 18, 0.60) 68%,
+            rgba(20, 17, 14, 0.78) 80%,
             rgba(14, 12, 10, 0.90) 100%
           )`,
           opacity: 0.88,
@@ -154,15 +156,16 @@ export default function CinematicCandleLighting({
         className="absolute pointer-events-none"
         style={{
           left: '50%',
-          top: '32%',
-          width: '55%',
-          height: '38%',
+          top: '30%',
+          width: '40%',
+          height: '35%',
           transform: 'translate(-50%, 0)',
           background: `radial-gradient(
-            ellipse 65% 55% at 50% 25%,
-            rgba(212, 186, 130, 0.055) 0%,
-            rgba(207, 178, 120, 0.03) 30%,
-            transparent 65%
+            ellipse 55% 45% at 50% 20%,
+            rgba(222, 196, 140, 0.07) 0%,
+            rgba(212, 186, 130, 0.04) 25%,
+            rgba(198, 167, 105, 0.015) 50%,
+            transparent 70%
           )`,
           opacity: 0.7,
           zIndex: 2,
