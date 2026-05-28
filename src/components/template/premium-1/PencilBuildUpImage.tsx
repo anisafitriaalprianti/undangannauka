@@ -56,6 +56,8 @@ interface PencilBuildUpImageProps {
   sizes?: string;
   maxWidth?: string;
   className?: string;
+  /** Background color for edge blending. Default: ivory */
+  bgColor?: string;
 }
 
 export default function PencilBuildUpImage({
@@ -65,6 +67,7 @@ export default function PencilBuildUpImage({
   sizes = '85vw',
   maxWidth = '520px',
   className = '',
+  bgColor = '#F5F0E8',
 }: PencilBuildUpImageProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-20% 0px -20% 0px' });
@@ -79,22 +82,6 @@ export default function PencilBuildUpImage({
         className="nauka-edge-soft relative overflow-hidden"
         style={{
           aspectRatio,
-          /* ═══ EDGE FEATHERING — image blends into background ═══
-             No hard border, no card shadow, no rounded corners.
-             The mask-image softens all 4 edges so the image
-             fades seamlessly into whatever background is behind it.
-             Like a painting on a wall — you can't see where
-             the paint ends and the wall begins. */
-          WebkitMaskImage: `
-            linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%),
-            linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%)
-          `,
-          maskImage: `
-            linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%),
-            linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%)
-          `,
-          WebkitMaskComposite: 'intersect',
-          maskComposite: 'intersect',
         }}
       >
         {/* ═══════════════════════════════════════════════════════
@@ -311,10 +298,29 @@ export default function PencilBuildUpImage({
         />
 
         {/* ═══════════════════════════════════════════════════════
-            REMOVED: Sketch frame gold border
-            No visible frame — image blends seamlessly
-            into the background without card boundaries.
-            ═══════════════════════════════════════════════════════ */}
+            INVERSE VIGNETTE — edges dissolve to background color
+            ═══════════════════════════════════════════════════════
+            NOT mask-image (makes edges blurry/ghosting).
+            Instead: overlay gradient from bgColor at edges to
+            transparent in center. The image stays full quality,
+            but edges seamlessly transition INTO the background.
+
+            Like oil paint on a wall — the edge colors blend
+            into the wall color. No blur, no ghosting, just
+            color dissolving naturally. */}
+        <div
+          className="pointer-events-none absolute inset-0 z-[9]"
+          style={{
+            background: `radial-gradient(
+              ellipse 92% 88% at 50% 50%,
+              transparent 0%,
+              transparent 78%,
+              ${bgColor}cc 88%,
+              ${bgColor}f0 94%,
+              ${bgColor} 100%
+            )`,
+          }}
+        />
       </div>
     </motion.div>
   );

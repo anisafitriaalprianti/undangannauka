@@ -205,20 +205,6 @@ export default function Gallery() {
                 style={{
                   aspectRatio: '3 / 4',
                   background: item.bg,
-                  /* ═══ EDGE FEATHERING — no card, blend into background ═══
-                     No border, no shadow, no rounded corners.
-                     Soft edge mask makes each image feel like
-                     it's painted directly on the surface. */
-                  WebkitMaskImage: `
-                    linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%),
-                    linear-gradient(to bottom, transparent 0%, black 3%, black 97%, transparent 100%)
-                  `,
-                  maskImage: `
-                    linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%),
-                    linear-gradient(to bottom, transparent 0%, black 3%, black 97%, transparent 100%)
-                  `,
-                  WebkitMaskComposite: 'intersect',
-                  maskComposite: 'intersect',
                 }}
               >
                 {/* Warm surface warmth on hover */}
@@ -260,6 +246,26 @@ export default function Gallery() {
                     backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
                     backgroundSize: '128px 128px',
                     mixBlendMode: 'overlay',
+                  }}
+                  aria-hidden="true"
+                />
+
+                {/* ═══ INVERSE VIGNETTE — edges dissolve to background ═══
+                    Overlay gradient from background color at edges to
+                    transparent in center. Image stays full quality,
+                    edges seamlessly transition INTO the background.
+                    No blur, no ghosting — just color dissolving. */}
+                <div
+                  className="pointer-events-none absolute inset-0 z-[5]"
+                  style={{
+                    background: `radial-gradient(
+                      ellipse 90% 86% at 50% 50%,
+                      transparent 0%,
+                      transparent 76%,
+                      #F5F0E8cc 86%,
+                      #F5F0E8f0 93%,
+                      #F5F0E8 100%
+                    )`,
                   }}
                   aria-hidden="true"
                 />
