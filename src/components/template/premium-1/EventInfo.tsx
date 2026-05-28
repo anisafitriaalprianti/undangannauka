@@ -299,6 +299,7 @@ export default function EventInfo() {
   return (
     <section
       ref={sectionRef}
+      data-section="event-info"
       className="template-p1 nauka-paper nauka-grain nauka-vignette relative w-full overflow-hidden"
       style={{
         background:

@@ -2,29 +2,58 @@
 
 import { motion, useInView, type Variants } from 'framer-motion';
 import { useRef, useEffect } from 'react';
+import CandleFlame from './CandleFlame';
 
 /* ──────────────────────────────────────────────────────────────
    Closing — "Terima kasih telah menungguku dalam ketaatan."
    Premium-1 Islamic Faceless Cinematic Wedding Invitation
 
-   Concept: Warm emotional ending. Returning to the opening's
-   darkness, completing the circle. Intimate, breathing, final.
+   Concept: Warm emotional ending. The last warm light before
+   the credits roll. A candle burns softly — the room darkens
+   around its glow, completing the circle back to the opening.
 
    Composition:
    • Warm dark background (#2A2420) — mirroring Opening
+   • REALISTIC CANDLE FLAME with ambient light + living shadows
    • Closing quote in Playfair Display italic, warm gold
    • Couple names: "Arka & Dyana" below
    • Gold ornamental divider above names
+   • Arabic doa — barely visible whisper
    • "Nauka" brand mark at very bottom, subtle
-   • Subtle candle/warm glow breathing (same as Opening, more subtle)
 
    Animation:
-   • Text fades in with blur dissolve
+   • Candle appears first — flame ignites (scale from 0)
+   • Text fades in with blur dissolve, lit by the candle
    • Gold divider draws from center
-   • Subtle warm glow breathing
+   • Warm glow breathing synced with flame flicker
    ────────────────────────────────────────────────────────────── */
 
 // ── Animation variants ──────────────────────────────────────────
+
+const candleIgnite: Variants = {
+  hidden: {
+    opacity: 0,
+    scale: 0,
+    filter: 'blur(8px)',
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 1.2,
+      ease: [0.16, 1, 0.3, 1],
+      opacity: {
+        duration: 0.8,
+        ease: 'easeOut',
+      },
+      filter: {
+        duration: 1.0,
+        ease: 'easeOut',
+      },
+    },
+  },
+};
 
 const quoteFadeIn: Variants = {
   hidden: {
@@ -115,75 +144,75 @@ export default function Closing() {
     margin: '-10% 0px -10% 0px',
   });
 
-  // PRIORITY 8: Lingering fade — barely perceptible opacity shift after 5s
+  // Lingering fade — barely perceptible opacity shift after 6s
+  // Also dispatch closing-sequence-complete so auto-scroll resumes
   useEffect(() => {
     if (!isInView) return;
-    const timer = setTimeout(() => {
+
+    // Dispatch closing-sequence-complete after animations finish
+    // This tells auto-scroll to resume (cinematic lock released)
+    const completeTimer = setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('closing-sequence-complete'));
+    }, 5000);
+
+    const fadeTimer = setTimeout(() => {
       const el = document.getElementById('closing-content');
       if (el) {
         el.style.transition = 'opacity 4s ease-out';
         el.style.opacity = '0.85';
       }
-    }, 5000);
-    return () => clearTimeout(timer);
+    }, 6000);
+
+    return () => {
+      clearTimeout(completeTimer);
+      clearTimeout(fadeTimer);
+    };
   }, [isInView]);
 
   return (
     <section
       ref={sectionRef}
+      data-section="closing"
       className="template-p1 template-p1-dark relative w-full min-h-dvh overflow-hidden flex items-center justify-center"
       style={{ backgroundColor: '#2A2420' }}
     >
-      {/* ─── Candle ambience glow ───
-          Same as Opening but even more subtle — like the final
-          flicker before the credits roll */}
-      <div
+      {/* ═══ CANDLE FLAME — realistic candle with ambient light + shadows ═══
+          The flame ignites first, then lights up the entire scene.
+          Ambient light (warm glow) + shadow play (deepening vignette)
+          are handled inside CandleFlame component via Web Animation API. */}
+      <motion.div
         className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(ellipse 45% 35% at 50% 30%, rgba(198, 167, 105, 0.06) 0%, rgba(198, 167, 105, 0.02) 40%, transparent 70%)',
-          animation: 'p1CandleAmbience 7s ease-in-out infinite',
-        }}
-      />
+        variants={candleIgnite}
+        initial="hidden"
+        animate={isInView ? 'visible' : 'hidden'}
+      >
+        <CandleFlame
+          left="50%"
+          top="18%"
+          scale={1}
+          visible={isInView}
+        />
+      </motion.div>
 
-      {/* Secondary warm wash — broader, softer */}
+      {/* ─── Secondary warm wash — broader, softer, underneath everything ───
+          Like the warm light filling the room from the candle */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            'radial-gradient(ellipse 60% 50% at 50% 40%, rgba(198, 167, 105, 0.03) 0%, transparent 60%)',
-          animation: 'p1CandleAmbience 9s ease-in-out 2s infinite',
-        }}
-      />
-
-      {/* Warm ambient drift — very subtle shifting warmth */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(ellipse 35% 25% at 48% 50%, rgba(198, 167, 105, 0.025) 0%, transparent 55%)',
-          animation: 'p1WarmDrift 14s ease-in-out infinite',
+            'radial-gradient(ellipse 45% 40% at 50% 35%, rgba(201, 169, 110, 0.04) 0%, transparent 65%)',
+          zIndex: 1,
         }}
       />
 
       {/* ─── Paper texture overlay ─── */}
-      <div className="nauka-paper absolute inset-0 pointer-events-none" />
-
-      {/* ─── Subtle warm vignette ───
-          Stronger than ivory sections — dark scene, edge darkening for intimacy */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(ellipse 60% 55% at 50% 45%, transparent 30%, rgba(20, 16, 12, 0.35) 100%)',
-        }}
-      />
+      <div className="nauka-paper absolute inset-0 pointer-events-none" style={{ zIndex: 2 }} />
 
       {/* ─── Very subtle film grain ───
           Slightly more visible on dark background for analog feel */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ opacity: 0.05 }}
+        style={{ opacity: 0.05, zIndex: 2 }}
       >
         <div
           className="absolute inset-0"
@@ -197,18 +226,20 @@ export default function Closing() {
 
       {/* ─── Content ───
           Vertically centered, sequential reveal with generous breathing room
-          PRIORITY 8: Lingering fade — see useEffect above */}
+          Lit by the candle flame above */}
       <div
-        className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-20 sm:py-28 md:py-36"
+        className="relative flex flex-col items-center justify-center min-h-screen px-6 py-20 sm:py-28 md:py-36"
         id="closing-content"
+        style={{ zIndex: 10 }}
       >
         {/* ── Closing quote ──
-            Blur dissolve — words settling into the darkness */}
+            Blur dissolve — words settling into the candlelight */}
         <motion.div
           className="flex flex-col items-center text-center max-w-md"
           variants={quoteFadeIn}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
+          transition={{ delay: 1.0 }}
         >
           {/* Decorative opening quotation mark */}
           <span
@@ -225,7 +256,6 @@ export default function Closing() {
               style={{
                 color: 'rgba(212, 186, 130, 0.85)',
                 textShadow: '0 0 30px rgba(198, 167, 105, 0.1)',
-                animation: 'p1TextBreathe 8s ease-in-out infinite',
               }}
             >
               Terima kasih telah menungguku dalam ketaatan.
@@ -250,7 +280,7 @@ export default function Closing() {
           variants={dividerDraw}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          transition={{ delay: 1.4 }}
+          transition={{ delay: 2.0 }}
         >
           {/* Main divider line */}
           <div
@@ -295,7 +325,7 @@ export default function Closing() {
           variants={namesFadeIn}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          transition={{ delay: 2.0 }}
+          transition={{ delay: 2.6 }}
         >
           <h3
             className="font-serif italic text-3xl sm:text-4xl md:text-5xl leading-tight tracking-wide"
@@ -325,14 +355,14 @@ export default function Closing() {
           </h3>
         </motion.div>
 
-        {/* ── Arabic blessing text (PRIORITY 8) ──
+        {/* ── Arabic blessing text ──
             Between names and brand mark. Very small, warm gold at low opacity,
-            with blur dissolve. Like a whispered blessing. */}
+            with blur dissolve. Like a whispered blessing in the candlelight. */}
         <motion.div
           className="mt-8 sm:mt-10 flex flex-col items-center"
           initial={{ opacity: 0, filter: 'blur(3px)' }}
           animate={isInView ? { opacity: 0.25, filter: 'blur(0px)' } : { opacity: 0, filter: 'blur(3px)' }}
-          transition={{ delay: 2.4, duration: 2.0, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ delay: 3.0, duration: 2.0, ease: [0.16, 1, 0.3, 1] }}
         >
           <p
             className="font-serif select-none leading-relaxed"
@@ -350,13 +380,13 @@ export default function Closing() {
 
         {/* ── "Nauka" brand mark ──
             Very subtle — barely there, like a watermark.
-            The last thing you see before it fades to black. */}
+            The last thing you see before the candle goes out. */}
         <motion.div
           className="mt-16 sm:mt-20 md:mt-24"
           variants={brandFadeIn}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          transition={{ delay: 2.8 }}
+          transition={{ delay: 3.4 }}
         >
           <p
             className="font-serif text-[10px] tracking-[0.3em] uppercase select-none"
@@ -368,10 +398,10 @@ export default function Closing() {
           </p>
         </motion.div>
 
-        {/* ── Warm embers (PRIORITY 8) ──
-            3-4 tiny warm dots at the bottom that very slowly float upward,
-            like the last warm embers of a candle */}
-        <div className="absolute bottom-0 left-0 right-0 pointer-events-none z-10" aria-hidden="true">
+        {/* ── Warm embers ──
+            Tiny warm dots at the bottom that slowly float upward,
+            like the last warm embers rising from the candle */}
+        <div className="absolute bottom-0 left-0 right-0 pointer-events-none" aria-hidden="true" style={{ zIndex: 11 }}>
           {[0, 1, 2, 3].map((i) => (
             <div
               key={`ember-${i}`}
@@ -381,7 +411,7 @@ export default function Closing() {
                 bottom: '8%',
                 width: '1px',
                 height: '1px',
-                backgroundColor: 'rgba(198, 167, 105, 0.5)',
+                backgroundColor: 'rgba(201, 169, 110, 0.5)',
                 animation: `p1EmberFloat ${8 + i * 2}s ease-in-out ${i * 1.5}s infinite`,
               }}
             />
@@ -397,17 +427,19 @@ export default function Closing() {
           height: '25%',
           background:
             'linear-gradient(180deg, transparent 0%, rgba(26, 20, 16, 0.4) 100%)',
+          zIndex: 5,
         }}
       />
 
       {/* ─── Top warm gradient ───
           Soft transition from the ivory section above */}
       <div
-        className="absolute top-0 left-0 right-0 pointer-events-none z-10"
+        className="absolute top-0 left-0 right-0 pointer-events-none"
         style={{
           height: '80px',
           background:
             'linear-gradient(0deg, transparent 0%, rgba(42, 36, 32, 0.6) 50%, rgba(42, 36, 32, 1) 100%)',
+          zIndex: 5,
         }}
       />
     </section>

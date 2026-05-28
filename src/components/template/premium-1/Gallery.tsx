@@ -123,6 +123,7 @@ export default function Gallery() {
   return (
     <section
       ref={sectionRef}
+      data-section="gallery"
       className="template-p1 nauka-paper nauka-grain nauka-vignette relative w-full overflow-hidden"
       style={{ backgroundColor: '#F5F0E8' }}
     >
