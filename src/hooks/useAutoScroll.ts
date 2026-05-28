@@ -1,133 +1,94 @@
 'use client';
 
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /* ──────────────────────────────────────────────────────────────
-   T4: useAutoScroll — Cinematic auto scroll controller
-   Premium-1 Islamic Faceless Cinematic Wedding Invitation
+   T4: useAutoScroll — Time accumulator approach
+   Adapted from Irwan-Anira auto-scroll technique
 
-   Scrolls the page slowly, like watching a film unfold.
-   Pauses when user manually scrolls, resumes after idle.
+   Key differences from previous implementation:
+   1. Time accumulator: accumulates fractional pixels, only scrolls
+      whole pixels via window.scrollTo() — no sub-pixel jitter
+   2. Delta time with 50ms cap: prevents jumps when tab is backgrounded
+   3. window.scrollTo() instead of scrollBy(): more reliable, no
+      fighting with browser scroll events
+   4. No user scroll detection needed: Irwan-Anira doesn't detect
+      manual scroll at all — the auto-scroll is gentle enough that
+      it doesn't interfere. User can scroll freely anytime.
+   5. Simple toggle: enabled/disabled via prop
    ────────────────────────────────────────────────────────────── */
 
 interface UseAutoScrollOptions {
   enabled: boolean;
-  speed?: number;
-  idleResumeDelay?: number;
+  /** Pixels per millisecond. 0.025 = ~25px/sec (Irwan-Anira base) */
+  pxPerMs?: number;
+  /** Delay in ms before auto-scroll starts after enabled */
+  startDelay?: number;
 }
 
 export default function useAutoScroll({
   enabled,
-  speed = 0.5,
-  idleResumeDelay = 3000,
+  pxPerMs = 0.025,
+  startDelay = 8000,
 }: UseAutoScrollOptions) {
-  const rafRef = useRef<number | null>(null);
-  const userScrollingRef = useRef(false);
-  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isAutoScrolling, setIsAutoScrolling] = useState(false);
-  const lastScrollTopRef = useRef(0);
-  const programmaticScrollRef = useRef(false);
 
-  // Auto scroll loop
   useEffect(() => {
     if (!enabled) {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-        rafRef.current = null;
-      }
       setIsAutoScrolling(false);
       return;
     }
 
-    setIsAutoScrolling(true);
-    lastScrollTopRef.current = window.scrollY;
-    userScrollingRef.current = false;
+    let animationId: number;
+    let lastTime = 0;
+    let accumulated = 0;
 
-    const scroll = () => {
-      // Don't scroll if user is manually scrolling
-      if (userScrollingRef.current) {
-        rafRef.current = requestAnimationFrame(scroll);
+    const tick = (time: number) => {
+      animationId = requestAnimationFrame(tick);
+
+      if (lastTime === 0) {
+        lastTime = time;
         return;
       }
 
-      // Check if we've reached the bottom
+      // Cap delta at 50ms to prevent huge jumps when tab is backgrounded
+      const delta = Math.min(time - lastTime, 50);
+      lastTime = time;
+
+      // Stop at bottom of page
       const atBottom =
         window.innerHeight + window.scrollY >=
-        document.body.scrollHeight - 50;
+        document.documentElement.scrollHeight - 50;
 
       if (atBottom) {
         setIsAutoScrolling(false);
         return;
       }
 
-      // Mark this as programmatic scroll so we don't detect it as user scroll
-      programmaticScrollRef.current = true;
-      window.scrollBy(0, speed);
-      lastScrollTopRef.current = window.scrollY;
-      // Reset flag after a tick (scroll event fires synchronously in most browsers)
-      requestAnimationFrame(() => {
-        programmaticScrollRef.current = false;
-      });
+      // Accumulate fractional pixels
+      accumulated += delta * pxPerMs;
 
-      rafRef.current = requestAnimationFrame(scroll);
+      // Only scroll whole pixels — prevents sub-pixel jitter
+      const wholePixels = Math.floor(accumulated);
+      if (wholePixels > 0) {
+        accumulated -= wholePixels;
+        const targetY = window.scrollY + wholePixels;
+        window.scrollTo(0, targetY);
+      }
     };
 
-    rafRef.current = requestAnimationFrame(scroll);
+    // Start after delay — give time to read the Bismillah
+    const startTimeout = setTimeout(() => {
+      setIsAutoScrolling(true);
+      lastTime = 0;
+      animationId = requestAnimationFrame(tick);
+    }, startDelay);
 
     return () => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-        rafRef.current = null;
-      }
+      clearTimeout(startTimeout);
+      cancelAnimationFrame(animationId);
     };
-  }, [enabled, speed]);
-
-  // Detect user manual scroll
-  useEffect(() => {
-    if (!enabled) return;
-
-    const handleUserScroll = () => {
-      // Skip if this is our own programmatic scroll
-      if (programmaticScrollRef.current) return;
-
-      const currentTop = window.scrollY;
-      const expectedTop = lastScrollTopRef.current;
-
-      // If scroll position jumped more than 3px from where we left it,
-      // it's a user-initiated scroll
-      if (Math.abs(currentTop - expectedTop) > 3) {
-        userScrollingRef.current = true;
-        setIsAutoScrolling(false);
-
-        // Clear any existing idle timer
-        if (idleTimerRef.current) {
-          clearTimeout(idleTimerRef.current);
-        }
-
-        // Set idle timer to resume auto scroll after user stops
-        idleTimerRef.current = setTimeout(() => {
-          const atBottom =
-            window.innerHeight + window.scrollY >=
-            document.body.scrollHeight - 50;
-
-          if (!atBottom) {
-            userScrollingRef.current = false;
-            lastScrollTopRef.current = window.scrollY;
-            setIsAutoScrolling(true);
-          }
-        }, idleResumeDelay);
-      }
-    };
-
-    window.addEventListener('scroll', handleUserScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener('scroll', handleUserScroll);
-      if (idleTimerRef.current) {
-        clearTimeout(idleTimerRef.current);
-      }
-    };
-  }, [enabled, idleResumeDelay]);
+  }, [enabled, pxPerMs, startDelay]);
 
   return { isAutoScrolling };
 }

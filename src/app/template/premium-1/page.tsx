@@ -28,6 +28,10 @@ import useAutoScroll from '@/hooks/useAutoScroll';
  * 5-8. Story Scenes — T2 PencilBuildUp + T5 Handwriting
  * 9. Breath — Sacred pause
  * 10. Event Info, Gallery, RSVP, Closing
+ *
+ * AUTO-SCROLL: Irwan-Anira style time accumulator approach.
+ * Starts 8s after "Buka Undangan" to give time to read Bismillah.
+ * Speed: ~25px/sec (0.025 px/ms).
  */
 
 const EASE = [0.25, 0.46, 0.45, 0.94] as const;
@@ -35,7 +39,6 @@ const EASE = [0.25, 0.46, 0.45, 0.94] as const;
 export default function Premium1Page() {
   const [openingComplete, setOpeningComplete] = useState(false);
   const [invitationOpened, setInvitationOpened] = useState(false);
-  const [autoScrollEnabled, setAutoScrollEnabled] = useState(false);
 
   const handleOpeningComplete = useCallback(() => {
     setOpeningComplete(true);
@@ -51,19 +54,15 @@ export default function Premium1Page() {
         bismillahSection.scrollIntoView({ behavior: 'smooth' });
       }
     }, 300);
-
-    // Delay auto-scroll start so the initial scrollIntoView completes first
-    // and doesn't get detected as "user scroll"
-    setTimeout(() => {
-      setAutoScrollEnabled(true);
-    }, 2500);
   }, []);
 
-  // Auto scroll starts 2.5s after invitation is opened
-  const { isAutoScrolling } = useAutoScroll({
-    enabled: autoScrollEnabled,
-    speed: 0.5,
-    idleResumeDelay: 2000,
+  // Auto-scroll: Irwan-Anira style
+  // Starts 8s after invitation is opened (time to read Bismillah)
+  // Speed: 0.025 px/ms ≈ 25px/sec
+  useAutoScroll({
+    enabled: invitationOpened,
+    pxPerMs: 0.025,
+    startDelay: 8000,
   });
 
   return (
