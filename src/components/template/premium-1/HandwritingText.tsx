@@ -1,33 +1,37 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
-import { useRef, useEffect, useState } from 'react';
+import { useInView } from 'framer-motion';
+import { useRef, useEffect, useState, useCallback } from 'react';
 
 /* ──────────────────────────────────────────────────────────────
    T5: HandwritingText — Mask Reveal (Irwan-Anira style)
    Premium-1 Islamic Faceless Cinematic Wedding Invitation
 
    Core technique: clip-path: inset() horizontal mask wipe.
-   The entire line is revealed from left to right — like watching
-   someone write in real-time. No per-letter stagger.
+   Revealed from left to right — like watching someone write.
+
+   IMPORTANT: We use CSS transition instead of Framer Motion
+   for the clip-path animation. Reason: Framer Motion's animate
+   prop can conflict with the style prop on re-render, causing
+   the clip-path to reset mid-animation and text to disappear.
+   CSS transitions are managed by the browser's compositor and
+   are completely independent of React's render cycle.
 
    Key principles from Irwan-Anira:
    - clip-path: inset(0 100% 0 0) → inset(0 0% 0 0)
    - Soft pacing: reveal speed proportional to text length
-   - Easing: cubic-bezier(0.25, 0.46, 0.45, 0.94) — natural deceleration
-   - Word-boundary pauses: longer gaps between lines that end with
-     punctuation (periods = biggest pause, commas = medium)
+   - Easing: cubic-bezier(0.25, 0.46, 0.45, 0.94)
+   - Word-boundary pauses via startDelay
 
    NO gold lines, NO progress indicators, NO UI decorations.
-   Just clean mask reveal — like natural handwriting.
    ────────────────────────────────────────────────────────────── */
 
-const EASE_NATURAL = [0.25, 0.46, 0.45, 0.94] as const;
+const EASE_CSS = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
 
 // Word-boundary pause multipliers (adapted from Irwan-Anira)
-const PAUSE_AFTER_PERIOD = 2.5;    // biggest pause — sentence end
-const PAUSE_AFTER_COMMA = 1.5;     // medium pause — clause end
-const PAUSE_NORMAL = 1.0;          // standard gap between lines
+const PAUSE_AFTER_PERIOD = 2.5;
+const PAUSE_AFTER_COMMA = 1.5;
+const PAUSE_NORMAL = 1.0;
 
 // Overlap factor: next line starts when previous is ~50% revealed
 const OVERLAP_FACTOR = 0.5;
@@ -40,7 +44,7 @@ interface HandwritingTextProps {
   startDelay?: number;
   as?: 'p' | 'span' | 'h1' | 'h2' | 'h3' | 'div';
   onComplete?: () => void;
-  inView?: boolean; // external inView control
+  inView?: boolean;
 }
 
 /**
@@ -63,21 +67,51 @@ export default function HandwritingText({
 }: HandwritingTextProps) {
   const ref = useRef<HTMLDivElement>(null);
   const internalInView = useInView(ref, { once: true, margin: '-5% 0px -5% 0px' });
-  const [hasFiredComplete, setHasFiredComplete] = useState(false);
-
-  // Use external inView if provided, otherwise fall back to internal useInView
   const isInView = externalInView !== undefined ? externalInView : internalInView;
+
+  // Track reveal state — starts hidden, becomes true after isInView + rAF
+  // The rAF ensures the browser has painted the hidden state before we transition
+  const [shouldReveal, setShouldReveal] = useState(false);
+  const [hasFiredComplete, setHasFiredComplete] = useState(false);
 
   const revealDuration = calcRevealDuration(text, charDelay);
 
-  // Total duration for onComplete callback — in useEffect to avoid re-render issues
+  // When inView becomes true, wait one frame then start the CSS transition
   useEffect(() => {
-    if (isInView && onComplete && !hasFiredComplete) {
+    if (isInView && !shouldReveal) {
+      const raf = requestAnimationFrame(() => {
+        setShouldReveal(true);
+      });
+      return () => cancelAnimationFrame(raf);
+    }
+  }, [isInView, shouldReveal]);
+
+  // onComplete callback — fires once after animation finishes
+  const handleComplete = useCallback(() => {
+    if (onComplete && !hasFiredComplete) {
       setHasFiredComplete(true);
-      const timer = setTimeout(onComplete, (startDelay + revealDuration + 0.3) * 1000);
+      onComplete();
+    }
+  }, [onComplete, hasFiredComplete]);
+
+  useEffect(() => {
+    if (shouldReveal && onComplete && !hasFiredComplete) {
+      const timer = setTimeout(handleComplete, (startDelay + revealDuration + 0.3) * 1000);
       return () => clearTimeout(timer);
     }
-  }, [isInView, onComplete, hasFiredComplete, startDelay, revealDuration]);
+  }, [shouldReveal, handleComplete, hasFiredComplete, startDelay, revealDuration]);
+
+  // CSS transition handles the clip-path animation
+  // The browser manages this independently of React re-renders
+  const clipPathStyle: React.CSSProperties = shouldReveal
+    ? {
+        clipPath: 'inset(0 0% 0 0)',
+        transition: `clip-path ${revealDuration}s ${EASE_CSS} ${startDelay}s`,
+      }
+    : {
+        clipPath: 'inset(0 100% 0 0)',
+        transition: 'none', // no transition for initial hidden state
+      };
 
   return (
     <div
@@ -85,28 +119,14 @@ export default function HandwritingText({
       className={className}
       style={{ ...style, position: 'relative', display: 'inline' }}
     >
-      {/* ── Clip-path mask reveal ──
-          Using initial={false} so the component doesn't reset to hidden
-          on re-render. Once it animates to visible, it stays visible. */}
-      <motion.span
-        initial={false}
-        animate={isInView ? {
-          clipPath: 'inset(0 0% 0 0)',
-        } : {
-          clipPath: 'inset(0 100% 0 0)',
-        }}
-        transition={{
-          delay: startDelay,
-          duration: revealDuration,
-          ease: EASE_NATURAL,
-        }}
+      <span
         style={{
           display: 'inline',
-          clipPath: 'inset(0 100% 0 0)',
+          ...clipPathStyle,
         }}
       >
         {text}
-      </motion.span>
+      </span>
     </div>
   );
 }
