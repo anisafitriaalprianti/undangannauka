@@ -1,8 +1,8 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
-import HandwritingText, { getLineGap } from './HandwritingText';
+import { useRef, useMemo, useEffect } from 'react';
+import HandwritingText, { calcLineDelays, calcTotalAnimDuration } from './HandwritingText';
 import PencilBuildUpImage from './PencilBuildUpImage';
 
 /* ──────────────────────────────────────────────────────────────
@@ -17,7 +17,7 @@ import PencilBuildUpImage from './PencilBuildUpImage';
 
    Animations:
    - T2 PencilBuildUp for image (sketch → shading → foto)
-   - T1 HandwritingText for story lines (SLOWEST stagger)
+   - T5 HandwritingText for story lines (SLOWEST stagger)
    ────────────────────────────────────────────────────────────── */
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -29,15 +29,38 @@ const sceneLines = [
   'menahan diri adalah bentuk cinta tertinggi kepada Allah.',
 ];
 
-const BASE_DELAY = 5.0;
-const BASE_GAP = 2.8; // SLOWEST — heaviest moment
+const CHAR_DELAY = 0.06;   // SLOWEST — heaviest moment
+const BASE_DELAY = 2.0;
+const PAUSE_GAP = 0.6;     // longer pauses for emotional weight
 
-export default function Scene3() {
+interface Scene3Props {
+  onAnimatingChange?: (isAnimating: boolean) => void;
+}
+
+export default function Scene3({ onAnimatingChange }: Scene3Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, {
     once: true,
     margin: '-20% 0px -20% 0px',
   });
+
+  const lineDelays = useMemo(
+    () => calcLineDelays(sceneLines, CHAR_DELAY, BASE_DELAY, PAUSE_GAP),
+    []
+  );
+
+  const totalAnimDuration = useMemo(
+    () => calcTotalAnimDuration(sceneLines, CHAR_DELAY, BASE_DELAY, PAUSE_GAP),
+    []
+  );
+
+  useEffect(() => {
+    if (isInView && onAnimatingChange) {
+      onAnimatingChange(true);
+      const timer = setTimeout(() => onAnimatingChange(false), totalAnimDuration * 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isInView, onAnimatingChange, totalAnimDuration]);
 
   return (
     <section
@@ -77,30 +100,25 @@ export default function Scene3() {
           }}
           initial={{ scaleX: 0, opacity: 0 }}
           animate={isInView ? { scaleX: 1, opacity: 0.5 } : { scaleX: 0, opacity: 0 }}
-          transition={{ delay: 2.5, duration: 2.5, ease: EASE }}
+          transition={{ delay: 1.5, duration: 2.5, ease: EASE }}
         />
 
-        {/* ── Text — THE HERO, T1 Handwriting, SLOWEST ── */}
+        {/* ── Text — THE HERO, T5 Handwriting, SLOWEST ── */}
         <div
           className="mt-8 sm:mt-10 flex flex-col items-center text-center"
           style={{ animation: 'p1TextBreathe 10s ease-in-out infinite' }}
         >
-          {sceneLines.map((line, i) => {
-            const lineStartDelay = sceneLines.slice(0, i).reduce(
-              (acc, prevLine) => acc + getLineGap(prevLine, BASE_GAP),
-              BASE_DELAY
-            );
-            return (
-              <HandwritingText
-                key={i}
-                text={line}
-                className="font-serif italic text-base leading-[2.4] tracking-wide sm:text-lg sm:leading-[2.5] md:text-xl md:leading-[2.6]"
-                style={{ color: 'var(--p1-warm-brown)' }}
-                charDelay={0.06}
-                startDelay={lineStartDelay}
-              />
-            );
-          })}
+          {sceneLines.map((line, i) => (
+            <HandwritingText
+              key={i}
+              text={line}
+              className="font-serif italic text-base leading-[2.4] tracking-wide sm:text-lg sm:leading-[2.5] md:text-xl md:leading-[2.6]"
+              style={{ color: 'var(--p1-warm-brown)' }}
+              charDelay={CHAR_DELAY}
+              startDelay={lineDelays[i]}
+              inView={isInView}
+            />
+          ))}
         </div>
 
         {/* ── Bottom gold line ── */}
@@ -113,7 +131,7 @@ export default function Scene3() {
           initial={{ scaleX: 0, opacity: 0 }}
           animate={isInView ? { scaleX: 1, opacity: 0.5 } : { scaleX: 0, opacity: 0 }}
           transition={{
-            delay: sceneLines.reduce((acc, line) => acc + getLineGap(line, BASE_GAP), BASE_DELAY) + 0.5,
+            delay: totalAnimDuration - 0.5,
             duration: 2.0,
             ease: EASE,
           }}

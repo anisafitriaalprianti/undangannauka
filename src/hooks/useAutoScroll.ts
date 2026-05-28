@@ -8,23 +8,27 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 
    Scrolls the page slowly, like watching a film unfold.
    Pauses when user manually scrolls, resumes after idle.
+   Supports external pause via pausedRef (for scene animations).
 
    Props:
    - enabled: whether auto scroll is active
    - speed: pixels per frame (default 0.4 — very slow, cinematic)
    - idleResumeDelay: ms to wait after user scroll before resuming (default 3000)
+   - pausedRef: ref that when true, pauses auto-scroll (for scene animations)
    ────────────────────────────────────────────────────────────── */
 
 interface UseAutoScrollOptions {
   enabled: boolean;
   speed?: number;
   idleResumeDelay?: number;
+  pausedRef?: React.RefObject<boolean>;
 }
 
 export default function useAutoScroll({
   enabled,
   speed = 0.4,
   idleResumeDelay = 3000,
+  pausedRef,
 }: UseAutoScrollOptions) {
   const rafRef = useRef<number | null>(null);
   const userScrollingRef = useRef(false);
@@ -86,6 +90,12 @@ export default function useAutoScroll({
         return;
       }
 
+      // Don't scroll if externally paused (e.g., scene animation in progress)
+      if (pausedRef?.current) {
+        rafRef.current = requestAnimationFrame(scroll);
+        return;
+      }
+
       // Check if we've reached the bottom
       const atBottom =
         window.innerHeight + window.scrollY >=
@@ -111,7 +121,7 @@ export default function useAutoScroll({
         rafRef.current = null;
       }
     };
-  }, [enabled, speed]);
+  }, [enabled, speed, pausedRef]);
 
   // Listen for user scroll events
   useEffect(() => {

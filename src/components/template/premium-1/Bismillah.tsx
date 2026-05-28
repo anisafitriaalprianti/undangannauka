@@ -1,15 +1,15 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
-import HandwritingText, { getLineGap } from './HandwritingText';
+import { useRef, useMemo } from 'react';
+import HandwritingText, { calcLineDelays, calcTotalAnimDuration, getLineGap } from './HandwritingText';
 
 /* ──────────────────────────────────────────────────────────────
    Bismillah Section
    Premium-1 Islamic Faceless Cinematic Wedding Invitation
 
    - بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ in Arabic (Amiri font)
-   - Terjemahan Surat Ar-Rum Ayat 22 with T1 Handwriting
+   - Terjemahan Surat Ar-Rum Ayat 22 with T5 Handwriting
    - Maximum whitespace, breathing, sacred pause
 
    Surat Ar-Rum Ayat 22:
@@ -28,12 +28,26 @@ const verseLines = [
   'terdapat tanda-tanda bagi orang-orang yang mengetahui.',
 ];
 
+const CHAR_DELAY = 0.05;
+const BASE_DELAY = 3.0;
+const PAUSE_GAP = 0.5;
+
 export default function Bismillah() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, {
     once: true,
     margin: '-20% 0px -20% 0px',
   });
+
+  const lineDelays = useMemo(
+    () => calcLineDelays(verseLines, CHAR_DELAY, BASE_DELAY, PAUSE_GAP),
+    []
+  );
+
+  const totalAnimDuration = useMemo(
+    () => calcTotalAnimDuration(verseLines, CHAR_DELAY, BASE_DELAY, PAUSE_GAP),
+    []
+  );
 
   return (
     <section
@@ -94,7 +108,7 @@ export default function Bismillah() {
           QS. Ar-Rum : 22
         </motion.p>
 
-        {/* Terjemahan — T1 Handwriting letter-by-letter */}
+        {/* Terjemahan — T5 Handwriting mask reveal */}
         <div
           className="flex flex-col items-center"
           style={{ animation: 'p1TextBreathe 10s ease-in-out infinite' }}
@@ -105,11 +119,9 @@ export default function Bismillah() {
               text={line}
               className="font-serif italic text-sm sm:text-base md:text-lg leading-[2.4] sm:leading-[2.5] md:leading-[2.6] tracking-wide"
               style={{ color: 'var(--p1-warm-brown)' }}
-              charDelay={0.05}
-              startDelay={verseLines.slice(0, i).reduce(
-                (acc, prevLine) => acc + getLineGap(prevLine, 2.0),
-                3.0
-              )}
+              charDelay={CHAR_DELAY}
+              startDelay={lineDelays[i]}
+              inView={isInView}
             />
           ))}
         </div>
@@ -124,7 +136,7 @@ export default function Bismillah() {
           initial={{ scaleX: 0, opacity: 0 }}
           animate={isInView ? { scaleX: 1, opacity: 0.5 } : { scaleX: 0, opacity: 0 }}
           transition={{
-            delay: verseLines.reduce((acc, line) => acc + getLineGap(line, 2.0), 3.0) + 0.8,
+            delay: totalAnimDuration - 0.5,
             duration: 1.5,
             ease: EASE,
           }}

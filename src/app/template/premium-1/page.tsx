@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Opening from '@/components/template/premium-1/Opening';
 import Cover from '@/components/template/premium-1/Cover';
@@ -21,13 +21,17 @@ import useAutoScroll from '@/hooks/useAutoScroll';
  * Theme: "Kenangan yang perlahan hidup"
  *
  * FLOW:
- * 1. Opening — Dark, "Undangan by Nauka" T1 Handwriting (3.5s)
+ * 1. Opening — Dark, "Undangan by Nauka" T5 Handwriting (3.5s)
  * 2. Cover — Names, guest, "Buka Undangan" button
  * 3. [User clicks "Buka Undangan"] → scroll to Bismillah + Auto scroll starts
- * 4. Bismillah — Arabic + Ar-Rum 22 T1 Handwriting
- * 5-8. Story Scenes — T2 PencilBuildUp + T1 Handwriting
+ * 4. Bismillah — Arabic + Ar-Rum 22 T5 Handwriting
+ * 5-8. Story Scenes — T2 PencilBuildUp + T5 Handwriting
  * 9. Breath — Sacred pause
  * 10. Event Info, Gallery, RSVP, Closing
+ *
+ * AUTO-SCROLL PAUSE:
+ * When a scene's handwriting animation is playing, auto-scroll pauses
+ * so the user can see the full text reveal before scrolling past.
  */
 
 const EASE = [0.25, 0.46, 0.45, 0.94] as const;
@@ -35,6 +39,9 @@ const EASE = [0.25, 0.46, 0.45, 0.94] as const;
 export default function Premium1Page() {
   const [openingComplete, setOpeningComplete] = useState(false);
   const [invitationOpened, setInvitationOpened] = useState(false);
+
+  // Ref to pause auto-scroll during scene animations
+  const autoScrollPausedRef = useRef(false);
 
   const handleOpeningComplete = useCallback(() => {
     setOpeningComplete(true);
@@ -53,11 +60,18 @@ export default function Premium1Page() {
   }, []);
 
   // Auto scroll starts after invitation is opened
+  // Pauses automatically when scene animations are in progress
   const { isAutoScrolling } = useAutoScroll({
     enabled: invitationOpened,
     speed: 0.7,
     idleResumeDelay: 2000,
+    pausedRef: autoScrollPausedRef,
   });
+
+  // Callback for scenes to pause/resume auto-scroll during animations
+  const handleSceneAnimatingChange = useCallback((isAnimating: boolean) => {
+    autoScrollPausedRef.current = isAnimating;
+  }, []);
 
   return (
     <main className="template-p1 bg-[#2A2420] min-h-screen">
@@ -106,10 +120,11 @@ export default function Premium1Page() {
 
             {/* Story Mode — Cinematic scenes
                 "Kenangan yang perlahan hidup"
-                Each scene breathes, has whitespace, emotional pacing. */}
+                Each scene breathes, has whitespace, emotional pacing.
+                Auto-scroll pauses during scene handwriting animations. */}
 
             {/* Scene I: "Menjaga Dalam Diam" */}
-            <Scene1 />
+            <Scene1 onAnimatingChange={handleSceneAnimatingChange} />
 
             {/* Breathing spacer — Scene 1 → Scene 2 */}
             <div
@@ -127,7 +142,7 @@ export default function Premium1Page() {
             </div>
 
             {/* Scene II: "Menitipkan Dalam Sujud" */}
-            <Scene2 />
+            <Scene2 onAnimatingChange={handleSceneAnimatingChange} />
 
             {/* Breathing spacer — Scene 2 → Scene 3 */}
             <div
@@ -136,7 +151,7 @@ export default function Premium1Page() {
             />
 
             {/* Scene III: Breathing space — emotional pause */}
-            <Scene3 />
+            <Scene3 onAnimatingChange={handleSceneAnimatingChange} />
 
             {/* Breathing spacer — Scene 3 → Scene 4 */}
             <div
@@ -155,7 +170,7 @@ export default function Premium1Page() {
             </div>
 
             {/* Scene IV: "Hari Yang Dijanjikan" — emotional payoff */}
-            <Scene4 />
+            <Scene4 onAnimatingChange={handleSceneAnimatingChange} />
 
             {/* Sacred breathing space before event info */}
             <Breath />

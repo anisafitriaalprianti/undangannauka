@@ -1,8 +1,8 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
-import HandwritingText, { getLineGap } from './HandwritingText';
+import { useRef, useMemo, useEffect } from 'react';
+import HandwritingText, { calcLineDelays, calcTotalAnimDuration } from './HandwritingText';
 import PencilBuildUpImage from './PencilBuildUpImage';
 
 /* ──────────────────────────────────────────────────────────────
@@ -16,7 +16,7 @@ import PencilBuildUpImage from './PencilBuildUpImage';
 
    Animations:
    - T2 PencilBuildUp for image (sketch → shading → foto)
-   - T1 HandwritingText for story lines (letter-by-letter)
+   - T5 HandwritingText for story lines (mask reveal)
    ────────────────────────────────────────────────────────────── */
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -31,15 +31,39 @@ const sceneLines = [
   'karena menunggu juga bentuk ibadah.',
 ];
 
-const BASE_DELAY = 5.0;
-const BASE_GAP = 2.0; // base gap, multiplied by punctuation pauses
+const CHAR_DELAY = 0.05;
+const BASE_DELAY = 2.0;   // time before first line starts (was 5.0)
+const PAUSE_GAP = 0.5;    // base gap between lines (was 2.0)
 
-export default function Scene1() {
+interface Scene1Props {
+  onAnimatingChange?: (isAnimating: boolean) => void;
+}
+
+export default function Scene1({ onAnimatingChange }: Scene1Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, {
     once: true,
     margin: '-20% 0px -20% 0px',
   });
+
+  const lineDelays = useMemo(
+    () => calcLineDelays(sceneLines, CHAR_DELAY, BASE_DELAY, PAUSE_GAP),
+    []
+  );
+
+  const totalAnimDuration = useMemo(
+    () => calcTotalAnimDuration(sceneLines, CHAR_DELAY, BASE_DELAY, PAUSE_GAP),
+    []
+  );
+
+  // Notify parent when animation starts/ends (for auto-scroll pause)
+  useEffect(() => {
+    if (isInView && onAnimatingChange) {
+      onAnimatingChange(true);
+      const timer = setTimeout(() => onAnimatingChange(false), totalAnimDuration * 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isInView, onAnimatingChange, totalAnimDuration]);
 
   return (
     <section
@@ -93,7 +117,7 @@ export default function Scene1() {
               className="mb-4 md:mb-6"
               initial={{ opacity: 0, x: 10 }}
               animate={isInView ? { opacity: 0.5, x: 0 } : { opacity: 0, x: 10 }}
-              transition={{ delay: 1.5, duration: 1.0, ease: EASE }}
+              transition={{ delay: 1.0, duration: 1.0, ease: EASE }}
             >
               <span
                 className="font-serif text-[10px] tracking-[0.3em] uppercase sm:text-xs"
@@ -108,7 +132,7 @@ export default function Scene1() {
               className="mb-8 md:mb-10"
               initial={{ opacity: 0, y: 12 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-              transition={{ delay: 2.0, duration: 1.4, ease: EASE }}
+              transition={{ delay: 1.3, duration: 1.4, ease: EASE }}
             >
               <h2
                 className="font-serif text-lg font-medium tracking-wide sm:text-xl md:text-2xl"
@@ -120,25 +144,19 @@ export default function Scene1() {
               </h2>
             </motion.div>
 
-            {/* Line-by-line text with T1 Handwriting */}
+            {/* Line-by-line text with T5 Handwriting */}
             <div className="max-w-xs">
-              {sceneLines.map((line, i) => {
-                // Calculate cumulative delay with word-boundary pauses
-                const lineStartDelay = sceneLines.slice(0, i).reduce(
-                  (acc, prevLine, j) => acc + getLineGap(prevLine, BASE_GAP),
-                  BASE_DELAY
-                );
-                return (
-                  <HandwritingText
-                    key={i}
-                    text={line}
-                    className="font-serif italic text-sm leading-[2.2] tracking-wide sm:text-[15px] sm:leading-[2.3] md:text-base md:leading-[2.4]"
-                    style={{ color: 'var(--p1-warm-brown)' }}
-                    charDelay={0.05}
-                    startDelay={lineStartDelay}
-                  />
-                );
-              })}
+              {sceneLines.map((line, i) => (
+                <HandwritingText
+                  key={i}
+                  text={line}
+                  className="font-serif italic text-sm leading-[2.2] tracking-wide sm:text-[15px] sm:leading-[2.3] md:text-base md:leading-[2.4]"
+                  style={{ color: 'var(--p1-warm-brown)' }}
+                  charDelay={CHAR_DELAY}
+                  startDelay={lineDelays[i]}
+                  inView={isInView}
+                />
+              ))}
             </div>
           </div>
         </div>

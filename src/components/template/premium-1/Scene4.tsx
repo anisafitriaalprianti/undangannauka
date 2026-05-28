@@ -1,8 +1,8 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
-import HandwritingText, { getLineGap } from './HandwritingText';
+import { useRef, useMemo, useEffect } from 'react';
+import HandwritingText, { calcLineDelays, calcTotalAnimDuration } from './HandwritingText';
 import PencilBuildUpImage from './PencilBuildUpImage';
 
 /* ──────────────────────────────────────────────────────────────
@@ -17,7 +17,7 @@ import PencilBuildUpImage from './PencilBuildUpImage';
 
    Animations:
    - T2 PencilBuildUp for image (sketch → shading → foto)
-   - T1 HandwritingText for story lines (FASTER stagger — payoff!)
+   - T5 HandwritingText for story lines (FASTER stagger — payoff!)
    ────────────────────────────────────────────────────────────── */
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -31,15 +31,38 @@ const sceneLines = [
   'Semata-mata karena-Nya.',
 ];
 
-const BASE_DELAY = 4.5;
-const BASE_GAP = 1.5; // FASTER — payoff moment
+const CHAR_DELAY = 0.04;   // FASTER — payoff moment
+const BASE_DELAY = 1.5;
+const PAUSE_GAP = 0.35;    // quicker pacing for climax
 
-export default function Scene4() {
+interface Scene4Props {
+  onAnimatingChange?: (isAnimating: boolean) => void;
+}
+
+export default function Scene4({ onAnimatingChange }: Scene4Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, {
     once: true,
     margin: '-20% 0px -20% 0px',
   });
+
+  const lineDelays = useMemo(
+    () => calcLineDelays(sceneLines, CHAR_DELAY, BASE_DELAY, PAUSE_GAP),
+    []
+  );
+
+  const totalAnimDuration = useMemo(
+    () => calcTotalAnimDuration(sceneLines, CHAR_DELAY, BASE_DELAY, PAUSE_GAP),
+    []
+  );
+
+  useEffect(() => {
+    if (isInView && onAnimatingChange) {
+      onAnimatingChange(true);
+      const timer = setTimeout(() => onAnimatingChange(false), totalAnimDuration * 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isInView, onAnimatingChange, totalAnimDuration]);
 
   return (
     <section
@@ -113,7 +136,7 @@ export default function Scene4() {
             className="mb-2"
             initial={{ opacity: 0, y: 6 }}
             animate={isInView ? { opacity: 0.5, y: 0 } : { opacity: 0, y: 6 }}
-            transition={{ delay: 2.0, duration: 0.9, ease: EASE }}
+            transition={{ delay: 1.2, duration: 0.9, ease: EASE }}
           >
             <span
               className="font-serif text-[10px] tracking-[0.3em] uppercase sm:text-xs"
@@ -128,7 +151,7 @@ export default function Scene4() {
             className="mb-6 md:mb-8"
             initial={{ opacity: 0, y: 10 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-            transition={{ delay: 2.3, duration: 1.2, ease: EASE }}
+            transition={{ delay: 1.4, duration: 1.2, ease: EASE }}
           >
             <h2
               className="font-serif text-lg font-medium tracking-wide sm:text-xl md:text-2xl"
@@ -149,27 +172,22 @@ export default function Scene4() {
             }}
             initial={{ scaleX: 0, opacity: 0 }}
             animate={isInView ? { scaleX: 1, opacity: 0.6 } : { scaleX: 0, opacity: 0 }}
-            transition={{ delay: 2.6, duration: 1.0, ease: EASE }}
+            transition={{ delay: 1.6, duration: 1.0, ease: EASE }}
           />
 
-          {/* Line-by-line text with T1 Handwriting — FASTER stagger */}
+          {/* Line-by-line text with T5 Handwriting — FASTER stagger */}
           <div className="max-w-sm">
-            {sceneLines.map((line, i) => {
-              const lineStartDelay = sceneLines.slice(0, i).reduce(
-                (acc, prevLine) => acc + getLineGap(prevLine, BASE_GAP),
-                BASE_DELAY
-              );
-              return (
-                <HandwritingText
-                  key={i}
-                  text={line}
-                  className="font-serif italic text-sm leading-[2] tracking-wide sm:text-[15px] sm:leading-[2.1] md:text-base md:leading-[2.2]"
-                  style={{ color: 'var(--p1-warm-brown)' }}
-                  charDelay={0.04}
-                  startDelay={lineStartDelay}
-                />
-              );
-            })}
+            {sceneLines.map((line, i) => (
+              <HandwritingText
+                key={i}
+                text={line}
+                className="font-serif italic text-sm leading-[2] tracking-wide sm:text-[15px] sm:leading-[2.1] md:text-base md:leading-[2.2]"
+                style={{ color: 'var(--p1-warm-brown)' }}
+                charDelay={CHAR_DELAY}
+                startDelay={lineDelays[i]}
+                inView={isInView}
+              />
+            ))}
           </div>
         </div>
       </div>
