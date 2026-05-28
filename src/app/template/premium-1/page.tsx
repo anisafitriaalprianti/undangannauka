@@ -117,7 +117,7 @@ export default function Premium1Page() {
             <Scene1 />
 
             {/* ═══ T9: THE VOID — keheningan antara menahan dan menitipkan ═══ */}
-            <section className="relative w-full overflow-hidden" style={{ height: '30vh', backgroundColor: '#1A1614' }}>
+            <section className="relative w-full overflow-hidden h-[15vh] sm:h-[30vh]" style={{ backgroundColor: '#1A1614' }}>
               <div className="pointer-events-none absolute inset-0" style={{
                 background: 'radial-gradient(ellipse 30% 25% at 50% 50%, rgba(198,167,105,0.03) 0%, transparent 70%)',
               }} />
@@ -127,7 +127,7 @@ export default function Premium1Page() {
             <Scene2 />
 
             {/* ═══ T9: THE VOID — keheningan terberat, sebelum rindu ═══ */}
-            <section className="relative w-full overflow-hidden" style={{ height: '40vh', backgroundColor: '#1A1614' }}>
+            <section className="relative w-full overflow-hidden h-[20vh] sm:h-[40vh]" style={{ backgroundColor: '#1A1614' }}>
               <div className="pointer-events-none absolute inset-0" style={{
                 background: 'radial-gradient(ellipse 25% 20% at 50% 50%, rgba(198,167,105,0.02) 0%, transparent 70%)',
               }} />
@@ -137,7 +137,7 @@ export default function Premium1Page() {
             <Scene3 />
 
             {/* ═══ T9: THE VOID — napas terakhir sebelum janji terjawab ═══ */}
-            <section className="relative w-full overflow-hidden" style={{ height: '25vh', backgroundColor: '#1A1614' }}>
+            <section className="relative w-full overflow-hidden h-[12vh] sm:h-[25vh]" style={{ backgroundColor: '#1A1614' }}>
               <div className="pointer-events-none absolute inset-0" style={{
                 background: 'radial-gradient(ellipse 35% 30% at 50% 50%, rgba(212,186,130,0.04) 0%, transparent 70%)',
               }} />

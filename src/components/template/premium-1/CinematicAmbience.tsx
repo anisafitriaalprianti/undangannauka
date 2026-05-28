@@ -63,10 +63,13 @@ interface CinematicAmbienceProps {
 }
 
 /** Duration of fade-in when ambience activates (seconds) */
-const FADE_IN_DURATION = 3.0;
+const FADE_IN_DURATION = 2.0;
 
 /** Duration of fade-out when ambience deactivates (seconds) */
-const FADE_OUT_DURATION = 2.0;
+const FADE_OUT_DURATION = 1.5;
+
+/** Total time ambience plays before auto-fade-out (seconds) */
+const AMBIENCE_DURATION = 4.0;
 
 /** Sample rate for generated audio buffers */
 const SAMPLE_RATE = 44100;
@@ -374,7 +377,18 @@ export default function CinematicAmbience({ active }: CinematicAmbienceProps) {
 
     // Mark as started
     isStartedRef.current = true;
-  }, [createNoiseBuffer]);
+
+    // ═══ AUTO-STOP: Fade out after AMBIENCE_DURATION ═══
+    // The ambience is a GESTURE, not a soundtrack.
+    // It plays for a few seconds to set the mood,
+    // then disappears — like opening a window and
+    // hearing the night air, then closing it.
+    setTimeout(() => {
+      if (isStartedRef.current && !isFadingOutRef.current) {
+        stopAmbience();
+      }
+    }, (AMBIENCE_DURATION + FADE_IN_DURATION) * 1000);
+  }, [createNoiseBuffer, stopAmbience]);
 
   // ── Lifecycle: Start/Stop based on `active` prop ──
   useEffect(() => {

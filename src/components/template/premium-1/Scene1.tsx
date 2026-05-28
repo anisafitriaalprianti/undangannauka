@@ -148,20 +148,20 @@ export default function Scene1() {
 
       {/* ── T7: Bottom edge — cinematic fade-to-black ── */}
       <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-32"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-16 sm:h-24"
         style={{
           background:
-            'linear-gradient(0deg, rgba(26,22,20,1) 0%, rgba(26,22,20,0.6) 40%, transparent 100%)',
+            'linear-gradient(0deg, rgba(26,22,20,1) 0%, rgba(26,22,20,0.4) 50%, transparent 100%)',
         }}
         aria-hidden="true"
       />
 
       {/* ── T7: Top edge — cinematic fade-to-black ── */}
       <div
-        className="pointer-events-none absolute top-0 left-0 right-0 z-10 h-28"
+        className="pointer-events-none absolute top-0 left-0 right-0 z-10 h-14 sm:h-20"
         style={{
           background:
-            'linear-gradient(180deg, rgba(26,22,20,1) 0%, rgba(26,22,20,0.6) 40%, transparent 100%)',
+            'linear-gradient(180deg, rgba(26,22,20,1) 0%, rgba(26,22,20,0.4) 50%, transparent 100%)',
         }}
         aria-hidden="true"
       />
