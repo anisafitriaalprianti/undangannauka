@@ -1,7 +1,7 @@
 'use client';
 
 import { useInView } from 'framer-motion';
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 
 /* ──────────────────────────────────────────────────────────────
    T5: HandwritingText — Mask Reveal (Irwan-Anira style)
@@ -10,30 +10,22 @@ import { useRef, useEffect, useState, useCallback } from 'react';
    Core technique: clip-path: inset() horizontal mask wipe.
    Revealed from left to right — like watching someone write.
 
-   IMPORTANT: We use CSS transition instead of Framer Motion
-   for the clip-path animation. Reason: Framer Motion's animate
-   prop can conflict with the style prop on re-render, causing
-   the clip-path to reset mid-animation and text to disappear.
-   CSS transitions are managed by the browser's compositor and
-   are completely independent of React's render cycle.
+   IMPLEMENTATION: Web Animation API (element.animate())
+   This is the most reliable approach because:
+   1. Zero React interference — animation is 100% browser-managed
+   2. fill: 'forwards' keeps the final visible state permanently
+   3. No style/animate prop fighting on re-render
+   4. Works identically to CSS @keyframes but with dynamic values
 
-   Key principles from Irwan-Anira:
-   - clip-path: inset(0 100% 0 0) → inset(0 0% 0 0)
-   - Soft pacing: reveal speed proportional to text length
-   - Easing: cubic-bezier(0.25, 0.46, 0.45, 0.94)
-   - Word-boundary pauses via startDelay
-
-   NO gold lines, NO progress indicators, NO UI decorations.
+   This is essentially the same as the CSS @keyframes approach
+   used in the Irwan-Anira reference, but with programmatic control.
    ────────────────────────────────────────────────────────────── */
 
 const EASE_CSS = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
 
-// Word-boundary pause multipliers (adapted from Irwan-Anira)
 const PAUSE_AFTER_PERIOD = 2.5;
 const PAUSE_AFTER_COMMA = 1.5;
 const PAUSE_NORMAL = 1.0;
-
-// Overlap factor: next line starts when previous is ~50% revealed
 const OVERLAP_FACTOR = 0.5;
 
 interface HandwritingTextProps {
@@ -47,10 +39,6 @@ interface HandwritingTextProps {
   inView?: boolean;
 }
 
-/**
- * Calculate reveal duration for a line of text.
- * Formula: min(4.0, max(1.5, textLength × charDelay × 2.0))
- */
 export function calcRevealDuration(text: string, charDelay: number): number {
   return Math.min(4.0, Math.max(1.5, text.length * charDelay * 2.0));
 }
@@ -65,64 +53,71 @@ export default function HandwritingText({
   onComplete,
   inView: externalInView,
 }: HandwritingTextProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const internalInView = useInView(ref, { once: true, margin: '-5% 0px -5% 0px' });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLSpanElement>(null);
+  const internalInView = useInView(containerRef, { once: true, margin: '-5% 0px -5% 0px' });
   const isInView = externalInView !== undefined ? externalInView : internalInView;
 
-  // Track reveal state — starts hidden, becomes true after isInView + rAF
-  // The rAF ensures the browser has painted the hidden state before we transition
-  const [shouldReveal, setShouldReveal] = useState(false);
-  const [hasFiredComplete, setHasFiredComplete] = useState(false);
+  // Track if we've already started the animation (prevent double-fire)
+  const hasAnimatedRef = useRef(false);
 
   const revealDuration = calcRevealDuration(text, charDelay);
 
-  // When inView becomes true, wait one frame then start the CSS transition
+  // Fire onComplete once after animation finishes
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
+
+  // Start animation using Web Animation API when inView becomes true
   useEffect(() => {
-    if (isInView && !shouldReveal) {
-      const raf = requestAnimationFrame(() => {
-        setShouldReveal(true);
-      });
-      return () => cancelAnimationFrame(raf);
-    }
-  }, [isInView, shouldReveal]);
+    if (!isInView || hasAnimatedRef.current) return;
 
-  // onComplete callback — fires once after animation finishes
-  const handleComplete = useCallback(() => {
-    if (onComplete && !hasFiredComplete) {
-      setHasFiredComplete(true);
-      onComplete();
-    }
-  }, [onComplete, hasFiredComplete]);
+    const el = innerRef.current;
+    if (!el) return;
 
-  useEffect(() => {
-    if (shouldReveal && onComplete && !hasFiredComplete) {
-      const timer = setTimeout(handleComplete, (startDelay + revealDuration + 0.3) * 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [shouldReveal, handleComplete, hasFiredComplete, startDelay, revealDuration]);
+    hasAnimatedRef.current = true;
 
-  // CSS transition handles the clip-path animation
-  // The browser manages this independently of React re-renders
-  const clipPathStyle: React.CSSProperties = shouldReveal
-    ? {
-        clipPath: 'inset(0 0% 0 0)',
-        transition: `clip-path ${revealDuration}s ${EASE_CSS} ${startDelay}s`,
+    // Use Web Animation API — same as CSS @keyframes but with dynamic values
+    // This is completely managed by the browser, immune to React re-renders
+    const animation = el.animate(
+      [
+        { clipPath: 'inset(0 100% 0 0)' },  // start: fully hidden
+        { clipPath: 'inset(0 0% 0 0)' },     // end: fully visible
+      ],
+      {
+        duration: revealDuration * 1000,       // ms
+        delay: startDelay * 1000,              // ms
+        easing: EASE_CSS,
+        fill: 'forwards',                      // keep visible state after animation
       }
-    : {
-        clipPath: 'inset(0 100% 0 0)',
-        transition: 'none', // no transition for initial hidden state
+    );
+
+    // Set initial hidden state (in case animation hasn't started yet due to delay)
+    el.style.clipPath = 'inset(0 100% 0 0)';
+
+    // onComplete callback
+    if (onCompleteRef.current) {
+      animation.onfinish = () => {
+        onCompleteRef.current?.();
       };
+    }
+
+    // Cleanup: cancel animation if component unmounts
+    return () => {
+      animation.cancel();
+    };
+  }, [isInView, revealDuration, startDelay]);
 
   return (
     <div
-      ref={ref}
+      ref={containerRef}
       className={className}
-      style={{ ...style, position: 'relative', display: 'inline' }}
+      style={{ ...style, position: 'relative', display: 'block' }}
     >
       <span
+        ref={innerRef}
         style={{
-          display: 'inline',
-          ...clipPathStyle,
+          display: 'inline-block',  // inline-block ensures clip-path works with text wrapping
+          clipPath: 'inset(0 100% 0 0)', // initial hidden state
         }}
       >
         {text}
@@ -130,10 +125,6 @@ export default function HandwritingText({
     </div>
   );
 }
-
-/* ──────────────────────────────────────────────────────────────
-   Utility: Calculate line gap with word-boundary pauses
-   ────────────────────────────────────────────────────────────── */
 
 export function getLineGap(text: string, baseGap: number): number {
   const trimmed = text.trimEnd();
@@ -151,9 +142,6 @@ export function getLineGap(text: string, baseGap: number): number {
   return baseGap * PAUSE_NORMAL;
 }
 
-/**
- * Calculate sequential line delays with overlap.
- */
 export function calcLineDelays(
   lines: string[],
   charDelay: number,
@@ -169,9 +157,6 @@ export function calcLineDelays(
   return delays;
 }
 
-/**
- * Calculate total animation duration for a set of lines.
- */
 export function calcTotalAnimDuration(
   lines: string[],
   charDelay: number,
