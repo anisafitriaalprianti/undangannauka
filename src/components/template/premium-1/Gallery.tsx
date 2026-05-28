@@ -201,16 +201,27 @@ export default function Gallery() {
               transition={{ delay: 0.6 + index * 0.15 }}
             >
               <div
-                className="relative overflow-hidden rounded-lg md:rounded-xl transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                className="relative overflow-hidden transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                 style={{
                   aspectRatio: '3 / 4',
                   background: item.bg,
-                  boxShadow:
-                    '0 2px 8px rgba(28,28,28,0.04), 0 8px 24px rgba(28,28,28,0.06), 0 20px 48px rgba(28,28,28,0.04)',
-                  border: '1px solid rgba(198, 167, 105, 0.12)',
+                  /* ═══ EDGE FEATHERING — no card, blend into background ═══
+                     No border, no shadow, no rounded corners.
+                     Soft edge mask makes each image feel like
+                     it's painted directly on the surface. */
+                  WebkitMaskImage: `
+                    linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%),
+                    linear-gradient(to bottom, transparent 0%, black 3%, black 97%, transparent 100%)
+                  `,
+                  maskImage: `
+                    linear-gradient(to right, transparent 0%, black 3%, black 97%, transparent 100%),
+                    linear-gradient(to bottom, transparent 0%, black 3%, black 97%, transparent 100%)
+                  `,
+                  WebkitMaskComposite: 'intersect',
+                  maskComposite: 'intersect',
                 }}
               >
-                {/* Subtle warm overlay on hover */}
+                {/* Warm surface warmth on hover */}
                 <div
                   className="pointer-events-none absolute inset-0 transition-opacity duration-500 opacity-0 group-hover:opacity-100"
                   style={{
@@ -220,9 +231,9 @@ export default function Gallery() {
                   aria-hidden="true"
                 />
 
-                {/* Warmer shadow on hover — achieved through inner glow */}
+                {/* Inner warmth on hover — light on surfaces */}
                 <div
-                  className="pointer-events-none absolute inset-0 rounded-lg md:rounded-xl transition-shadow duration-500"
+                  className="pointer-events-none absolute inset-0 transition-shadow duration-500"
                   style={{
                     boxShadow: 'inset 0 0 40px rgba(198,167,105,0.04)',
                   }}

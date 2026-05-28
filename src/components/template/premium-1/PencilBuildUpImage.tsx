@@ -76,11 +76,25 @@ export default function PencilBuildUpImage({
       style={{ maxWidth }}
     >
       <div
-        className="nauka-edge-soft relative overflow-hidden rounded-lg md:rounded-xl"
+        className="nauka-edge-soft relative overflow-hidden"
         style={{
           aspectRatio,
-          boxShadow:
-            '0 2px 8px rgba(28,28,28,0.04), 0 8px 24px rgba(28,28,28,0.06), 0 20px 48px rgba(28,28,28,0.04)',
+          /* ═══ EDGE FEATHERING — image blends into background ═══
+             No hard border, no card shadow, no rounded corners.
+             The mask-image softens all 4 edges so the image
+             fades seamlessly into whatever background is behind it.
+             Like a painting on a wall — you can't see where
+             the paint ends and the wall begins. */
+          WebkitMaskImage: `
+            linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%),
+            linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%)
+          `,
+          maskImage: `
+            linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%),
+            linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%)
+          `,
+          WebkitMaskComposite: 'intersect',
+          maskComposite: 'intersect',
         }}
       >
         {/* ═══════════════════════════════════════════════════════
@@ -297,24 +311,10 @@ export default function PencilBuildUpImage({
         />
 
         {/* ═══════════════════════════════════════════════════════
-            SKETCH FRAME — thin gold border
-            Appears during sketch phase, fades as color fills
+            REMOVED: Sketch frame gold border
+            No visible frame — image blends seamlessly
+            into the background without card boundaries.
             ═══════════════════════════════════════════════════════ */}
-        <motion.div
-          className="absolute inset-[-3px] rounded-lg md:rounded-xl pointer-events-none z-[9]"
-          style={{ border: '1px solid var(--p1-gold)' }}
-          initial={{ opacity: 0 }}
-          animate={isInView
-            ? { opacity: [0, 0.6, 0.6, 0.4, 0] }
-            : { opacity: 0 }
-          }
-          transition={{
-            duration: 10.0,
-            delay: 1.0,
-            times: [0, 0.06, 0.25, 0.55, 1],
-            ease: 'easeOut',
-          }}
-        />
       </div>
     </motion.div>
   );
