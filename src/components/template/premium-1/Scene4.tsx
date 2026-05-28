@@ -1,8 +1,8 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { useRef, useMemo, useEffect } from 'react';
-import HandwritingText, { calcLineDelays, calcTotalAnimDuration } from './HandwritingText';
+import { useRef, useMemo } from 'react';
+import HandwritingText, { calcLineDelays } from './HandwritingText';
 import PencilBuildUpImage from './PencilBuildUpImage';
 
 /* ──────────────────────────────────────────────────────────────
@@ -35,11 +35,7 @@ const CHAR_DELAY = 0.04;   // FASTER — payoff moment
 const BASE_DELAY = 1.5;
 const PAUSE_GAP = 0.35;    // quicker pacing for climax
 
-interface Scene4Props {
-  onAnimatingChange?: (isAnimating: boolean) => void;
-}
-
-export default function Scene4({ onAnimatingChange }: Scene4Props) {
+export default function Scene4() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, {
     once: true,
@@ -50,19 +46,6 @@ export default function Scene4({ onAnimatingChange }: Scene4Props) {
     () => calcLineDelays(sceneLines, CHAR_DELAY, BASE_DELAY, PAUSE_GAP),
     []
   );
-
-  const totalAnimDuration = useMemo(
-    () => calcTotalAnimDuration(sceneLines, CHAR_DELAY, BASE_DELAY, PAUSE_GAP),
-    []
-  );
-
-  useEffect(() => {
-    if (isInView && onAnimatingChange) {
-      onAnimatingChange(true);
-      const timer = setTimeout(() => onAnimatingChange(false), totalAnimDuration * 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [isInView, onAnimatingChange, totalAnimDuration]);
 
   return (
     <section

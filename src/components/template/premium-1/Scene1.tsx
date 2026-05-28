@@ -1,8 +1,8 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { useRef, useMemo, useEffect } from 'react';
-import HandwritingText, { calcLineDelays, calcTotalAnimDuration } from './HandwritingText';
+import { useRef, useMemo } from 'react';
+import HandwritingText, { calcLineDelays } from './HandwritingText';
 import PencilBuildUpImage from './PencilBuildUpImage';
 
 /* ──────────────────────────────────────────────────────────────
@@ -35,11 +35,7 @@ const CHAR_DELAY = 0.05;
 const BASE_DELAY = 2.0;   // time before first line starts (was 5.0)
 const PAUSE_GAP = 0.5;    // base gap between lines (was 2.0)
 
-interface Scene1Props {
-  onAnimatingChange?: (isAnimating: boolean) => void;
-}
-
-export default function Scene1({ onAnimatingChange }: Scene1Props) {
+export default function Scene1() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, {
     once: true,
@@ -50,20 +46,6 @@ export default function Scene1({ onAnimatingChange }: Scene1Props) {
     () => calcLineDelays(sceneLines, CHAR_DELAY, BASE_DELAY, PAUSE_GAP),
     []
   );
-
-  const totalAnimDuration = useMemo(
-    () => calcTotalAnimDuration(sceneLines, CHAR_DELAY, BASE_DELAY, PAUSE_GAP),
-    []
-  );
-
-  // Notify parent when animation starts/ends (for auto-scroll pause)
-  useEffect(() => {
-    if (isInView && onAnimatingChange) {
-      onAnimatingChange(true);
-      const timer = setTimeout(() => onAnimatingChange(false), totalAnimDuration * 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [isInView, onAnimatingChange, totalAnimDuration]);
 
   return (
     <section

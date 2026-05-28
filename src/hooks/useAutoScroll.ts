@@ -8,66 +8,25 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 
    Scrolls the page slowly, like watching a film unfold.
    Pauses when user manually scrolls, resumes after idle.
-   Supports external pause via pausedRef (for scene animations).
-
-   Props:
-   - enabled: whether auto scroll is active
-   - speed: pixels per frame (default 0.4 — very slow, cinematic)
-   - idleResumeDelay: ms to wait after user scroll before resuming (default 3000)
-   - pausedRef: ref that when true, pauses auto-scroll (for scene animations)
    ────────────────────────────────────────────────────────────── */
 
 interface UseAutoScrollOptions {
   enabled: boolean;
   speed?: number;
   idleResumeDelay?: number;
-  pausedRef?: React.RefObject<boolean>;
 }
 
 export default function useAutoScroll({
   enabled,
-  speed = 0.4,
+  speed = 0.5,
   idleResumeDelay = 3000,
-  pausedRef,
 }: UseAutoScrollOptions) {
   const rafRef = useRef<number | null>(null);
   const userScrollingRef = useRef(false);
   const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isAutoScrolling, setIsAutoScrolling] = useState(false);
   const lastScrollTopRef = useRef(0);
-
-  // Detect user manual scroll
-  const handleUserScroll = useCallback(() => {
-    // Check if this is a programmatic scroll (from our RAF)
-    const currentTop = window.scrollY;
-    const expectedTop = lastScrollTopRef.current;
-
-    // If scroll position jumped more than 2px from where we left it,
-    // it's likely a user-initiated scroll
-    if (Math.abs(currentTop - expectedTop) > 2) {
-      userScrollingRef.current = true;
-      setIsAutoScrolling(false);
-
-      // Clear any existing idle timer
-      if (idleTimerRef.current) {
-        clearTimeout(idleTimerRef.current);
-      }
-
-      // Set idle timer to resume auto scroll after user stops
-      idleTimerRef.current = setTimeout(() => {
-        // Check if we've reached the bottom
-        const atBottom =
-          window.innerHeight + window.scrollY >=
-          document.body.scrollHeight - 50;
-
-        if (!atBottom) {
-          userScrollingRef.current = false;
-          lastScrollTopRef.current = window.scrollY;
-          setIsAutoScrolling(true);
-        }
-      }, idleResumeDelay);
-    }
-  }, [idleResumeDelay]);
+  const programmaticScrollRef = useRef(false);
 
   // Auto scroll loop
   useEffect(() => {
@@ -82,16 +41,11 @@ export default function useAutoScroll({
 
     setIsAutoScrolling(true);
     lastScrollTopRef.current = window.scrollY;
+    userScrollingRef.current = false;
 
     const scroll = () => {
       // Don't scroll if user is manually scrolling
       if (userScrollingRef.current) {
-        rafRef.current = requestAnimationFrame(scroll);
-        return;
-      }
-
-      // Don't scroll if externally paused (e.g., scene animation in progress)
-      if (pausedRef?.current) {
         rafRef.current = requestAnimationFrame(scroll);
         return;
       }
@@ -106,9 +60,14 @@ export default function useAutoScroll({
         return;
       }
 
-      // Scroll by speed pixels
+      // Mark this as programmatic scroll so we don't detect it as user scroll
+      programmaticScrollRef.current = true;
       window.scrollBy(0, speed);
       lastScrollTopRef.current = window.scrollY;
+      // Reset flag after a tick (scroll event fires synchronously in most browsers)
+      requestAnimationFrame(() => {
+        programmaticScrollRef.current = false;
+      });
 
       rafRef.current = requestAnimationFrame(scroll);
     };
@@ -121,11 +80,44 @@ export default function useAutoScroll({
         rafRef.current = null;
       }
     };
-  }, [enabled, speed, pausedRef]);
+  }, [enabled, speed]);
 
-  // Listen for user scroll events
+  // Detect user manual scroll
   useEffect(() => {
     if (!enabled) return;
+
+    const handleUserScroll = () => {
+      // Skip if this is our own programmatic scroll
+      if (programmaticScrollRef.current) return;
+
+      const currentTop = window.scrollY;
+      const expectedTop = lastScrollTopRef.current;
+
+      // If scroll position jumped more than 3px from where we left it,
+      // it's a user-initiated scroll
+      if (Math.abs(currentTop - expectedTop) > 3) {
+        userScrollingRef.current = true;
+        setIsAutoScrolling(false);
+
+        // Clear any existing idle timer
+        if (idleTimerRef.current) {
+          clearTimeout(idleTimerRef.current);
+        }
+
+        // Set idle timer to resume auto scroll after user stops
+        idleTimerRef.current = setTimeout(() => {
+          const atBottom =
+            window.innerHeight + window.scrollY >=
+            document.body.scrollHeight - 50;
+
+          if (!atBottom) {
+            userScrollingRef.current = false;
+            lastScrollTopRef.current = window.scrollY;
+            setIsAutoScrolling(true);
+          }
+        }, idleResumeDelay);
+      }
+    };
 
     window.addEventListener('scroll', handleUserScroll, { passive: true });
 
@@ -135,7 +127,7 @@ export default function useAutoScroll({
         clearTimeout(idleTimerRef.current);
       }
     };
-  }, [enabled, handleUserScroll]);
+  }, [enabled, idleResumeDelay]);
 
   return { isAutoScrolling };
 }

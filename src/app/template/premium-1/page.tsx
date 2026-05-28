@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Opening from '@/components/template/premium-1/Opening';
 import Cover from '@/components/template/premium-1/Cover';
@@ -28,10 +28,6 @@ import useAutoScroll from '@/hooks/useAutoScroll';
  * 5-8. Story Scenes — T2 PencilBuildUp + T5 Handwriting
  * 9. Breath — Sacred pause
  * 10. Event Info, Gallery, RSVP, Closing
- *
- * AUTO-SCROLL PAUSE:
- * When a scene's handwriting animation is playing, auto-scroll pauses
- * so the user can see the full text reveal before scrolling past.
  */
 
 const EASE = [0.25, 0.46, 0.45, 0.94] as const;
@@ -39,9 +35,7 @@ const EASE = [0.25, 0.46, 0.45, 0.94] as const;
 export default function Premium1Page() {
   const [openingComplete, setOpeningComplete] = useState(false);
   const [invitationOpened, setInvitationOpened] = useState(false);
-
-  // Ref to pause auto-scroll during scene animations
-  const autoScrollPausedRef = useRef(false);
+  const [autoScrollEnabled, setAutoScrollEnabled] = useState(false);
 
   const handleOpeningComplete = useCallback(() => {
     setOpeningComplete(true);
@@ -50,28 +44,27 @@ export default function Premium1Page() {
 
   const handleOpenInvitation = useCallback(() => {
     setInvitationOpened(true);
-    // Scroll directly to Bismillah section after content renders
+    // Scroll to Bismillah section after content renders
     setTimeout(() => {
       const bismillahSection = document.getElementById('bismillah-section');
       if (bismillahSection) {
         bismillahSection.scrollIntoView({ behavior: 'smooth' });
       }
-    }, 400);
+    }, 300);
+
+    // Delay auto-scroll start so the initial scrollIntoView completes first
+    // and doesn't get detected as "user scroll"
+    setTimeout(() => {
+      setAutoScrollEnabled(true);
+    }, 2500);
   }, []);
 
-  // Auto scroll starts after invitation is opened
-  // Pauses automatically when scene animations are in progress
+  // Auto scroll starts 2.5s after invitation is opened
   const { isAutoScrolling } = useAutoScroll({
-    enabled: invitationOpened,
-    speed: 0.7,
+    enabled: autoScrollEnabled,
+    speed: 0.5,
     idleResumeDelay: 2000,
-    pausedRef: autoScrollPausedRef,
   });
-
-  // Callback for scenes to pause/resume auto-scroll during animations
-  const handleSceneAnimatingChange = useCallback((isAnimating: boolean) => {
-    autoScrollPausedRef.current = isAnimating;
-  }, []);
 
   return (
     <main className="template-p1 bg-[#2A2420] min-h-screen">
@@ -103,8 +96,7 @@ export default function Premium1Page() {
         )}
       </AnimatePresence>
 
-      {/* ── Phase 3: Full content — after "Buka Undangan" ──
-          Cover is NOT repeated here. User scrolls from Bismillah onward. */}
+      {/* ── Phase 3: Full content — after "Buka Undangan" ── */}
       <AnimatePresence>
         {invitationOpened && (
           <motion.div
@@ -113,64 +105,22 @@ export default function Premium1Page() {
             animate={{ opacity: 1 }}
             transition={{ duration: 1.6, ease: EASE }}
           >
-            {/* Bismillah Section — first thing user sees after Buka Undangan */}
+            {/* Bismillah Section */}
             <div id="bismillah-section">
               <Bismillah />
             </div>
 
-            {/* Story Mode — Cinematic scenes
-                "Kenangan yang perlahan hidup"
-                Each scene breathes, has whitespace, emotional pacing.
-                Auto-scroll pauses during scene handwriting animations. */}
+            {/* Scene I */}
+            <Scene1 />
 
-            {/* Scene I: "Menjaga Dalam Diam" */}
-            <Scene1 onAnimatingChange={handleSceneAnimatingChange} />
+            {/* Scene II */}
+            <Scene2 />
 
-            {/* Breathing spacer — Scene 1 → Scene 2 */}
-            <div
-              className="template-p1 relative flex items-center justify-center"
-              style={{ backgroundColor: 'var(--p1-ivory)', height: '25vh' }}
-            >
-              <div
-                className="w-[80px] origin-center"
-                style={{
-                  height: '1px',
-                  background: 'linear-gradient(to right, transparent, var(--p1-gold), transparent)',
-                  animation: 'p1LineDrawSlow 2.5s ease-out forwards',
-                }}
-              />
-            </div>
+            {/* Scene III */}
+            <Scene3 />
 
-            {/* Scene II: "Menitipkan Dalam Sujud" */}
-            <Scene2 onAnimatingChange={handleSceneAnimatingChange} />
-
-            {/* Breathing spacer — Scene 2 → Scene 3 */}
-            <div
-              className="template-p1"
-              style={{ backgroundColor: 'var(--p1-ivory)', height: '18vh' }}
-            />
-
-            {/* Scene III: Breathing space — emotional pause */}
-            <Scene3 onAnimatingChange={handleSceneAnimatingChange} />
-
-            {/* Breathing spacer — Scene 3 → Scene 4 */}
-            <div
-              className="template-p1 relative flex items-center justify-center"
-              style={{ backgroundColor: 'var(--p1-ivory)', height: '12vh' }}
-            >
-              <div
-                className="origin-center"
-                style={{
-                  width: '1px',
-                  height: '3px',
-                  background: 'var(--p1-gold)',
-                  animation: 'p1VerticalLineDraw 1.5s ease-out forwards',
-                }}
-              />
-            </div>
-
-            {/* Scene IV: "Hari Yang Dijanjikan" — emotional payoff */}
-            <Scene4 onAnimatingChange={handleSceneAnimatingChange} />
+            {/* Scene IV */}
+            <Scene4 />
 
             {/* Sacred breathing space before event info */}
             <Breath />
