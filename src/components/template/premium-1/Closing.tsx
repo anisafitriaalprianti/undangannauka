@@ -2,19 +2,20 @@
 
 import { motion, useInView, type Variants } from 'framer-motion';
 import { useRef, useEffect } from 'react';
-import CandleFlame from './CandleFlame';
+import CinematicCandleLighting from './CandleFlame';
 
 /* ──────────────────────────────────────────────────────────────
    Closing — "Terima kasih telah menungguku dalam ketaatan."
    Premium-1 Islamic Faceless Cinematic Wedding Invitation
 
    Concept: Warm emotional ending. The last warm light before
-   the credits roll. A candle burns softly — the room darkens
-   around its glow, completing the circle back to the opening.
+   the credits roll. A candle burns softly using T3 Cinematic
+   Candle Lighting — light affects surfaces, not just overlays.
+   The room darkens around the flame, completing the circle.
 
    Composition:
    • Warm dark background (#2A2420) — mirroring Opening
-   • REALISTIC CANDLE FLAME with ambient light + living shadows
+   • T3 CINEMATIC CANDLE LIGHTING — light affects surfaces
    • Closing quote in Playfair Display italic, warm gold
    • Couple names: "Arka & Dyana" below
    • Gold ornamental divider above names
@@ -179,14 +180,14 @@ export default function Closing() {
       {/* ═══ CANDLE FLAME — realistic candle with ambient light + shadows ═══
           The flame ignites first, then lights up the entire scene.
           Ambient light (warm glow) + shadow play (deepening vignette)
-          are handled inside CandleFlame component via Web Animation API. */}
+          are handled inside CinematicCandleLighting (T3) component via Web Animation API. */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
         variants={candleIgnite}
         initial="hidden"
         animate={isInView ? 'visible' : 'hidden'}
       >
-        <CandleFlame
+        <CinematicCandleLighting
           left="50%"
           top="18%"
           scale={1}
