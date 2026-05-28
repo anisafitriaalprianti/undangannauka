@@ -54,14 +54,14 @@ export default function Scene3() {
     <section
       ref={sectionRef}
       className="template-p1 nauka-paper nauka-grain nauka-ink-wash nauka-vignette relative w-full min-h-dvh overflow-hidden"
-      style={{ backgroundColor: 'var(--p1-ivory)' }}
+      style={{ background: 'linear-gradient(170deg, #F5EDD6 0%, #F2E8C8 25%, #EFE3BC 50%, #ECDFB4 75%, #F0E5C0 100%)' }}
     >
       {/* ── Golden hour ambient glow ── */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
-            'radial-gradient(ellipse 55% 45% at 65% 20%, rgba(198,167,105,0.08) 0%, transparent 55%)',
+            'radial-gradient(ellipse 55% 45% at 65% 20%, rgba(212,186,130,0.12) 0%, transparent 55%)',
           animation: 'p1WarmDrift 14s ease-in-out infinite',
         }}
         aria-hidden="true"
@@ -77,6 +77,7 @@ export default function Scene3() {
           aspectRatio="614 / 378"
           sizes="380px"
           maxWidth="380px"
+          bgColor="#F2E8C8"
         />
 
         {/* ── Top gold line ── */}
@@ -126,22 +127,22 @@ export default function Scene3() {
         />
       </div>
 
-      {/* ── Top edge ── */}
+      {/* ── T7: Top edge — cinematic fade-to-black ── */}
       <div
-        className="pointer-events-none absolute top-0 left-0 right-0 z-10 h-20"
+        className="pointer-events-none absolute top-0 left-0 right-0 z-10 h-28"
         style={{
           background:
-            'linear-gradient(0deg, transparent 0%, rgba(245,240,232,0.5) 50%, rgba(245,240,232,1) 100%)',
+            'linear-gradient(180deg, rgba(26,22,20,1) 0%, rgba(26,22,20,0.6) 40%, transparent 100%)',
         }}
         aria-hidden="true"
       />
 
-      {/* ── Bottom edge ── */}
+      {/* ── T7: Bottom edge — cinematic fade-to-black ── */}
       <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-20"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-32"
         style={{
           background:
-            'linear-gradient(180deg, transparent 0%, rgba(245,240,232,0.5) 50%, rgba(245,240,232,1) 100%)',
+            'linear-gradient(0deg, rgba(26,22,20,1) 0%, rgba(26,22,20,0.6) 40%, transparent 100%)',
         }}
         aria-hidden="true"
       />

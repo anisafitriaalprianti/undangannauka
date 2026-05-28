@@ -53,7 +53,7 @@ export default function Scene4() {
       className="template-p1 nauka-paper nauka-grain nauka-ink-wash nauka-vignette relative w-full min-h-dvh overflow-hidden"
       style={{
         background:
-          'linear-gradient(170deg, #F7F1E4 0%, #F5EFE3 25%, #F4EDE0 50%, #F3ECE0 75%, #F5F0E6 100%)',
+          'linear-gradient(170deg, #F8F0D8 0%, #F5ECCA 25%, #F2E8BC 50%, #F0E4B4 75%, #F4ECC4 100%)',
       }}
     >
       {/* ── Multiple warm light layers ── */}
@@ -61,7 +61,7 @@ export default function Scene4() {
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background: [
-            'radial-gradient(ellipse 60% 45% at 50% 40%, rgba(212, 186, 130, 0.07) 0%, transparent 55%)',
+            'radial-gradient(ellipse 60% 45% at 50% 40%, rgba(222, 196, 140, 0.10) 0%, transparent 55%)',
             'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(198, 167, 105, 0.04) 0%, transparent 60%)',
           ].join(', '),
         }}
@@ -108,6 +108,7 @@ export default function Scene4() {
             aspectRatio="606 / 396"
             sizes="(max-width: 640px) 85vw, 540px"
             maxWidth="540px"
+            bgColor="#F5ECCA"
           />
         </motion.div>
 
@@ -175,22 +176,22 @@ export default function Scene4() {
         </div>
       </div>
 
-      {/* ── Bottom edge ── */}
+      {/* ── T7: Bottom edge — cinematic fade-to-black ── */}
       <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-24"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-32"
         style={{
           background:
-            'linear-gradient(180deg, transparent 0%, rgba(245,239,227,0.5) 50%, rgba(245,239,227,1) 100%)',
+            'linear-gradient(0deg, rgba(26,22,20,1) 0%, rgba(26,22,20,0.6) 40%, transparent 100%)',
         }}
         aria-hidden="true"
       />
 
-      {/* ── Top edge ── */}
+      {/* ── T7: Top edge — cinematic fade-to-black ── */}
       <div
-        className="pointer-events-none absolute top-0 left-0 right-0 z-10 h-16"
+        className="pointer-events-none absolute top-0 left-0 right-0 z-10 h-28"
         style={{
           background:
-            'linear-gradient(0deg, transparent 0%, rgba(245,239,227,0.5) 50%, rgba(245,239,227,1) 100%)',
+            'linear-gradient(180deg, rgba(26,22,20,1) 0%, rgba(26,22,20,0.6) 40%, transparent 100%)',
         }}
         aria-hidden="true"
       />

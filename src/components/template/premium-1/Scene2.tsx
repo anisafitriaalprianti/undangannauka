@@ -52,7 +52,7 @@ export default function Scene2() {
       className="template-p1 nauka-paper nauka-grain nauka-ink-wash nauka-vignette relative w-full min-h-dvh overflow-hidden"
       style={{
         background:
-          'linear-gradient(160deg, #F5F0E8 0%, #F2EDE4 30%, #F5F0E8 60%, #F0EBE1 100%)',
+          'linear-gradient(155deg, #F7F1E4 0%, #F4ECDA 25%, #F2E8D2 50%, #F0E4CC 75%, #F5F0E6 100%)',
       }}
     >
       {/* ── Warm dawn light from top-left ── */}
@@ -76,6 +76,7 @@ export default function Scene2() {
           sizes="85vw"
           maxWidth="85%"
           className="mx-auto"
+          bgColor="#F4ECDA"
         />
 
         {/* ── Thin horizontal line below image ── */}
@@ -142,22 +143,22 @@ export default function Scene2() {
         </div>
       </div>
 
-      {/* ── Bottom edge ── */}
+      {/* ── T7: Bottom edge — cinematic fade-to-black ── */}
       <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-20"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-32"
         style={{
           background:
-            'linear-gradient(180deg, transparent 0%, rgba(245,240,232,0.6) 60%, rgba(245,240,232,1) 100%)',
+            'linear-gradient(0deg, rgba(26,22,20,1) 0%, rgba(26,22,20,0.6) 40%, transparent 100%)',
         }}
         aria-hidden="true"
       />
 
-      {/* ── Top edge ── */}
+      {/* ── T7: Top edge — cinematic fade-to-black ── */}
       <div
-        className="pointer-events-none absolute top-0 left-0 right-0 z-10 h-16"
+        className="pointer-events-none absolute top-0 left-0 right-0 z-10 h-28"
         style={{
           background:
-            'linear-gradient(0deg, transparent 0%, rgba(245,240,232,0.5) 50%, rgba(245,240,232,1) 100%)',
+            'linear-gradient(180deg, rgba(26,22,20,1) 0%, rgba(26,22,20,0.6) 40%, transparent 100%)',
         }}
         aria-hidden="true"
       />

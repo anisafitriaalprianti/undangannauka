@@ -143,22 +143,22 @@ export default function Bismillah() {
         />
       </div>
 
-      {/* ── Top edge ── */}
+      {/* ── T7: Top edge — cinematic fade-to-black (follows dark Cover) ── */}
       <div
-        className="pointer-events-none absolute top-0 left-0 right-0 z-10 h-16"
+        className="pointer-events-none absolute top-0 left-0 right-0 z-10 h-28"
         style={{
           background:
-            'linear-gradient(0deg, transparent 0%, rgba(245,240,232,0.5) 50%, rgba(245,240,232,1) 100%)',
+            'linear-gradient(180deg, rgba(26,22,20,1) 0%, rgba(26,22,20,0.6) 40%, transparent 100%)',
         }}
         aria-hidden="true"
       />
 
-      {/* ── Bottom edge ── */}
+      {/* ── T7: Bottom edge — cinematic fade-to-black ── */}
       <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-16"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-32"
         style={{
           background:
-            'linear-gradient(180deg, transparent 0%, rgba(245,240,232,0.5) 50%, rgba(245,240,232,1) 100%)',
+            'linear-gradient(0deg, rgba(26,22,20,1) 0%, rgba(26,22,20,0.6) 40%, transparent 100%)',
         }}
         aria-hidden="true"
       />

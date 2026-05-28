@@ -51,14 +51,15 @@ export default function Scene1() {
     <section
       ref={sectionRef}
       className="template-p1 nauka-paper nauka-grain nauka-ink-wash nauka-vignette relative w-full min-h-dvh overflow-hidden"
-      style={{ backgroundColor: 'var(--p1-ivory)' }}
+      style={{ background: 'linear-gradient(165deg, #EBE8E4 0%, #E5E2DE 30%, #E0DDD8 60%, #DCD9D4 100%)' }}
     >
       {/* ── Directional lighting overlays ── */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background: [
-            'radial-gradient(ellipse 70% 40% at 35% 5%, rgba(138,155,174,0.08) 0%, transparent 50%)',
+            'radial-gradient(ellipse 70% 40% at 35% 5%, rgba(138,155,174,0.12) 0%, transparent 50%)',
+            'radial-gradient(ellipse 55% 45% at 70% 85%, rgba(138,155,174,0.06) 0%, transparent 50%)',
             'radial-gradient(ellipse 65% 55% at 25% 75%, rgba(198,167,105,0.08) 0%, transparent 50%)',
           ].join(', '),
         }}
@@ -88,6 +89,7 @@ export default function Scene1() {
               aspectRatio="574 / 388"
               sizes="(max-width: 768px) 85vw, 520px"
               maxWidth="520px"
+              bgColor="#E5E2DE"
             />
           </div>
 
@@ -144,22 +146,22 @@ export default function Scene1() {
         </div>
       </div>
 
-      {/* ── Bottom edge ── */}
+      {/* ── T7: Bottom edge — cinematic fade-to-black ── */}
       <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-24"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-32"
         style={{
           background:
-            'linear-gradient(180deg, transparent 0%, rgba(245,240,232,0.5) 50%, rgba(245,240,232,1) 100%)',
+            'linear-gradient(0deg, rgba(26,22,20,1) 0%, rgba(26,22,20,0.6) 40%, transparent 100%)',
         }}
         aria-hidden="true"
       />
 
-      {/* ── Top edge ── */}
+      {/* ── T7: Top edge — cinematic fade-to-black ── */}
       <div
-        className="pointer-events-none absolute top-0 left-0 right-0 z-10 h-16"
+        className="pointer-events-none absolute top-0 left-0 right-0 z-10 h-28"
         style={{
           background:
-            'linear-gradient(0deg, transparent 0%, rgba(245,240,232,0.5) 50%, rgba(245,240,232,1) 100%)',
+            'linear-gradient(180deg, rgba(26,22,20,1) 0%, rgba(26,22,20,0.6) 40%, transparent 100%)',
         }}
         aria-hidden="true"
       />

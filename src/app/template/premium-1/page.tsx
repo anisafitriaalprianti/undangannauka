@@ -15,6 +15,7 @@ import Gallery from '@/components/template/premium-1/Gallery';
 import RSVP from '@/components/template/premium-1/RSVP';
 import Closing from '@/components/template/premium-1/Closing';
 import useAutoScroll from '@/hooks/useAutoScroll';
+import CinematicAmbience from '@/components/template/premium-1/CinematicAmbience';
 
 /**
  * Premium-1 Template Page — Islamic Faceless Cinematic
@@ -67,6 +68,9 @@ export default function Premium1Page() {
 
   return (
     <main className="template-p1 bg-[#2A2420] min-h-screen">
+      {/* ── T6: Cinematic Ambience — procedural ambient soundscape ── */}
+      <CinematicAmbience active={invitationOpened} />
+
       {/* ── Phase 1: Opening — cinematic intro ── */}
       <AnimatePresence mode="wait">
         {!openingComplete && (
@@ -112,11 +116,32 @@ export default function Premium1Page() {
             {/* Scene I */}
             <Scene1 />
 
+            {/* ═══ T9: THE VOID — keheningan antara menahan dan menitipkan ═══ */}
+            <section className="relative w-full overflow-hidden" style={{ height: '30vh', backgroundColor: '#1A1614' }}>
+              <div className="pointer-events-none absolute inset-0" style={{
+                background: 'radial-gradient(ellipse 30% 25% at 50% 50%, rgba(198,167,105,0.03) 0%, transparent 70%)',
+              }} />
+            </section>
+
             {/* Scene II */}
             <Scene2 />
 
+            {/* ═══ T9: THE VOID — keheningan terberat, sebelum rindu ═══ */}
+            <section className="relative w-full overflow-hidden" style={{ height: '40vh', backgroundColor: '#1A1614' }}>
+              <div className="pointer-events-none absolute inset-0" style={{
+                background: 'radial-gradient(ellipse 25% 20% at 50% 50%, rgba(198,167,105,0.02) 0%, transparent 70%)',
+              }} />
+            </section>
+
             {/* Scene III */}
             <Scene3 />
+
+            {/* ═══ T9: THE VOID — napas terakhir sebelum janji terjawab ═══ */}
+            <section className="relative w-full overflow-hidden" style={{ height: '25vh', backgroundColor: '#1A1614' }}>
+              <div className="pointer-events-none absolute inset-0" style={{
+                background: 'radial-gradient(ellipse 35% 30% at 50% 50%, rgba(212,186,130,0.04) 0%, transparent 70%)',
+              }} />
+            </section>
 
             {/* Scene IV */}
             <Scene4 />
