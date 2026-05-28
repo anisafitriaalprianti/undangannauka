@@ -31,25 +31,23 @@ import CinematicCandleLighting from './CandleFlame';
 
 // ── Animation variants ──────────────────────────────────────────
 
-const candleIgnite: Variants = {
+const lightingIgnite: Variants = {
   hidden: {
     opacity: 0,
-    scale: 0,
-    filter: 'blur(8px)',
+    filter: 'blur(6px)',
   },
   visible: {
     opacity: 1,
-    scale: 1,
     filter: 'blur(0px)',
     transition: {
-      duration: 1.2,
+      duration: 1.5,
       ease: [0.16, 1, 0.3, 1],
       opacity: {
-        duration: 0.8,
+        duration: 1.0,
         ease: 'easeOut',
       },
       filter: {
-        duration: 1.0,
+        duration: 1.2,
         ease: 'easeOut',
       },
     },
@@ -177,22 +175,17 @@ export default function Closing() {
       className="template-p1 template-p1-dark relative w-full min-h-dvh overflow-hidden flex items-center justify-center"
       style={{ backgroundColor: '#2A2420' }}
     >
-      {/* ═══ CANDLE FLAME — realistic candle with ambient light + shadows ═══
-          The flame ignites first, then lights up the entire scene.
-          Ambient light (warm glow) + shadow play (deepening vignette)
-          are handled inside CinematicCandleLighting (T3) component via Web Animation API. */}
+      {/* ═══ T3: CINEMATIC CANDLE LIGHTING — no visible candle ═══
+          Light affects surfaces, not just overlay. The candle is
+          IMPLIED — you feel the warmth without seeing the object.
+          This keeps guests focused on the TEXT being illuminated. */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
-        variants={candleIgnite}
+        variants={lightingIgnite}
         initial="hidden"
         animate={isInView ? 'visible' : 'hidden'}
       >
-        <CinematicCandleLighting
-          left="50%"
-          top="18%"
-          scale={1}
-          visible={isInView}
-        />
+        <CinematicCandleLighting visible={isInView} />
       </motion.div>
 
       {/* ─── Secondary warm wash — broader, softer, underneath everything ───
