@@ -8,21 +8,19 @@ import { useRef, useEffect } from 'react';
    Technique: Light affects surfaces — not just blur glow overlay
 
    Core principles:
-   1. CINEMATIC LIGHT FALLOFF — inverse-square-ish decay from
-      light source position. Close = warm gold, mid = dim amber,
-      far = near darkness. Not a uniform overlay.
-   2. LAYERED AMBIENT LIGHTING — multiple independent light
-      layers at different heights/intensities. Real candlelight
-      doesn't produce one flat glow — it creates zones.
-   3. SURFACE LIGHT RESPONSE — the text, dividers, and elements
-      catch warm highlights on their top edges.
-      Elements further away are cooler/dimmer. The light wraps
-      around surfaces, not just sits on top.
-   4. SUBTLE VOLUMETRIC WARMTH — visible light scatter in the
-      air between source and surfaces. Like dust motes catching
-      light. Thin, directional, not a foggy haze.
+   1. CINEMATIC LIGHT FALLOFF — one seamless gradient from
+      warm cream at center to deep brown at edges. No visible
+      layer boundaries. Painted as a single stroke, not stacked.
+   2. SURFACE LIGHT RESPONSE — the text area catches a subtle
+      warm highlight. Light reaches surfaces, it doesn't just
+      float on top as a glow.
+   3. ORGANIC BREATH — one rhythm for the whole scene, not
+      multiple competing flicker cycles. Real candlelight has
+      ONE pulse that affects everything together.
 
    What this is NOT:
+   - ❌ Multiple gradient stacks with visible boundaries
+   - ❌ Color patches / bands that feel like separate layers
    - ❌ Blur glow overlay (just slapping radial-gradient on top)
    - ❌ Flat opacity breathing (same intensity everywhere)
    - ❌ Generic vignette (uniform edge darkening)
@@ -32,11 +30,12 @@ import { useRef, useEffect } from 'react';
    the warmth but you don't see the object. This keeps guests
    focused on the TEXT being illuminated, not the light source.
 
-   Implementation layers (bottom to top):
-   A. Shadow zones — where light DOESN'T reach (deep corners)
-   B. Volumetric warmth — visible light in the air itself
-   C. Surface response layers — light hitting specific surfaces
-   D. Ambient light zones — primary, secondary falloff
+   Implementation:
+   - MASTER FALLOFF: One carefully crafted radial gradient,
+     many color stops, seamless transition from warm cream
+     to deep dark brown. This IS the cinematic falloff.
+   - SURFACE WARMTH: One gentle warm highlight on the text
+     area — light that responds to surfaces below it.
    ────────────────────────────────────────────────────────────── */
 
 interface CinematicCandleLightingProps {
@@ -47,115 +46,49 @@ interface CinematicCandleLightingProps {
 export default function CinematicCandleLighting({
   visible = true,
 }: CinematicCandleLightingProps) {
-  const primaryLightRef = useRef<HTMLDivElement>(null);
-  const secondaryLightRef = useRef<HTMLDivElement>(null);
-  const shadowRef = useRef<HTMLDivElement>(null);
-  const volumetricRef = useRef<HTMLDivElement>(null);
-  const surfaceResponseRef = useRef<HTMLDivElement>(null);
-  const tertiaryLightRef = useRef<HTMLDivElement>(null);
+  const masterRef = useRef<HTMLDivElement>(null);
+  const surfaceRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!visible) return;
 
-    const primaryLight = primaryLightRef.current;
-    const secondaryLight = secondaryLightRef.current;
-    const shadow = shadowRef.current;
-    const volumetric = volumetricRef.current;
-    const surfaceResponse = surfaceResponseRef.current;
-    const tertiaryLight = tertiaryLightRef.current;
+    const master = masterRef.current;
+    const surface = surfaceRef.current;
 
-    // ═══ LAYER D1: PRIMARY AMBIENT — fast, tight, centered ═══
-    // The brightest zone — right on the content. Follows the
-    // flicker closely with slight lag, like light travel time.
-    const primaryBreath = primaryLight?.animate(
+    // ═══ MASTER FALLOFF BREATH — single organic rhythm ═══
+    // One pulse for the whole scene. Like real candlelight —
+    // everything brightens and dims together, not separately.
+    // Very subtle scale shift: the warm zone breathes slightly,
+    // expanding and contracting like a living thing.
+    const masterBreath = master?.animate(
       [
-        { opacity: 0.7, transform: 'scale(1)' },
-        { opacity: 1, transform: 'scale(1.02)' },
-        { opacity: 0.6, transform: 'scale(0.98)' },
-        { opacity: 0.9, transform: 'scale(1.01)' },
-        { opacity: 0.7, transform: 'scale(1)' },
+        { opacity: 0.88, transform: 'scale(1)' },
+        { opacity: 1, transform: 'scale(1.008)' },
+        { opacity: 0.82, transform: 'scale(0.996)' },
+        { opacity: 0.95, transform: 'scale(1.004)' },
+        { opacity: 0.88, transform: 'scale(1)' },
       ],
-      { duration: 2200, easing: 'ease-in-out', iterations: Infinity }
+      { duration: 4500, easing: 'ease-in-out', iterations: Infinity }
     );
 
-    // ═══ LAYER D2: SECONDARY AMBIENT — slow, broad warmth ═══
-    // The "room glow" — diffused, delayed, gentler.
-    // This is the warmth you feel before you see it.
-    const secondaryBreath = secondaryLight?.animate(
+    // ═══ SURFACE WARMTH BREATH — subtle light on surfaces ═══
+    // The warm highlight that appears on the text area.
+    // Slightly offset rhythm from master — the light hits
+    // surfaces a fraction after the source pulses.
+    const surfaceBreath = surface?.animate(
       [
-        { opacity: 0.5, transform: 'scale(1)' },
-        { opacity: 0.7, transform: 'scale(1.02)' },
-        { opacity: 0.4, transform: 'scale(0.99)' },
-        { opacity: 0.6, transform: 'scale(1.01)' },
-        { opacity: 0.5, transform: 'scale(1)' },
-      ],
-      { duration: 5500, easing: 'ease-in-out', iterations: Infinity }
-    );
-
-    // ═══ LAYER D3: TERTIARY — subtle wash across whole scene ═══
-    // The faintest, broadest warmth. Barely perceptible but
-    // without it the edges feel dead/uniform.
-    const tertiaryBreath = tertiaryLight?.animate(
-      [
-        { opacity: 0.6 },
-        { opacity: 0.8 },
-        { opacity: 0.5 },
         { opacity: 0.7 },
+        { opacity: 0.9 },
         { opacity: 0.6 },
+        { opacity: 0.85 },
+        { opacity: 0.7 },
       ],
-      { duration: 8000, easing: 'ease-in-out', iterations: Infinity }
-    );
-
-    // ═══ LAYER A: SHADOW ZONES — inverse of light ═══
-    // Corners and edges that the candle CAN'T reach.
-    // These deepen when light is dimmer, lighten when brighter.
-    const shadowPulse = shadow?.animate(
-      [
-        { opacity: 0.4 },
-        { opacity: 0.32 },
-        { opacity: 0.45 },
-        { opacity: 0.36 },
-        { opacity: 0.4 },
-      ],
-      { duration: 6000, easing: 'ease-in-out', iterations: Infinity }
-    );
-
-    // ═══ LAYER B: VOLUMETRIC WARMTH — light in the air ═══
-    // Subtle directional scatter from source downward.
-    // Like seeing dust motes catch light in a beam.
-    const volumetricPulse = volumetric?.animate(
-      [
-        { opacity: 0.06, transform: 'translateY(0)' },
-        { opacity: 0.1, transform: 'translateY(2px)' },
-        { opacity: 0.05, transform: 'translateY(-1px)' },
-        { opacity: 0.08, transform: 'translateY(1px)' },
-        { opacity: 0.06, transform: 'translateY(0)' },
-      ],
-      { duration: 4000, easing: 'ease-in-out', iterations: Infinity }
-    );
-
-    // ═══ LAYER C: SURFACE RESPONSE — light on surfaces ═══
-    // The warm highlight that appears on the top edges of text
-    // and elements. This is the key differentiator:
-    // light is not just "on top of" things — it hits surfaces.
-    const surfacePulse = surfaceResponse?.animate(
-      [
-        { opacity: 0.4 },
-        { opacity: 0.55 },
-        { opacity: 0.35 },
-        { opacity: 0.5 },
-        { opacity: 0.4 },
-      ],
-      { duration: 2800, easing: 'ease-in-out', iterations: Infinity }
+      { duration: 3800, easing: 'ease-in-out', iterations: Infinity }
     );
 
     return () => {
-      primaryBreath?.cancel();
-      secondaryBreath?.cancel();
-      tertiaryBreath?.cancel();
-      shadowPulse?.cancel();
-      volumetricPulse?.cancel();
-      surfacePulse?.cancel();
+      masterBreath?.cancel();
+      surfaceBreath?.cancel();
     };
   }, [visible]);
 
@@ -164,163 +97,75 @@ export default function CinematicCandleLighting({
   return (
     <>
       {/* ════════════════════════════════════════════════════════
-          LAYER A: SHADOW ZONES — where light doesn't reach
+          MASTER FALLOFF — one painted gradient, seamless
           ════════════════════════════════════════════════════════
-          Cinematic light falloff: inverse-square from center.
-          Center = bright. Edges/corners = darkness.
-          Asymmetric — darker at bottom corners because
-          candlelight goes UP more than down. */}
+          This IS the cinematic falloff. Not a stack of layers —
+          one continuous stroke from warm cream to deep brown.
+
+          Many color stops ensure smooth transitions with no
+          visible boundaries. Think oil paint blended wet-on-wet:
+          the warm center gradually cools and darkens toward edges.
+
+          Center (50% 38%) = warm cream, the brightest point
+          Edges = deep dark brown, near black
+          Elliptical — wider than tall (light spreads sideways)
+
+          The origin point at 38% from top (not 50%) because
+          candlelight feels like it comes from slightly above,
+          illuminating what's below it. */}
       <div
-        ref={shadowRef}
+        ref={masterRef}
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: `
-            radial-gradient(
-              ellipse 50% 45% at 50% 40%,
-              transparent 0%,
-              transparent 20%,
-              rgba(20, 16, 12, 0.06) 35%,
-              rgba(20, 16, 12, 0.18) 50%,
-              rgba(20, 16, 12, 0.35) 70%,
-              rgba(20, 16, 12, 0.55) 90%
-            )
-          `,
-          opacity: 0.4,
+          background: `radial-gradient(
+            ellipse 60% 55% at 50% 38%,
+            rgba(212, 186, 130, 0.13) 0%,
+            rgba(207, 178, 120, 0.10) 10%,
+            rgba(198, 167, 105, 0.07) 20%,
+            rgba(175, 145, 85, 0.05) 30%,
+            rgba(130, 105, 65, 0.04) 40%,
+            rgba(70, 55, 38, 0.10) 50%,
+            rgba(42, 36, 32, 0.30) 60%,
+            rgba(32, 26, 22, 0.48) 70%,
+            rgba(24, 20, 16, 0.65) 80%,
+            rgba(18, 15, 12, 0.80) 90%,
+            rgba(14, 12, 10, 0.90) 100%
+          )`,
+          opacity: 0.88,
           zIndex: 1,
         }}
       />
 
       {/* ════════════════════════════════════════════════════════
-          LAYER B: VOLUMETRIC WARMTH — visible light scatter
+          SURFACE WARMTH — light that reaches surfaces
           ════════════════════════════════════════════════════════
-          Light traveling through air catches dust/moisture.
-          Directional: from center, spreading downward and outward.
-          NOT a foggy haze — thin, purposeful. */}
+          THE KEY DIFFERENTIATOR: "cahaya mempengaruhi permukaan"
+
+          Not a glow floating ON TOP of content — it's light
+          that HITS the text area below. Like a desk lit by
+          candle from above: the warm highlight appears on the
+          surface, not in the air.
+
+          Very subtle. Barely there. You feel it more than see it.
+          Positioned at the text area (center, slightly above mid)
+          so the light seems to be reaching down to the words. */}
       <div
-        ref={volumetricRef}
+        ref={surfaceRef}
         className="absolute pointer-events-none"
         style={{
           left: '50%',
-          top: '25%',
-          width: '80%',
-          height: '60%',
+          top: '32%',
+          width: '55%',
+          height: '38%',
           transform: 'translate(-50%, 0)',
-          background: `
-            radial-gradient(
-              ellipse 35% 70% at 50% 10%,
-              rgba(201, 169, 110, 0.04) 0%,
-              rgba(198, 167, 105, 0.015) 30%,
-              transparent 70%
-            )
-          `,
-          opacity: 0.06,
-          zIndex: 2,
-        }}
-      />
-
-      {/* ════════════════════════════════════════════════════════
-          LAYER C: SURFACE LIGHT RESPONSE — light hits surfaces
-          ════════════════════════════════════════════════════════
-          THE KEY DIFFERENTIATOR. Not a glow ON TOP of content —
-          it's light that RESPONDS to surfaces below.
-
-          The content area (center) gets a warm highlight on its
-          top edges — like a desk lit by candle from above.
-          Further from center = cooler, less warm.
-          Creates the illusion that text is PHYSICALLY below
-          the light source, catching its rays. */}
-      <div
-        ref={surfaceResponseRef}
-        className="absolute pointer-events-none"
-        style={{
-          left: '50%',
-          top: '30%',
-          width: '70%',
-          height: '35%',
-          transform: 'translate(-50%, 0)',
-          background: `
-            radial-gradient(
-              ellipse 60% 50% at 50% 0%,
-              rgba(212, 186, 130, 0.08) 0%,
-              rgba(201, 169, 110, 0.03) 40%,
-              transparent 80%
-            )
-          `,
-          opacity: 0.4,
-          zIndex: 2,
-        }}
-      />
-
-      {/* ════════════════════════════════════════════════════════
-          LAYER D: LAYERED AMBIENT LIGHTING — multiple zones
-          ════════════════════════════════════════════════════════
-          Real candlelight creates ZONES of illumination:
-          - Primary: tight, bright, centered on content
-          - Secondary: broader, dimmer, delayed
-          - Tertiary: faintest wash across whole scene
-          Each zone has its own flicker rhythm and intensity. */}
-
-      {/* D1: Primary ambient — tight, bright, centered on content */}
-      <div
-        ref={primaryLightRef}
-        className="absolute pointer-events-none"
-        style={{
-          left: '50%',
-          top: '40%',
-          width: '120%',
-          height: '80%',
-          transform: 'translate(-50%, -40%)',
           background: `radial-gradient(
-            ellipse 30% 25% at 50% 30%,
-            rgba(201, 169, 110, 0.12) 0%,
-            rgba(198, 167, 105, 0.06) 40%,
-            rgba(198, 167, 105, 0.02) 65%,
-            transparent 85%
+            ellipse 65% 55% at 50% 25%,
+            rgba(212, 186, 130, 0.055) 0%,
+            rgba(207, 178, 120, 0.03) 30%,
+            transparent 65%
           )`,
           opacity: 0.7,
-          zIndex: 3,
-        }}
-      />
-
-      {/* D2: Secondary ambient — broad, dim, slow response */}
-      <div
-        ref={secondaryLightRef}
-        className="absolute pointer-events-none"
-        style={{
-          left: '50%',
-          top: '35%',
-          width: '200%',
-          height: '160%',
-          transform: 'translate(-50%, -25%)',
-          background: `radial-gradient(
-            ellipse 35% 30% at 50% 25%,
-            rgba(201, 169, 110, 0.05) 0%,
-            rgba(198, 167, 105, 0.02) 40%,
-            transparent 70%
-          )`,
-          opacity: 0.5,
-          zIndex: 3,
-        }}
-      />
-
-      {/* D3: Tertiary ambient — faintest wash, whole scene */}
-      <div
-        ref={tertiaryLightRef}
-        className="absolute pointer-events-none"
-        style={{
-          left: '50%',
-          top: '40%',
-          width: '300%',
-          height: '250%',
-          transform: 'translate(-50%, -30%)',
-          background: `radial-gradient(
-            ellipse 40% 35% at 50% 30%,
-            rgba(201, 169, 110, 0.02) 0%,
-            rgba(198, 167, 105, 0.008) 45%,
-            transparent 70%
-          )`,
-          opacity: 0.6,
-          zIndex: 3,
+          zIndex: 2,
         }}
       />
     </>

@@ -188,17 +188,6 @@ export default function Closing() {
         <CinematicCandleLighting visible={isInView} />
       </motion.div>
 
-      {/* ─── Secondary warm wash — broader, softer, underneath everything ───
-          Like the warm light filling the room from the candle */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(ellipse 45% 40% at 50% 35%, rgba(201, 169, 110, 0.04) 0%, transparent 65%)',
-          zIndex: 1,
-        }}
-      />
-
       {/* ─── Paper texture overlay ─── */}
       <div className="nauka-paper absolute inset-0 pointer-events-none" style={{ zIndex: 2 }} />
 
