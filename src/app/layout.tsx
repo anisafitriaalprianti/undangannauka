@@ -1,3 +1,4 @@
+import { ModeProvider } from "@/lib/mode";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Playfair_Display } from "next/font/google";
