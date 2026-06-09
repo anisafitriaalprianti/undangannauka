@@ -60,9 +60,8 @@ function CreateContent() {
     saveInvitation(slug, invitationData);
 
     // 2. Save ke Supabase (fire-and-forget)
-    if (isSupabaseConfigured()) {
-      await saveInvitationToDB(slug, invitationData);
-    }
+    const result = await saveInvitationToDB(slug, invitationData);
+console.log('SUPABASE RESULT:', result);
 
     // Navigate ke halaman undangan
     router.push(`/i/${slug}`);
