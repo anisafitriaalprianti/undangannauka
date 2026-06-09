@@ -13,14 +13,13 @@ export default function Home() {
 
       {/* JUDUL (INI NANTI FONT SUAMI KAMU) */}
       <h1 style={{
-        fontSize: "38px",
-        fontWeight: "400",
-        color: "#3b3b3b",
-        fontFamily: "serif",
-        letterSpacing: "1px"
-      }}>
-        Undangan by Nauka
-      </h1>
+  fontSize: "42px",
+  fontWeight: "400",
+  color: "#3b3b3b",
+  fontFamily: "'Dancing Script', cursive"
+}}>
+  Undangan by Nauka
+</h1>
 
       {/* ICON SIMPLE (BUKAN ANIMASI PINTU) */}
       <div style={{
