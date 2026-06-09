@@ -15,7 +15,7 @@
  * - NEXT_PUBLIC_SUPABASE_ANON_KEY
  */
 
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 
 // 🔍 Debug: log raw ENV values at module load time
 console.log("ENV URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
@@ -34,9 +34,9 @@ if (!supabaseUrl || !supabaseKey) {
   });
 }
 
-export const supabase = createClient(
-  supabaseUrl || "",
-  supabaseKey || ""
+export const supabase = supabaseUrl && supabaseKey
+  ? createClient(supabaseUrl, supabaseKey)
+  : null;
 );
 /** Returns true if both NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set */
 export function isSupabaseConfigured(): boolean {
