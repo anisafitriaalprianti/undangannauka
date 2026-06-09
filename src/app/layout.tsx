@@ -55,7 +55,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} antialiased bg-[#F6F2EE] text-[#1C1C1C]`}
       >
-        {children}
+        <ModeProvider>
+  {children}
+</ModeProvider>
         <Toaster />
       </body>
     </html>
