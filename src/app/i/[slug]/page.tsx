@@ -14,12 +14,12 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { templates } from '@/registry/templates';
+// import { templates } from '@/registry/templates';
 import { loadInvitation, getGuestName, type InvitationData } from '@/lib/invitation';
 import { getInvitationFromDB, isSupabaseConfigured } from '@/lib/db';
-import { ShareButtons } from '@/components/ShareButtons';
-import { RSVP } from '@/components/RSVP';
-import { RSVPDashboard } from '@/components/RSVPDashboard';
+// import { ShareButtons } from '@/components/ShareButtons';
+// import { RSVP } from '@/components/RSVP';
+// import { RSVPDashboard } from '@/components/RSVPDashboard';
 
 const slowEase = [0.16, 1, 0.3, 1];
 
