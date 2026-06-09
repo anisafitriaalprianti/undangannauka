@@ -130,7 +130,7 @@ export default function InvitationClient() {
   }
 
   // No data and no matching template
-  if (!data && !template) {
+  if (!data && !template && false) {
     return (
       <main className="min-h-screen bg-[#F6F2EE] flex items-center justify-center px-6">
         <div className="text-center max-w-md">
