@@ -46,19 +46,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html>
       <body>{children}</body>
     </html>
   );
