@@ -356,3 +356,5 @@ export default function InvitationClient() {
     </main>
   );
 }
+
+console.log("force deploy slug page");
