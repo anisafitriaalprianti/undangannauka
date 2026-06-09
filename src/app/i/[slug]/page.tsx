@@ -67,7 +67,7 @@ export default function InvitationClient() {
   }, []);
 
   // Try to find matching template
-  const template = templates.find((t) => t.id === slug);
+  const template = null;
 
   // ⚠️ ALL hooks and derived values MUST be before any early returns
   // This satisfies React's Rules of Hooks (consistent call order)
