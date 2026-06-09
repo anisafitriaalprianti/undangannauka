@@ -1,5 +1,7 @@
 'use client';
 
+console.log("SLUG PAGE ACTIVE");
+
 /**
  * NAUKA PRODUCTION: Invitation View Page
  *
@@ -52,6 +54,8 @@ function formatTime(timeStr: string): string {
 }
 
 export default function InvitationClient() {
+  return <div>SLUG WORKS OK</div>;
+}
   const params = useParams();
   const slug = params.slug as string;
   const [data, setData] = useState<InvitationData | null>(null);
