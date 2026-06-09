@@ -25,9 +25,8 @@ console.log("ENV KEY:", process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
  * Supabase client — langsung createClient(process.env.URL, process.env.KEY)
  * ⚠️ Tidak ada fallback config. Jika ENV kosong → supabase = null → error jelas.
  */
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
 /** Returns true if both NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set */
